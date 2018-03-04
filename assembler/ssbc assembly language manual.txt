@@ -1,0 +1,93 @@
+========================================
+         SSBC assembly language         
+========================================
+
+COMMENTS:
+
+//single line comment
+
+/*
+multi line comment
+*/
+
+LITERALS:
+
+hexadecimal:	0x1234567890abcdef
+decimal:	[-]1234567890
+octal:		01234567
+binary:		0b10
+character:	'c'
+string:		"string"
+
+DIRECTIVES:
+
+start		- specifies start location of program
+byte X		- specify an 8bit value
+word X		- specify a 16bit value
+array SIZE	- allocates SIZE bytes of memory
+ascii STRING	- specify a character array
+asciz STRING	- specify a null terminated character array
+
+ADDRESS LABEL:
+
+An address label is any identifier that is not a reserved keyword followed by a colon.
+Labels are used to specify memory locations of jumps and data
+ex)
+myNumber: byte 0xa1
+
+NATIVE INSTRUCTION SET:
+
+noop			- no operation
+halt			- halt program
+pushimm X		- push byte to stack
+pushext ADDRESS		- push byte at address
+popinh			- pop top off stack
+popext ADDRESS		- pop byte at top of stack to address
+jnz ADDRESS		- jump to address if Z bit in PSW is 0
+jnn ADDRESS		- jump to address if N bit in PSW is 0
+add			- replace top 2 bytes of stack with sum
+			(sets Z and N bits in PSW if result is zero or negative respectively)
+sub			- replace top 2 bytes of stack with difference between top and bottom
+			(sets Z and N bits in PSW if result is zero or negative respectively)
+nor			- replace top 2 bytes of stack with bitwise nor
+
+EXTENDED INSTRUCTION SET:
+
+test				- test top of stack to set Z and N bits in PSW
+pushimm16 X			- push word to stack
+pushext16 ADDRESS		- push word at address
+popinh16			- pop word off stack
+popext16 ADDRESS		- pop word at top of stack to address
+jump ADDRESS			- jump to address
+jsr ADDRESS			- jumps to address and pushes the address after the current instruction
+clear ADDRESS			- sets byte at address to 0
+clearpsw			- clear Z and N bits in PSW
+clone				- duplicate top byte of stack
+or				- replace top 2 bytes on stack with bitwise or
+and				- replace top 2 bytes on stack with bitwise and
+not				- perform bitwise not on top of stack
+nand				- replace top 2 bytes on stack with bitwise nand
+compare ADDRESS1 ADDRESS2	- sets Z and N bits in PSW based on difference between bytes in ADDRESS1 and ADDRESS2
+inc ADDRESS			- increment byte in address
+dec ADDRESS			- decrement byte in address
+swap ADDRESS1 ADDRESS2		- swap bytes in addresses
+move ADDRESS1 ADDRESS2		- move byte in ADDRESS1 to ADDRESS2
+btest BIT			- tests top byte of stack for bit
+bset BIT			- sets bit of top of stack to 1
+bclear BIT			- sets bit of top of stack to 0
+
+blank addresses (specified by the token '?') can be used to specify that an address will be set in the future, such as setting the address of the return jump in a subroutine. A word must be declared after a blank address. The label is required to reference the blank address
+ex)
+mySubroutine:
+	popext16 returnAddress
+	...
+	jump ?
+returnAddress: word 0
+
+Some of the extended instructions cannot support this feature.
+The exclusions are:
+ - pushext16
+ - popext16
+ - compare
+ - inc
+ - dec
