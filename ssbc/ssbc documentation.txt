@@ -1,0 +1,11 @@
+0: noop
+1: halt
+2: pushimm
+3: pushext
+4: popinh
+5: popext
+6: jnz
+7: jnn
+8: add
+9: sub
+10: nor
