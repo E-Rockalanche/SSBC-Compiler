@@ -43,12 +43,14 @@ SSBCLang::SSBCLang(){
 	define(BCLEAR, "bclear");
 
 	//directives
-	define(START, "start");
-	define(BYTE, "byte");
-	define(WORD, "word");
-	define(ARRAY, "array");
-	define(ASCII, "ascii");
-	define(ASCIZ, "asciz");
+	define(START, "\\.start");
+	define(GLOBAL, "\\.global");
+	define(FILE, "\\.file");
+	define(BYTE, "\\.byte");
+	define(WORD, "\\.word");
+	define(ARRAY, "\\.array");
+	define(ASCII, "\\.ascii");
+	define(ASCIZ, "\\.asciz");
 
 	//literals
 	define(HEXADECIMAL, "0x[0-9a-fA-F]+");
@@ -61,7 +63,7 @@ SSBCLang::SSBCLang(){
 	//other
 	define(COMMENT, "//[ -~\\t]*(\\n)?");
 	define(COMMENT_BLOCK, "/\\*[ -~\\t\\n\\r\\f]*\\*/");
-	define(IDENTIFIER, "[a-zA-Z_]+[a-zA-Z0-9_]*");
+	define(IDENTIFIER, "[a-zA-Z_\\.]+[a-zA-Z0-9_]*");
 	define(COLON, ":");
 	define(LOW_BITS, ">");
 	define(HIGH_BITS, "<");

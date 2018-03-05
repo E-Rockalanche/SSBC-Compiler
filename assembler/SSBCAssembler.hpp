@@ -5,7 +5,7 @@
 #include "Tokenizer.hpp"
 #include "SSBCLang.hpp"
 #include "Debug.hpp"
-#include "Assert.hpp"
+#include "Assert.hpp" 
 #include "Token.hpp"
 #include "Binary.hpp"
 
@@ -25,8 +25,10 @@ private:
 	string outputFilename = "";
 
 	LabelList labels;
+	Tokenizer tokenizer;
 	vector<string> inputFiles;
 	vector<Token> tokens;
+	
 	unsigned int index;
 	int errors;
 	Binary binary;
@@ -74,7 +76,7 @@ private:
 	void writeComment(string comment, unsigned int address);
 	string getComment(unsigned int i);
 
-	void tokenize();
+	void assembleFile(string filename);
 	void statement();
 	void writeToFile();
 
@@ -141,6 +143,8 @@ private:
 
 	//directives
 	void start();
+	void global();
+	void file();
 	void byte();
 	void word();
 	void array();

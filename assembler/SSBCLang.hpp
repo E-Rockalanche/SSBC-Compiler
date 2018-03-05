@@ -48,6 +48,8 @@ public:
 
 		//directives
 		START,
+		GLOBAL,
+		FILE,
 		BYTE,
 		WORD,
 		ARRAY,

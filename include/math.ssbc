@@ -9,10 +9,22 @@ ADD16 (add words)
 	
 SUB16 (subtract words)
 	-calculate the subtraction of two words
+	
+TEST16 (test word)
+	-test top word of stack and returns PSW on stack
+	
+XOR (exclusive or)
+	-calculate bitwise xor of top two bytes on stack
 */
 
+.global ADDWC
+.global ADD16
+.global SUB16
+.global TEST16
+.global XOR
 
-
+//global register
+.global CARRY
 
 ADDWC:
 //add two bytes and track if there is a carry
@@ -54,9 +66,9 @@ ADDWC_SECOND_POS:
 	add
 ADDWC_RETURN:
 	jump ?
-ADDWC_RET_ADDR: word 0
-ADDWC_TEMP: byte 0
-CARRY: byte 0
+ADDWC_RET_ADDR: .word 0
+ADDWC_TEMP: .byte 0
+CARRY: .byte 0
 
 
 
@@ -75,11 +87,11 @@ ADD16:
 	pushext CARRY
 	add
 	jump ?
-ADD16_RET_ADDR: word 0
-ADD16_HIGH1: byte 0
-ADD16_LOW1: byte 0
-ADD16_HIGH2: byte 0
-ADD16_LOW2: byte 0
+ADD16_RET_ADDR: .word 0
+ADD16_HIGH1: .byte 0
+ADD16_LOW1: .byte 0
+ADD16_HIGH2: .byte 0
+ADD16_LOW2: .byte 0
 
 
 
@@ -97,9 +109,9 @@ SUB16:
 	pushext16 SUB16_TEMP_WORD
 	jsr ADD16
 	jnz ?
-SUB16_RET_ADDR: word 0
-SUB16_TEMP_WORD: word 0
-SUB16_TEMP_BYTE: byte 0
+SUB16_RET_ADDR: .word 0
+SUB16_TEMP_WORD: .word 0
+SUB16_TEMP_BYTE: .byte 0
 
 
 
@@ -120,4 +132,25 @@ TEST16_NOT_NEG:
 TEST16_RETURN:
 	pushext PSW
 	jump ?
-TEST16_RET_ADDR: word 0
+TEST16_RET_ADDR: .word 0
+
+
+
+XOR:
+	popext16 XOR_RET_ADDR
+	popext ASM
+	popext ASM2
+	pushext ASM
+	pushext ASM2
+	pushext ASM2
+	pushext ASM
+	not
+	and
+	popext XOR_TEMP
+	not
+	and
+	pushext XOR_TEMP
+	or
+	jnz ?
+XOR_RET_ADDR: .word 0
+XOR_TEMP: .byte 0

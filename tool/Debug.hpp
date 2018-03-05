@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-#define DEBUG true
+#define DEBUG false
 
 #if(DEBUG)
 	#define dout(N) cout << "DEBUG " << __FILE__ << " (" << __LINE__ << "): " << N << '\n'

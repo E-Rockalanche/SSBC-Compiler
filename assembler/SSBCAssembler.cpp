@@ -15,13 +15,22 @@ SSBCAssembler::SSBCAssembler(int argc, const char** argv){
 		}
 	}
 
-	labels.define("ASM", ASM, 0);
-	labels.define("ASM2", ASM2, 0);
-	labels.define("PSW", PSW, 0);
-	labels.define("PORT_A", PORT_A, 0);
-	labels.define("PORT_B", PORT_B, 0);
-	labels.define("PORT_C", PORT_C, 0);
-	labels.define("PORT_D", PORT_D, 0);
+	tokenizer.setLang(new SSBCLang());
+
+	labels.define("ASM", ASM);
+	labels.setGlobal("ASM");
+	labels.define("ASM2", ASM2);
+	labels.setGlobal("ASM2");
+	labels.define("PSW", PSW);
+	labels.setGlobal("PSW");
+	labels.define("PORT_A", PORT_A);
+	labels.setGlobal("PORT_A");
+	labels.define("PORT_B", PORT_B);
+	labels.setGlobal("PORT_B");
+	labels.define("PORT_C", PORT_C);
+	labels.setGlobal("PORT_C");
+	labels.define("PORT_D", PORT_D);
+	labels.setGlobal("PORT_D");
 }
 
 void SSBCAssembler::setWarnings(bool set){
@@ -50,12 +59,11 @@ void SSBCAssembler::assemble(){
 		cout << "No files given to assemble\n";
 		return;
 	}
+
 	if (outputFilename == ""){
 		cout << "No output filename given\n";
 		return;
 	}
-
-	tokenize();
 
 	dout("leaving room for " << numASMRegisters << " ASM registers");
 	for(int i = 0; i < numASMRegisters; i++){
@@ -69,10 +77,9 @@ void SSBCAssembler::assemble(){
 	}
 
 	errors = 0;
-	index = 0;
-	dout("compiling statements");
-	while(index < tokens.size()){
-		statement();
+
+	for(unsigned int i = 0; i < inputFiles.size(); i++){
+		assembleFile(inputFiles[i]);
 	}
 
 	checkForUndefinedReferences();
@@ -84,14 +91,18 @@ void SSBCAssembler::assemble(){
 	}
 }
 
-void SSBCAssembler::tokenize(){
-	dout("tokenize()");
-	Tokenizer tokenizer;
-	tokenizer.setLang(new SSBCLang());
-	for(unsigned int i = 0; i < inputFiles.size(); i++){
-		tokenizer.tokenize(inputFiles[i], &tokens);
-	}
-	assert(tokens.size() > 0, "Nothing to assemble");
+void SSBCAssembler::assembleFile(string filename){
+		dout("assembling file " << filename);
+
+		tokens.clear();
+		index = 0;
+		tokenizer.tokenize(filename, &tokens);
+		while(index < tokens.size()){
+			statement();
+		}
+
+		dout("clearing local labels");
+		labels.clearLocal();
 }
 
 void SSBCAssembler::writeToFile(){
@@ -113,7 +124,7 @@ string SSBCAssembler::getComment(unsigned int i){
 
 void SSBCAssembler::checkForUndefinedReferences(){
 	dout("Checking for undefined references");
-	LabelList::UndefinedList undefinedList = labels.getUndefined();
+	LabelList::UndefinedList undefinedList = labels.getUndefinedReferences();
 	char numString[32];
 	for(unsigned int i = 0; i < undefinedList.size(); i++){
 		error("Undefined reference: " + undefinedList[i].first
@@ -222,6 +233,8 @@ void SSBCAssembler::statement(){
 
 		//directives
 		case SSBCLang::START: start(); break;
+		case SSBCLang::GLOBAL: global(); break;
+		case SSBCLang::FILE: file(); break;
 		case SSBCLang::BYTE: byte(); break;
 		case SSBCLang::WORD: word(); break;
 		case SSBCLang::ARRAY: array(); break;
@@ -246,7 +259,6 @@ void SSBCAssembler::statement(){
 			errorAt("Invalid start of statement token");
 			dout("value = \"" << currentToken().value() << "\"");
 			dout("type = " << currentToken().type());
-
 	}
 }
 
@@ -586,6 +598,23 @@ void SSBCAssembler::start(){
 	writeComment("start", binary.size());
 }
 
+void SSBCAssembler::global(){
+	dout("global");
+	Token global = nextToken();
+	if (global.type() != SSBCLang::IDENTIFIER){
+		errorAt("Expected an identifier");
+	}else{
+		labels.setGlobal(global.value());
+	}
+}
+
+void SSBCAssembler::file(){
+	dout("file");
+	if (nextToken().type() != SSBCLang::STRING){
+		errorAt("Expected a string");
+	}
+}
+
 void SSBCAssembler::byte(){
 	dout("byte");
 	writeComment("byte", binary.size());
@@ -873,18 +902,15 @@ void SSBCAssembler::defineLabelAsCurrentAddress(string label){
 		labelDefError(label);
 	}else{
 		replaceLabelOccurrences(label);
-		labels.define(label, binary.size(), index-1);
+		labels.define(label, binary.size());
 	}
 	writeComment(label, binary.size());
 }
 
 void SSBCAssembler::labelDefError(string label){
 	error("Label " + label + " is already defined");
-	unsigned int i = labels.getTokenIndex(label);
-	Token labelDef = tokens[i];
-	cout << label << " was defined at (" << labelDef.row() << ", "
-		<< labelDef.col() << ") as " << labels.getAddress(label)
-		<< '\n';
+	int address = labels.getAddress(label);
+	cout << "\tdefined as " << address << '\n';
 }
 
 void SSBCAssembler::replaceLabelOccurrences(string label){

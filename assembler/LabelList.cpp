@@ -1,41 +1,87 @@
 #include "LabelList.hpp"
 
-void LabelList::define(const string label, const unsigned int address,
-		const unsigned int tokenIndex){
-	labels[label].define(address, tokenIndex);
+void LabelList::clearLocal(){
+	EntryMap::iterator it = labels.begin();
+	while(it != labels.end()){
+		if ((it->second.getAddress() >= 0) && (it->second.isLocal())){
+			EntryMap::iterator victim = it;
+			it++;
+			labels.erase(victim);
+		}else{
+			it++;
+		}
+	}
 }
 
-bool LabelList::isDefined(const string label){
+void LabelList::setGlobal(string label){
+	labels[label].setGlobal();
+}
+
+void LabelList::define(string label, unsigned int address){
+	labels[label].define(address);
+}
+
+bool LabelList::isDefined(string label){
 	return (labels[label].getAddress() >= 0);
 }
 
-void LabelList::addOccurrence(const string label, const unsigned int address,
+void LabelList::addOccurrence(string label, unsigned int address,
 		LabelList::Option option){
 	labels[label].addOccurrence(address, option);
 }
 
-int LabelList::getAddress(const string label){
+unsigned int LabelList::getAddress(string label){
 	return labels[label].getAddress();
 }
 
-LabelList::OccurrenceList LabelList::getOccurrences(const string label){
+LabelList::OccurrenceList LabelList::getOccurrences(string label){
 	return labels[label].getOccurrences();
 }
 
-int LabelList::getTokenIndex(const string label){
-	return labels[label].getTokenIndex();
-}
-
-LabelList::UndefinedList LabelList::getUndefined(){
+LabelList::UndefinedList LabelList::getUndefinedReferences(){
 	UndefinedList undefinedList;
-	for(map<string, Entry>::iterator it = labels.begin();
+	for(EntryMap::iterator it = labels.begin();
 			it != labels.end(); it++){
 		OccurrenceList occurrences = it->second.getOccurrences();
 		for(unsigned int i = 0; i < occurrences.size(); i++){
-			pair<string, unsigned int> occurrence(it->first,
+			Reference ref(it->first,
 				occurrences[i].first);
-			undefinedList.push_back(occurrence);
+			undefinedList.push_back(ref);
 		}
 	}
 	return undefinedList;
+}
+
+
+
+
+
+LabelList::Entry::Entry(){
+	address = -1;
+	local = true;
+}
+
+void LabelList::Entry::setGlobal(){
+	local = false;
+}
+
+void LabelList::Entry::define(unsigned int address){
+	this->address = address;
+	occurrences.clear();
+}
+
+int LabelList::Entry::getAddress(){
+	return address;
+}
+
+void LabelList::Entry::addOccurrence(unsigned int address, Option option = NONE){
+	occurrences.push_back(Occurrence(address, option));
+}
+
+LabelList::OccurrenceList LabelList::Entry::getOccurrences(){
+	return occurrences;
+}
+
+bool LabelList::Entry::isLocal(){
+	return local;
 }

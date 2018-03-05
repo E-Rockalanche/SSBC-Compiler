@@ -10,6 +10,7 @@ public:
 	Lang(){}
 	virtual ~Lang(){};
 	virtual int getTokenType(const string& str){
+		throw(str);
 		return INVALID_TOKEN;
 	}
 };

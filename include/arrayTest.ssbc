@@ -1,8 +1,8 @@
-myArray: array 8
-LENGTH: byte 8
-iterator: byte 0
+myArray: .array 8
+LENGTH: .byte 8
+iterator: .byte 0
 
-start
+.start
 LOOP:
 	compare iterator LENGTH
 	jnz CONTINUE
@@ -15,12 +15,12 @@ CONTINUE:
 	popext16 SET_INDEX
 	pushext iterator
 	popext ?
-SET_INDEX: word 0
+SET_INDEX: .word 0
 	inc iterator
 	jnz LOOP
 
-maxValue: byte -128
-curValue: byte 0
+maxValue: .byte -128
+curValue: .byte 0
 END_LOOP:
 	pushimm 0
 	popext iterator
@@ -35,7 +35,7 @@ CONTINUE2:
 	jsr ADD16
 	popext16 GET_INDEX
 	pushext ?
-GET_INDEX: word 0
+GET_INDEX: .word 0
 	popext curValue
 	pushext curValue
 	pushext maxValue

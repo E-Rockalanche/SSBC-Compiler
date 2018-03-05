@@ -16,44 +16,43 @@ public:
 		ADD_ONE,
 	};
 
-	typedef vector<pair<unsigned int, Option>> OccurrenceList;
-	typedef vector<pair<string, unsigned int>> UndefinedList;
+	typedef pair<unsigned int, Option> Occurrence; 
+	typedef vector<Occurrence> OccurrenceList;
+	typedef pair<string, unsigned int> Reference;
+	typedef vector<Reference> UndefinedList;
 
-	void define(const string label, const unsigned int address,
-		const unsigned int tokenIndex);
-	bool isDefined(const string label);
-	void addOccurrence(const string label, const unsigned int address,
+	void clearLocal();
+	void setGlobal(string label);
+	void define(string label, unsigned int address);
+	bool isDefined(string label);
+
+	void addOccurrence(string label, unsigned int address,
 		Option option = NONE);
-	int getAddress(const string label);
-	OccurrenceList getOccurrences(const string label);
-	int getTokenIndex(const string label);
-	UndefinedList getUndefined();
-private:
+	unsigned int getAddress(string label);
 
+	OccurrenceList getOccurrences(string label);
+	UndefinedList getUndefinedReferences();
+
+private:
 	class Entry{
 	public:
-		Entry(){
-			address = -1;
-			tokenIndex = -1;
-		}
-		void define(const unsigned int address, const unsigned int tokenIndex){
-			this->address = address;
-			this->tokenIndex = tokenIndex;
-			occurrences.clear();
-		}
-		int getAddress(){return address;}
-		int getTokenIndex(){return tokenIndex;}
-		void addOccurrence(const unsigned int address, Option option = NONE){
-			occurrences.push_back(pair<unsigned int, Option>(address, option));
-		}
-		OccurrenceList getOccurrences(){return occurrences;}
+		Entry();
+		void setGlobal();
+		void define(unsigned int address);
+		int getAddress();
+		int getTokenIndex();
+		void addOccurrence(unsigned int address, Option option);
+		OccurrenceList getOccurrences();
+		bool isLocal();
+
 	private:
 		OccurrenceList occurrences;
 		int address;
-		int tokenIndex;
+		bool local;
 	};
 	
-	map<string, Entry> labels;
+	typedef map<string, Entry> EntryMap;
+	EntryMap labels;
 };
 
 #endif
