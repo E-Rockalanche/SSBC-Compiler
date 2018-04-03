@@ -65,6 +65,7 @@ public:
 		STRING,
 
 		//other
+		PLUS,
 		COMMENT,
 		COMMENT_BLOCK,
 		IDENTIFIER,

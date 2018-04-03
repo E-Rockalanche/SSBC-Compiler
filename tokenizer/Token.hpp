@@ -6,6 +6,12 @@ using namespace std;
 
 class Token{
 public:
+	Token(){
+		_type = -1;
+		_row = -1;
+		_col = -1;
+		_value = "'undefined'";
+	}
 	Token(int t, string v, int r, int c){
 		_type = t;
 		_value = v;

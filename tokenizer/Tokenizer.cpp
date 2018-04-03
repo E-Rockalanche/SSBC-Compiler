@@ -7,12 +7,10 @@ void Tokenizer::setLang(Lang* lang){
 	this->lang = lang;
 }
 
-vector<Token>* Tokenizer::tokenize(const string filename, vector<Token>* tokens){
-	if (tokens == NULL){
-		tokens = new vector<Token>();
-	}else{
-		this->tokens = tokens;
-	}
+void Tokenizer::tokenize(const string& filename, vector<Token>* t){
+	assert(t != NULL, "Given NULL vector of tokens");
+	tokens = t;
+	numErrors = 0;
 
 	scanner.open(filename);
 	assert(!scanner.fail(), "Cannot open " + filename);
@@ -21,16 +19,20 @@ vector<Token>* Tokenizer::tokenize(const string filename, vector<Token>* tokens)
 		readToken();
 	}
 
-	scanner.close();
+	#if(DEBUG)
+		for(unsigned int i = 0; i < tokens->size(); i++){
+			Token token = tokens->at(i);
+			cout << "[" << token.type() << "] " << token.value() << '\n';
+		}
+	#endif
 
-	return tokens;
+	scanner.close();
 }
 
 void Tokenizer::readToken(){
 	skipWhiteSpace();
 
 	if (scanner.eof()){
-		dout("End of file");
 		return;
 	}
 
@@ -46,6 +48,10 @@ void Tokenizer::readToken(){
 		nextType = lang->getTokenType(value + scanner.peek());
 		if (scanner.eof()) break;
 	}while(type == INVALID_TOKEN || nextType != INVALID_TOKEN);
+
+	if (type == INVALID_TOKEN){
+		numErrors++;
+	}
 
 	tokens->push_back(Token(type, value, row, col));
 }

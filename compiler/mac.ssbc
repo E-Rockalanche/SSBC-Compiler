@@ -1,0 +1,17 @@
+.start
+/*
+Assignment
+*/
+pushimm 5
+/*
+Converting int to int
+*/
+/*
+End type conversion
+*/
+popext x + 0
+/*
+End Assignment
+*/
+halt
+x: .byte 0

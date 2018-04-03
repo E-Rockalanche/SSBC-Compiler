@@ -1,5 +1,4 @@
 #include "ssbc.hpp"
-#include "../tool/Debug.hpp"
 
 SSBC::SSBC(){
 	dout("SSBC()");
@@ -28,7 +27,7 @@ void SSBC::load(const char* filename){
 	}
 
 	string byte;
-	string garbage;
+	string comment;
 	unsigned int n = 0;
 	while(!fin.eof()){
 		if (n >= PSW){
@@ -36,7 +35,10 @@ void SSBC::load(const char* filename){
 			return;
 		}
 		fin >> byte;
-		getline(fin, garbage);
+		getline(fin, comment);
+		#if(DEBUG)
+			comments.push_back(comment);
+		#endif
 		memory[n] = stoi(byte, NULL, 2);
 		n++;
 	}
@@ -50,6 +52,10 @@ void SSBC::run(){
 			fault("program counter too large");
 			return;
 		}
+		#if(DEBUG)
+			if (program_counter < comments.size())
+				cout << comments[program_counter] << '\n';
+		#endif
 		switch(memory[program_counter]){
 			case NOOP:
 				noop();
@@ -137,7 +143,8 @@ void SSBC::pushimm(){
 	}
 	memory[stack_pointer] = memory[program_counter+1];
 
-	dout("pushimm " << (int)memory[stack_pointer]);
+	dout("pushimm " << (int)memory[stack_pointer] << " : "
+		<< (char)memory[stack_pointer]);
 
 	stack_pointer--;
 	program_counter += 2;
@@ -153,7 +160,8 @@ void SSBC::pushext(){
 	memory[stack_pointer] = memory[address];
 
 	dout("pushext " << getAddressName(address) << ": "
-		<< (int)memory[stack_pointer]);
+		<< (int)memory[stack_pointer] << " : "
+		<< (char)memory[stack_pointer]);
 
 	stack_pointer--;
 	program_counter += 3;
@@ -177,7 +185,8 @@ void SSBC::popext(){
 	uint address = readAddress();
 	stack_pointer++;
 	memory[address] = memory[stack_pointer];
-	dout("popext " << getAddressName(address) << ": " << (int)memory[address]);
+	dout("popext " << getAddressName(address) << ": " << (int)memory[address]
+		<< " : " << (char)memory[stack_pointer]);
 	
 	program_counter += 3;
 }

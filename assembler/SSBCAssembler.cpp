@@ -53,16 +53,16 @@ void SSBCAssembler::addInputFile(string filename){
 	inputFiles.push_back(filename);
 }
 
-void SSBCAssembler::assemble(){
+bool SSBCAssembler::assemble(){
 	dout("assemble()");
 	if (inputFiles.size() == 0){
 		cout << "No files given to assemble\n";
-		return;
+		return false;
 	}
 
 	if (outputFilename == ""){
 		cout << "No output filename given\n";
-		return;
+		return false;
 	}
 
 	dout("leaving room for " << numASMRegisters << " ASM registers");
@@ -86,8 +86,10 @@ void SSBCAssembler::assemble(){
 
 	if (errors == 0){
 		writeToFile();
+		return true;
 	}else{
 		cout << "Assembly failed. See errors above\n";
+		return false;
 	}
 }
 
@@ -168,22 +170,26 @@ void SSBCAssembler::warningNear(string message){
 #undef ROW_COL
 
 Token SSBCAssembler::nextToken(){
-	Token tok = endToken();
-	if (index < tokens.size()){
-		tok = tokens[index++];
+	unsigned int cur = index++;
+	if (cur < tokens.size()){
+		Token tok = tokens[cur];
 		switch(tok.type()){
 			case SSBCLang::COMMENT:
 			case SSBCLang::COMMENT_BLOCK:
 				tok = nextToken();
 			default:
+				return tok;
 				break;
 		}
 	}
-	return tok;
+	return endToken();
 }
 
 Token SSBCAssembler::currentToken(){
-	return tokens[index-1];
+	if (index-1 < tokens.size())
+		return tokens[index-1];
+	else
+		return endToken();
 }
 
 Token SSBCAssembler::endToken(){
@@ -370,6 +376,7 @@ void SSBCAssembler::pushimm16(){
 
 		default:
 			errorAt("Expected an integer or address");
+			return;
 	}
 	pushimm16(value);
 }
@@ -384,9 +391,9 @@ void SSBCAssembler::pushext16(){
 	binary.write8bit(PUSHEXT);
 	writeComment("pushext16");
 	unsigned int value = getExt16Address();
-	binary.write16bit(value);
-	binary.write8bit(PUSHEXT);
 	binary.write16bit(value + 1);
+	binary.write8bit(PUSHEXT);
+	binary.write16bit(value);
 }
 
 void SSBCAssembler::popext16(){
@@ -646,8 +653,6 @@ void SSBCAssembler::ascii(){
 	Token str = nextToken();
 	if (str.type() != SSBCLang::STRING){
 		errorAt("Expected string");
-		dout("value = " << str.value());
-		dout("type = " << str.type());
 	}else{
 		writeAscii(str.value());
 	}
@@ -740,12 +745,26 @@ void SSBCAssembler::identifier(){
 	if (token.type() != SSBCLang::IDENTIFIER){
 		errorAt("Expected an identifier");
 	}else{
+		int offset = 0;
+		if (nextToken().type() == SSBCLang::PLUS){
+			dout("plus offset");
+			offset = getInteger();
+			if (offset < 0){
+				errorAt("address offsets must not be negative");
+				offset = 0;
+			}
+		}else{
+			dout("no offset to address");
+			index--;
+		}
 		if (labels.isDefined(token.value())){
 			int address = labels.getAddress(token.value());
-			writeComment(token.value(), binary.size());
-			binary.write16bit(address);
+			dout(token.value() << " is defined as " << address);
+			writeComment(token.value()+"+"+to_string(offset), binary.size());
+			binary.write16bit(address + offset);
 		}else{
-			labels.addOccurrence(token.value(), binary.size());
+			dout("adding occurrence of " << token.value());
+			labels.addOccurrence(token.value(), binary.size(), offset);
 			binary.write16bit(0);
 		}
 	}
@@ -920,12 +939,12 @@ void SSBCAssembler::replaceLabelOccurrences(string label){
 	occurrences = labels.getOccurrences(label);
 	for(unsigned int i = 0; i < occurrences.size(); i++){
 		pair<unsigned int, int> p = occurrences[i];
-		replaceLabelOccurrence(label, p.first, (LabelList::Option)p.second);
+		replaceLabelOccurrence(label, p.first, (int)p.second);
 	}
 }
 
 void SSBCAssembler::replaceLabelOccurrence(string label, unsigned int address,
-		LabelList::Option option){
+		int option){
 	unsigned int value = binary.size();
 	switch(option){
 		case LabelList::NONE:
@@ -953,8 +972,11 @@ void SSBCAssembler::replaceLabelOccurrence(string label, unsigned int address,
 			break;
 
 		default:
-			assert(false, "Option in SSBCAssembler::replaceLabelOccurrence() \
-is undefined");
+			int offset = option;
+			dout("writing value + " << offset << " into address " << address);
+			binary.write16bit(value + offset, address);
+			writeComment(label + " + " + to_string(offset), address);
+			break;
 	}
 }
 

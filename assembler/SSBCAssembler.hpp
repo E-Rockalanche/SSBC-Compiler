@@ -12,7 +12,7 @@
 class SSBCAssembler{
 public:
 	SSBCAssembler(int argc = 0, const char** argv = NULL);
-	void assemble();
+	bool assemble();
 	void setWarnings(bool set = true);
 	void setComments(bool set = true);
 	void setOutputFilename(string filename);
@@ -102,7 +102,7 @@ private:
 	void labelDefError(string label);
 	void replaceLabelOccurrences(string label);
 	void replaceLabelOccurrence(string label, unsigned int address,
-		LabelList::Option option);
+		int option);
 
 	//native instructions
 	void noop();

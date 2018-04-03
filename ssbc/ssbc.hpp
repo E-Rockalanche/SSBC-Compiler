@@ -12,6 +12,8 @@ written by Eric Roberts
 #include <bitset>
 #include <iostream>
 #include <string>
+#include <vector>
+#include "../tool/Debug.hpp"
 using namespace std;
 
 typedef unsigned int uint;
@@ -56,6 +58,9 @@ private:
 	};
 
 	char memory[MEMORY_SIZE];
+	#if(DEBUG)
+		vector<string> comments;
+	#endif
 	uint stack_pointer;
 	uint program_counter;
 	bool fault_bit;

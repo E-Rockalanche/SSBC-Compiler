@@ -8,26 +8,32 @@ using namespace std;
 class CppLang : public Lang{
 public:
 	enum Token{
-		//keywords
+		//types
+		/*
+		VOID,
 		INT,
+		CHAR,
+		BOOL,
+		LONG,
+		*/
 		STRUCT,
+		CLASS,
+		UNION,
+		
+		//keywords
 		BREAK,
 		ELSE,
-		LONG,
 		SWITCH,
 		CASE,
 		ENUM,
 		TYPEDEF,
-		CHAR,
 		EXTERN,
 		RETURN,
-		UNION,
 		CONST,
 		UNSIGNED,
 		CONTINUE,
 		FOR,
 		SIGNED,
-		VOID,
 		DEFAULT,
 		SIZEOF,
 		VOLATILE,
@@ -35,10 +41,7 @@ public:
 		IF,
 		STATIC,
 		WHILE,
-		BOOL,
-		CLASS,
 		DELETE,
-		FALSE,
 		INLINE,
 		NAMESPACE,
 		NEW,
@@ -48,7 +51,6 @@ public:
 		PUBLIC,
 		TEMPLATE,
 		THIS,
-		TRUE,
 		TYPENAME,
 		VIRTUAL,
 
@@ -61,6 +63,8 @@ public:
 		BINARY,
 		CHARACTER,
 		STRING,
+		TRUE,
+		FALSE,
 
 		//other
 		COMMENT,
@@ -80,8 +84,8 @@ public:
 		DIRECTIVE,
 
 		//operators
-		PLUS,
-		MINUS,
+		ADD,
+		SUB,
 		DIV,
 		MOD,
 		INC,
@@ -98,7 +102,7 @@ public:
 		AMPERSAND,
 		BIT_OR,
 		BIT_XOR,
-		BIT_NOT,
+		TILDE,
 		SHIFT_LEFT,
 		SHIFT_RIGHT,
 		ASSIGN,
@@ -121,11 +125,12 @@ private:
 
 	void define(Token token, string regExp);
 };
-
-#define CASE_INTEGER \
-	case CppLang::HEXADECIMAL:\
-	case CppLang::DECIMAL:\
-	case CppLang::OCTAL:\
-	case CppLang::BINARY:
-
+/*
+#define CASE_PRIMITIVE\
+	case CppLang::INT:\
+	case CppLang::CHAR:\
+	case CppLang::LONG:\
+	case CppLang::VOID:\
+	case CppLang::BOOL:
+*/
 #endif

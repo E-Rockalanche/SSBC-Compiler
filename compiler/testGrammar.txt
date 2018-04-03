@@ -1,0 +1,29 @@
+//this is a comment
+int globalVar = 5
+bool foo(long var, myType x){
+	anotherType y = var + x
+	bool result = (var ^ x == 0) && (var & x == 76) && 1 * p / j + 9
+	result = result | 1
+	return result
+}
+retType bar(){
+	if (cond) dostuff()
+	else doadifferentthing()
+	while(cond){
+		do{
+			//stuff
+		}while(cond + 1 & 6 ^ 5 % 4 | 0 << 1 > 5)
+		continue
+	}
+	switch(7 * 6){
+		case 0:
+			case0()
+			break
+		case 1:
+			case1()
+			break
+			break
+		default:
+			defaultCase()
+	}
+}

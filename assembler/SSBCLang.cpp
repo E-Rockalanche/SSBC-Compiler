@@ -61,6 +61,7 @@ SSBCLang::SSBCLang(){
 	define(STRING, "\"([^\\\\\"]|(\\\\.))*\"");
 
 	//other
+	define(PLUS, "\\+");
 	define(COMMENT, "//[ -~\\t]*(\\n)?");
 	define(COMMENT_BLOCK, "/\\*[ -~\\t\\n\\r\\f]*\\*/");
 	define(IDENTIFIER, "[a-zA-Z_\\.]+[a-zA-Z0-9_]*");

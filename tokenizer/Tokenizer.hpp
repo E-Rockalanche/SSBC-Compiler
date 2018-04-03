@@ -10,7 +10,7 @@ using namespace std;
 class Tokenizer{
 public:
 	void setLang(Lang* lang);
-	vector<Token>* tokenize(const string filename, vector<Token>* tokens = NULL);
+	void tokenize(const string& filename, vector<Token>* t = NULL);
 	int errors();
 
 private:

@@ -10,13 +10,14 @@ using namespace std;
 class LabelList{
 public:
 	enum Option{
-		NONE,
-		LOW_BITS,
-		HIGH_BITS,
-		ADD_ONE,
+		LOW_BITS = -3,
+		HIGH_BITS = -2,
+		ADD_ONE = -1,
+		NONE = 0,
+		//>0 with offset
 	};
 
-	typedef pair<unsigned int, Option> Occurrence; 
+	typedef pair<unsigned int, int> Occurrence; 
 	typedef vector<Occurrence> OccurrenceList;
 	typedef pair<string, unsigned int> Reference;
 	typedef vector<Reference> UndefinedList;
@@ -27,7 +28,7 @@ public:
 	bool isDefined(string label);
 
 	void addOccurrence(string label, unsigned int address,
-		Option option = NONE);
+		int option = NONE);
 	unsigned int getAddress(string label);
 
 	OccurrenceList getOccurrences(string label);
@@ -41,7 +42,7 @@ private:
 		void define(unsigned int address);
 		int getAddress();
 		int getTokenIndex();
-		void addOccurrence(unsigned int address, Option option);
+		void addOccurrence(unsigned int address, int option);
 		OccurrenceList getOccurrences();
 		bool isLocal();
 

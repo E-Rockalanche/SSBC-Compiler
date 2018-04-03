@@ -26,7 +26,7 @@ bool LabelList::isDefined(string label){
 }
 
 void LabelList::addOccurrence(string label, unsigned int address,
-		LabelList::Option option){
+		int option){
 	labels[label].addOccurrence(address, option);
 }
 
@@ -74,7 +74,7 @@ int LabelList::Entry::getAddress(){
 	return address;
 }
 
-void LabelList::Entry::addOccurrence(unsigned int address, Option option = NONE){
+void LabelList::Entry::addOccurrence(unsigned int address, int option = NONE){
 	occurrences.push_back(Occurrence(address, option));
 }
 
