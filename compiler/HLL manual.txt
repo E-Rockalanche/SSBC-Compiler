@@ -1,0 +1,82 @@
+========================
+	Compiler Grammar
+========================
+
+identifier = 	[a-zA-Z_][a-zA-Z0-9_]*
+hexadecimal = 	0x[0-9a-fA-F]*
+decimal = 		[-]?[1-9][0-9]*
+octal = 		0[0-7]*
+binary = 		0b[01]*
+char = 			'[\\]?[ -~]'
+string = 		"[ -~]*"
+
+Program -> StatementSequence
+
+StatementSequence -> Statement
+StatementSequence ->
+
+Statement -> VariableDef
+Statement -> Assignment
+Statement -> CompoundStatement
+
+CompoundStatement -> { StatementSequence }
+
+VariableDef -> Type identifier
+
+Type -> identifier Pointers
+
+Pointers -> * Pointers
+Pointers ->
+
+Assignment -> AssignmentExpression = Expression
+
+AssignmentExpression -> VariableAssignment
+AssignmentExpression -> ArrayAssignment
+
+VariableAssignment -> identifier
+
+ArrayAssignment -> identifier [ Expression ]
+
+Expression -> BooleanExpression
+
+BooleanExpression -> RelationalExpression && BooleanExpression
+BooleanExpression -> RelationalExpression || BooleanExpression
+BooleanExpression -> RelationalExpression
+
+RelationalExpression -> EqualityExpression < RelationalExpression
+RelationalExpression -> EqualityExpression <= RelationalExpression
+RelationalExpression -> EqualityExpression > RelationalExpression
+RelationalExpression -> EqualityExpression >= RelationalExpression
+RelationalExpression -> EqualityExpression
+
+EqualityExpression -> AdditiveExpression == EqualityExpression
+EqualityExpression -> AdditiveExpression != EqualityExpression
+EqualityExpression -> AdditiveExpression
+
+AdditiveExpression -> UnaryExpression + AdditiveExpression
+AdditiveExpression -> UnaryExpression - AdditiveExpression
+AdditiveExpression -> UnaryExpression
+
+UnaryExpression -> BitwiseNotExpression
+UnaryExpression -> BooleanNotExpression
+UnaryExpression -> DereferenceExpression
+UnaryExpression -> ArrayAccessorExpression
+UnaryExpression -> EnclosedExpression
+UnaryExpression -> VariableExpression
+UnaryExpression -> LiteralExpression
+
+BitwiseNotExpression -> ~ UnaryExpression
+
+BooleanNotExpression -> ! UnaryExpression
+
+DereferenceExpression -> * UnaryExpression
+
+ArrayAccessorExpression -> identifier [ Expression ]
+
+EnclosedExpression -> ( Expression )
+
+VariableExpression -> identifier
+
+LiteralExpression -> Integer | char | string
+
+Integer -> hexadecimal | decimal | octal | binary
