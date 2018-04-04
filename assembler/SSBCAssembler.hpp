@@ -28,15 +28,21 @@ private:
 	Tokenizer tokenizer;
 	vector<string> inputFiles;
 	vector<Token> tokens;
+	string currentFile;
 	
 	unsigned int index;
 	int errors;
 	Binary binary;
 	vector<string> comments;
 
+	//start directive
+	bool foundStartDirective;
+	string startFile;
+	Token startToken;
+
 	int numASMRegisters = 2;
 
-	const static unsigned int MAX_BINARY_SIZE = 0xf000;
+	const static unsigned int MAX_BINARY_SIZE = 0xf000;//leave room for stack
 	const static unsigned int ASM = 0xfff9;
 	const static unsigned int ASM2 = 0xfffa;
 	const static unsigned int PSW = 0xfffb;
@@ -64,8 +70,8 @@ private:
 	void writeAscii(string str);
 
 	//messages
-	void error(string message);
-	void warning(string message);
+	void printError(string message);
+	void printWarning(string message);
 	void errorAt(string message);
 	void warningAt(string message);
 	void errorNear(string message);

@@ -13,7 +13,7 @@ written by Eric Roberts
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../tool/Debug.hpp"
+#include "Debug.hpp"
 using namespace std;
 
 typedef unsigned int uint;

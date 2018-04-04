@@ -1,0 +1,3 @@
+int* port_a_ptr
+port_a_ptr = 0xfffc // PORT A
+port_a_ptr[0] = 1

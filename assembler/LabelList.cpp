@@ -17,8 +17,11 @@ void LabelList::setGlobal(string label){
 	labels[label].setGlobal();
 }
 
-void LabelList::define(string label, unsigned int address){
+void LabelList::define(string label, unsigned int address, bool global){
 	labels[label].define(address);
+	if(global){
+		labels[label].setGlobal();
+	}
 }
 
 bool LabelList::isDefined(string label){

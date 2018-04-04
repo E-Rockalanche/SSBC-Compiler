@@ -1,0 +1,12 @@
+myString: .asciz "Hello World!"
+iterator: .word 1
+
+.start
+pushext16 iterator
+pushimm16 myString
+jsr ADD16
+popext16 charAddr
+pushext ?
+charAddr: .word 0
+popext PORT_A
+halt

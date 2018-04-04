@@ -17,20 +17,13 @@ SSBCAssembler::SSBCAssembler(int argc, const char** argv){
 
 	tokenizer.setLang(new SSBCLang());
 
-	labels.define("ASM", ASM);
-	labels.setGlobal("ASM");
-	labels.define("ASM2", ASM2);
-	labels.setGlobal("ASM2");
-	labels.define("PSW", PSW);
-	labels.setGlobal("PSW");
-	labels.define("PORT_A", PORT_A);
-	labels.setGlobal("PORT_A");
-	labels.define("PORT_B", PORT_B);
-	labels.setGlobal("PORT_B");
-	labels.define("PORT_C", PORT_C);
-	labels.setGlobal("PORT_C");
-	labels.define("PORT_D", PORT_D);
-	labels.setGlobal("PORT_D");
+	labels.define("ASM", ASM, true);
+	labels.define("ASM2", ASM2, true);
+	labels.define("PSW", PSW, true);
+	labels.define("PORT_A", PORT_A, true);
+	labels.define("PORT_B", PORT_B, true);
+	labels.define("PORT_C", PORT_C, true);
+	labels.define("PORT_D", PORT_D, true);
 }
 
 void SSBCAssembler::setWarnings(bool set){
@@ -77,9 +70,14 @@ bool SSBCAssembler::assemble(){
 	}
 
 	errors = 0;
+	foundStartDirective = false;
 
 	for(unsigned int i = 0; i < inputFiles.size(); i++){
 		assembleFile(inputFiles[i]);
+	}
+
+	if (!foundStartDirective){
+		printError("No start directive specified");
 	}
 
 	checkForUndefinedReferences();
@@ -96,6 +94,7 @@ bool SSBCAssembler::assemble(){
 void SSBCAssembler::assembleFile(string filename){
 		dout("assembling file " << filename);
 
+		currentFile = filename;
 		tokens.clear();
 		index = 0;
 		tokenizer.tokenize(filename, &tokens);
@@ -129,17 +128,17 @@ void SSBCAssembler::checkForUndefinedReferences(){
 	LabelList::UndefinedList undefinedList = labels.getUndefinedReferences();
 	char numString[32];
 	for(unsigned int i = 0; i < undefinedList.size(); i++){
-		error("Undefined reference: " + undefinedList[i].first
+		printError("Undefined reference: " + undefinedList[i].first
 			+ string(" at 0x") + itoa(undefinedList[i].second, numString, 16));
 	}
 }
 
-void SSBCAssembler::error(string message){
+void SSBCAssembler::printError(string message){
 	errors++;
 	cout << "Error: " << message << '\n';
 }
 
-void SSBCAssembler::warning(string message){
+void SSBCAssembler::printWarning(string message){
 	if (warnings){
 		cout << "Warning: " << message << '\n';
 	}
@@ -597,17 +596,26 @@ void SSBCAssembler::bclear(){
 
 void SSBCAssembler::start(){
 	dout("start");
-	int startAddress = numASMRegisters*2;
-	binary.write8bit(PUSHIMM, startAddress);
-	writeComment("clearpsw", startAddress);
-	binary.write8bit(0, startAddress + 1);
-	binary.write8bit(POPEXT, startAddress + 2);
-	binary.write16bit(PSW, startAddress + 3);
-	binary.write8bit(JNZ, startAddress + 5);
-	writeComment("jump", startAddress + 5);
-	binary.write16bit(binary.size(), startAddress + 6);
-	writeComment("start", startAddress + 6);
-	writeComment("start", binary.size());
+	if (foundStartDirective){
+		printError("Start of program already declared in file " + currentFile
+			+ " at (" + to_string(startToken.row()) + ", "
+			+ to_string(startToken.col()) + ")");
+	}else{
+		foundStartDirective = true;
+		startToken = currentToken();
+
+		int jumpToStartAddress = numASMRegisters*2;
+		binary.write8bit(PUSHIMM, jumpToStartAddress);
+		writeComment("clearpsw", jumpToStartAddress);
+		binary.write8bit(0, jumpToStartAddress + 1);
+		binary.write8bit(POPEXT, jumpToStartAddress + 2);
+		binary.write16bit(PSW, jumpToStartAddress + 3);
+		binary.write8bit(JNZ, jumpToStartAddress + 5);
+		writeComment("jump", jumpToStartAddress + 5);
+		binary.write16bit(binary.size(), jumpToStartAddress + 6);
+		writeComment("start", jumpToStartAddress + 6);
+		writeComment("start", binary.size());
+	}
 }
 
 void SSBCAssembler::global(){
@@ -691,7 +699,7 @@ void SSBCAssembler::writeAddress(Token addressToken){
 			break;
 
 		default:
-			error("Expected an address at (" + to_string(addressToken.row())
+			printError("Expected an address at (" + to_string(addressToken.row())
 				+ ", " + to_string(addressToken.col()) + ")");
 	}
 	binary.write16bit(value);
@@ -797,7 +805,7 @@ void SSBCAssembler::byteLiteral(){
 void SSBCAssembler::highLowAddress(bool high){
 	Token token = nextToken();
 	if (token.type() != SSBCLang::IDENTIFIER){
-		error("Expected an identifier");
+		printError("Expected an identifier");
 	}else{
 		if (labels.isDefined(token.value())){
 			int address = labels.getAddress(token.value());
@@ -841,7 +849,7 @@ int SSBCAssembler::parseInteger(Token integerToken){
 			break;
 			
 		default:	
-			error("Expected an integer");
+			printError("Expected an integer");
 			dout("value = " << value);
 	}
 	return num;
@@ -873,7 +881,7 @@ unsigned int SSBCAssembler::getExt16Address(bool highFirst){
 			break;
 
 		default:
-			error("Expected an integer or address");
+			printError("Expected an integer or address");
 	}
 	return value;
 }
@@ -896,7 +904,7 @@ void SSBCAssembler::addressToken(){
 			break;
 
 		default:
-			error("Expecting an address");
+			printError("Expecting an address");
 	}
 }
 
@@ -938,7 +946,7 @@ void SSBCAssembler::defineLabelAsCurrentAddress(string label){
 }
 
 void SSBCAssembler::labelDefError(string label){
-	error("Label " + label + " is already defined");
+	printError("Label " + label + " is already defined");
 	int address = labels.getAddress(label);
 	cout << "\tdefined as " << address << '\n';
 }

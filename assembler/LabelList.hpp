@@ -24,7 +24,7 @@ public:
 
 	void clearLocal();
 	void setGlobal(string label);
-	void define(string label, unsigned int address);
+	void define(string label, unsigned int address, bool global = false);
 	bool isDefined(string label);
 
 	void addOccurrence(string label, unsigned int address,

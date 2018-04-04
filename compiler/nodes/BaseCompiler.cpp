@@ -27,19 +27,35 @@ void BaseCompiler::incIndex(){
 }
 
 Token BaseCompiler::nextToken(){
-	if (index + 1 < tokens.size()){
-		return tokens[++index];
-	}else{
-		return Token();
-	}
+	Token token;
+	do{
+		if (++index < tokens.size()){
+			token = tokens[index];
+		}else{
+			token = Token();
+		}
+	}while(token.type() == CppLang::COMMENT
+		|| token.type() == CppLang::COMMENT_BLOCK);
+	return token;
 }
 
 Token BaseCompiler::currentToken(){
-	if (index < tokens.size()){
-		return tokens[index];
-	}else{
-		return Token();
-	}
+	Token token;
+	bool next = true;
+	do{
+		if (index < tokens.size()){
+			token = tokens[index];
+		}else{
+			token = Token();
+		}
+		if (token.type() == CppLang::COMMENT
+			|| token.type() == CppLang::COMMENT_BLOCK){
+			index++;
+		}else{
+			next = false;
+		}
+	}while(next);
+	return token;
 }
 
 void BaseCompiler::writeAssembly(string str){

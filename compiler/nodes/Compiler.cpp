@@ -6,6 +6,7 @@ Compiler::Compiler(){
 	numLabels = 0;
 	errors = 0;
 	program = NULL;
+	stdLibDir = "ssbclib/";
 }
 
 Compiler::~Compiler(){
@@ -79,7 +80,7 @@ bool Compiler::compile(){
 	writeToFile(asmFilename);
 
 	assembler.addInputFile(asmFilename);
-	assembler.addInputFile("../ssbclib/math.ssbc");
+	assembler.addInputFile(stdLibDir + "math.ssbc");
 	assembler.setOutputFilename(outputFilename);
 	
 	#if(DEBUG)

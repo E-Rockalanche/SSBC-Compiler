@@ -1,4 +1,4 @@
-PROGRAM = compiler.exe
+PROGRAM = ../compiler.exe
 INCLUDE = -I../lang -I../tokenizer -I../tool -I../assembler -I./nodes -I.
 CFLAGS = -c -Wall -Wextra
 LFLAGS = -static -Wall -Wextra
@@ -20,7 +20,7 @@ $(PROGRAM):	$(OBJ_DIR)/CppLang.o $(OBJ_DIR)/Tokenizer.o $(OBJ_DIR)/Scanner.o \
 
 nodes/%.o:	nodes/%.cpp FunctionManager.hpp FunctionSignature.hpp \
 		ScopeTable.hpp Type.hpp TypeManager.hpp ../tokenizer/Token.hpp \
-		CppLang.hpp ../tool/Debug.hpp nodes/BaseCompiler.hpp
+		CppLang.hpp CompilerDebug.hpp nodes/BaseCompiler.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/Main.o:	Main.cpp nodes/Compiler.hpp
@@ -36,7 +36,7 @@ $(OBJ_DIR)/Type.o:	Type.cpp Type.hpp ../tool/Assert.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/CppLang.o:	CppLang.cpp CppLang.hpp ../lang/Lang.hpp \
-		../tool/Debug.hpp
+		CompilerDebug.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/FunctionSignature.o:	FunctionSignature.cpp FunctionSignature.hpp
@@ -50,24 +50,24 @@ $(OBJ_DIR)/Assert.o:	../tool/Assert.cpp ../tool/Assert.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/Tokenizer.o:	../tokenizer/Tokenizer.cpp ../tokenizer/Tokenizer.hpp \
-		../tokenizer/Scanner.hpp ../tool/Assert.hpp ../tool/Debug.hpp
+		../tokenizer/Scanner.hpp ../tool/Assert.hpp CompilerDebug.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/Scanner.o:	../tokenizer/Scanner.cpp ../tokenizer/Scanner.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/LabelList.o:	../assembler/LabelList.cpp ../assembler/LabelList.hpp \
-		../tool/Debug.hpp
+		CompilerDebug.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/SSBCAssembler.o:	../assembler/SSBCAssembler.cpp \
 		../assembler/SSBCAssembler.hpp ../assembler/SSBCLang.hpp \
-		../tokenizer/Tokenizer.hpp ../tool/Assert.hpp ../tool/Debug.hpp \
+		../tokenizer/Tokenizer.hpp ../tool/Assert.hpp CompilerDebug.hpp \
 		../assembler/Binary.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/SSBCLang.o:	../assembler/SSBCLang.cpp ../assembler/SSBCLang.hpp \
-		../lang/Lang.hpp ../tool/Debug.hpp
+		../lang/Lang.hpp CompilerDebug.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/Binary.o:	../assembler/Binary.cpp ../assembler/Binary.hpp

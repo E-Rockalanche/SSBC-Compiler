@@ -10,7 +10,7 @@
 #include "FunctionManager.hpp"
 #include "Type.hpp"
 #include "CppLang.hpp"
-#include "Debug.hpp"
+#include "CompilerDebug.hpp"
 #include "Assert.hpp"
 #include "Token.hpp"
 using namespace std;

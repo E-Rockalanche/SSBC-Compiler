@@ -20,6 +20,7 @@ private:
 	string outputFilename;
 	bool createAsm;
 	ProgramCompiler* program;
+	string stdLibDir;
 
 	bool parse();
 	bool compileFile(string filename);

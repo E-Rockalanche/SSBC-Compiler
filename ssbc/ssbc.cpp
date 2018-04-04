@@ -22,7 +22,9 @@ void SSBC::load(const char* filename){
 	for(unsigned int i = 0; i < MEMORY_SIZE; i++){
 		memory[i] = 0;
 	}
-	comments.clear();
+	#if(DEBUG)
+		comments.clear();
+	#endif
 
 	ifstream fin;
 	fin.open(filename);

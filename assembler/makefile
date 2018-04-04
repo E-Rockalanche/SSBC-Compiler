@@ -1,4 +1,4 @@
-PROGRAM = ssbca.exe
+PROGRAM = ../assembler.exe
 INCLUDE = -I ../lang -I ../tokenizer -I ../tool
 CFLAGS = -c -Wall -Wextra
 LFLAGS = -static
