@@ -36,6 +36,11 @@ bool VariableDefCompiler::compile(){
 	}
 
 	scopeTable.add(identifier.value(), type);
+	
+	#if(DEBUG)
+		scopeTable.dump();
+	#endif
+
 	if (typeManager.sizeOf(type) == 1){
 		writeData(identifier.value() + ": .byte 0");
 	}else{

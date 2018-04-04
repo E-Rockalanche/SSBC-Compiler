@@ -22,10 +22,8 @@ bool FunctionCallCompiler::compile(){
 		if (!children.back()->compile()) return false;
 		writeAssembly("jsr " + getFunctionSignature().toLabel());
 		return true;
-	}else{
-		printError("Function is not defined", startTokenIndex);
-		return false;
 	}
+	return false;
 }
 
 FunctionSignature FunctionCallCompiler::getFunctionSignature(){
@@ -39,6 +37,8 @@ Type FunctionCallCompiler::getType(){
 	FunctionSignature function = getFunctionSignature();
 	if (functionManager.functionExists(function)){
 		return functionManager.getReturnType(function);
+	}else{
+		printError("Function is not defined", startTokenIndex);
+		return Type();
 	}
-	return Type();
 }

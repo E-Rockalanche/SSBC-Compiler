@@ -13,12 +13,13 @@ Type::Type(string name, bool constant){
 }
 
 Type& Type::addPointer(bool constant){
+	assert(isDefined(), "Cannot add pointers to undefined type");
 	pointers.push_back(constant);
 	return *this;
 }
 
 bool Type::isConstant() const{
-	if (pointers.size() > 0){
+	if (isPointer()){
 		return pointers.back();
 	}else{
 		return constant;
@@ -30,7 +31,7 @@ bool Type::isPointer() const{
 }
 
 Type Type::dereference() const{
-	assert(pointers.size() > 0, "Trying to dereference non-pointer type");
+	assert(isPointer(), "Trying to dereference non-pointer type");
 	Type t = *this;
 	t.pointers.pop_back();
 	return t;

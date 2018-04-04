@@ -14,25 +14,25 @@ bool VariableExpCompiler::parse(){
 
 bool VariableExpCompiler::compile(){
 	dout("Compiling in " << __FILE__);
-
-	type = getType();
-	if (type.isDefined()){
+	
+	if (getType().isDefined()){
 		int size = typeManager.sizeOf(type);
 		for(int i = size-1; i >= 0; i--){
 			writeAssembly("pushext " + identifier.value() + " + "
 				+ to_string(i));
 		}
 		return true;
-	}else{
-		printError("Variable " + identifier.value() + " is not defined",
-			startTokenIndex);
-		return false;
 	}
+	return false;
 }
 
 Type VariableExpCompiler::getType(){
 	if (!type.isDefined()){
 		type = scopeTable.getType(identifier.value());
+		if (!type.isDefined()){
+			printError("Variable " + identifier.value() + " is not defined",
+				startTokenIndex);
+		}
 	}
 	return type;
 }

@@ -14,11 +14,16 @@ void SSBC::reset(){
 	halt_bit = false;
 	fault_bit = false;
 	break_bit = false;
-	memory[PSW] = 0;
 }
 
 void SSBC::load(const char* filename){
 	dout("loading program");
+	//clear memory
+	for(unsigned int i = 0; i < MEMORY_SIZE; i++){
+		memory[i] = 0;
+	}
+	comments.clear();
+
 	ifstream fin;
 	fin.open(filename);
 	if (fin.fail()){
@@ -53,8 +58,9 @@ void SSBC::run(){
 			return;
 		}
 		#if(DEBUG)
-			if (program_counter < comments.size())
+			if (program_counter < comments.size()){
 				cout << comments[program_counter] << '\n';
+			}
 		#endif
 		switch(memory[program_counter]){
 			case NOOP:

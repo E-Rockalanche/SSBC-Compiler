@@ -21,23 +21,15 @@ bool BooleanExpCompiler::parse(){
 }
 
 bool BooleanExpCompiler::compile(){
-	dout("Compiling in " << __FILE__);
-
 	assert(children.size() > 0, "No boolean expression");
-
-	for(unsigned int i = 0; i < children.size(); i++){
-		Type t = children[i]->getType();
-		if (!t.isDefined()){
-			printError("Expression type undefined", children[i]->getIndex());
-			return false;
-		}else if (t == Type("void")){
-			printError("Expression returns void", children[i]->getIndex());
-			return false;
-		}
-	}
+	
 	if (children.size() == 1){
 		return children.back()->compile();
 	}else{
+		dout("Compiling in " << __FILE__);
+
+		ASSERT_TYPES
+
 		writeComment(token.value());
 		Type t1 = children[0]->getType();
 		Type t2 = children[1]->getType();

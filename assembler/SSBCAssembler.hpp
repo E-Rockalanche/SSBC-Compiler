@@ -91,7 +91,7 @@ private:
 	int parseInteger(Token token);
 	int parseChar(Token charToken);
 	int parseEscapeChar(char escapeChar);
-	unsigned int getExt16Address();
+	unsigned int getExt16Address(bool highFirst);
 	void pushimm16(unsigned int value);
 	void identifier();
 	void addressToken();

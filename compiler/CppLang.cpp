@@ -6,10 +6,10 @@ CppLang::CppLang(){
 	//literals
 	define(FALSE, "false");
 	define(TRUE, "true");
-	define(HEXADECIMAL, "0x[0-9a-fA-F]+");
+	define(HEXADECIMAL, "0x[0-9a-fA-F]*");
 	define(DECIMAL, "[-+]?[1-9][0-9]*");
 	define(OCTAL, "0[0-7]*");
-	define(BINARY, "0b[01]+");
+	define(BINARY, "0b[01]*");
 	define(CHARACTER,   "'([^\\\\']|(\\\\.))'");
 	define(STRING, "\"([^\\\\\"]|(\\\\.))*\"");
 

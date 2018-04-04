@@ -1,5 +1,7 @@
 #include "ScopeTable.hpp"
 #include "Debug.hpp"
+#include <iostream>
+using namespace std;
 
 ScopeTable::ScopeTable(){
 	pushScope();
@@ -16,27 +18,25 @@ void ScopeTable::popScope(){
 }
 
 void ScopeTable::add(string name, Type type){
-	dout("ScopeTable::add(" << name << ", " << type.toString() << ")");
-
 	vector<Entry>& scope = scopeTable.back();
-
-	dout("current scope size = " << scope.size());
-
 	scope.push_back(Entry(name, type));
 }
 
 Type ScopeTable::getType(string name) const{
-	dout("ScopeTable::getType(" << name << ")");
-
+	Type type;
 	for(int scope = (int)scopeTable.size()-1; scope >= 0; scope--){
 		const vector<Entry>& currentScope = scopeTable[scope];
 		for(int i = (int)currentScope.size()-1; i >= 0; i--){
 			if (currentScope[i].getName() == name){
-				return currentScope[i].getType();
+				type = currentScope[i].getType();
+				dout("type of " << name << " is " << type.toString());
 			}
 		}
 	}
-	return Type();
+	if (!type.isDefined()){
+		dout(name << " is not defined");
+	}
+	return type;
 }
 
 bool ScopeTable::isDefined(string name) const{
@@ -44,8 +44,6 @@ bool ScopeTable::isDefined(string name) const{
 }
 
 bool ScopeTable::isGlobal(string name) const{
-	dout("ScopeTable::isGlobal(" << name << ")");
-
 	for(int scope = (int)scopeTable.size()-1; scope >= 0; scope--){
 		const vector<Entry>& currentScope = scopeTable[scope];
 		for(int i = (int)currentScope.size()-1; i >= 0; i--){
@@ -60,4 +58,17 @@ bool ScopeTable::isGlobal(string name) const{
 void ScopeTable::clear(){
 	scopeTable.clear();
 	pushScope();
+}
+
+void ScopeTable::dump(){
+	cout << "========== SCOPE TABLE ==========\n";
+	for(unsigned int scope = 0; scope < scopeTable.size(); scope++){
+		cout << scope << ":\n";
+		const vector<Entry>& curScope = scopeTable[scope];
+		for(unsigned int i = 0; i < curScope.size(); i++){
+			const Entry& entry = curScope[i];
+			cout << entry.getType().toString() << ' ' << entry.getName() << '\n';
+		}
+	}
+	cout << "=================================\n";
 }

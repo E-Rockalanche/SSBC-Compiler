@@ -3,8 +3,9 @@
 
 #include "BaseCompiler.hpp"
 #include "SSBCAssembler.hpp"
+#include "ProgramCompiler.hpp"
 
-class Compiler : public CompilerNode {
+class Compiler : public BaseCompiler {
 public:
 	Compiler();
 	~Compiler();
@@ -13,13 +14,14 @@ public:
 	bool compile();
 
 private:
-	bool parse();
 	SSBCAssembler assembler;
 	vector<string> inputFiles;
 	string asmFilename;
 	string outputFilename;
 	bool createAsm;
+	ProgramCompiler* program;
 
+	bool parse();
 	bool compileFile(string filename);
 	bool writeToFile(string filename);
 };

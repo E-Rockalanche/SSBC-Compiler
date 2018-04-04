@@ -19,9 +19,14 @@ bool AssignmentCompiler::compile(){
 	writeComment("Assignment");
 
 	Type to = children[0]->getType();
-	Type from = children[0]->getType();
+	dout("left type = " << to.toString());
+
+	Type from = children[1]->getType();
+	dout("right type = " << from.toString());
+
 	if (!children[1]->compile()) return false;
 	compileTypeConversion(from, to);
+
 	if (!children[0]->compile()) return false;
 
 	writeComment("End Assignment");

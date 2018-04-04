@@ -388,9 +388,14 @@ void SSBCAssembler::popinh16(){
 
 void SSBCAssembler::pushext16(){
 	dout("pushext16");
+	dout("~~~~~~~~~~ PUSHEXT16 ~~~~~~~~~~");
+
 	binary.write8bit(PUSHEXT);
 	writeComment("pushext16");
-	unsigned int value = getExt16Address();
+	unsigned int value = getExt16Address(false);
+
+	dout("value = " << value);
+
 	binary.write16bit(value + 1);
 	binary.write8bit(PUSHEXT);
 	binary.write16bit(value);
@@ -400,7 +405,7 @@ void SSBCAssembler::popext16(){
 	dout("popext16");
 	binary.write8bit(POPEXT);
 	writeComment("popext16");
-	unsigned int value = getExt16Address();
+	unsigned int value = getExt16Address(true);
 	binary.write16bit(value);
 	binary.write8bit(POPEXT);
 	binary.write16bit(value + 1);
@@ -842,7 +847,7 @@ int SSBCAssembler::parseInteger(Token integerToken){
 	return num;
 }
 
-unsigned int SSBCAssembler::getExt16Address(){
+unsigned int SSBCAssembler::getExt16Address(bool highFirst){
 	dout("getExt16Address()");
 	unsigned int value = 0;
 	Token token = nextToken();
@@ -855,9 +860,15 @@ unsigned int SSBCAssembler::getExt16Address(){
 			if (labels.isDefined(token.value())){
 				value = labels.getAddress(token.value());
 			}else{
-				labels.addOccurrence(token.value(), binary.size());
-				labels.addOccurrence(token.value(), binary.size() + 3,
-					LabelList::ADD_ONE);
+				if (highFirst){
+					labels.addOccurrence(token.value(), binary.size());
+					labels.addOccurrence(token.value(), binary.size() + 3,
+						LabelList::ADD_ONE);
+				}else{
+					labels.addOccurrence(token.value(), binary.size(),
+						LabelList::ADD_ONE);
+					labels.addOccurrence(token.value(), binary.size() + 3);
+				}
 			}
 			break;
 

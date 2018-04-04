@@ -70,14 +70,20 @@ void BaseCompiler::printWarning(string message){
 }
 
 void BaseCompiler::printError(string message, unsigned int index){
-	cout << "Error: " << message << '\n';
+	cout << "Error: " << message << " at " << getLocationString(index) << '\n';
 	printRow(index);
 	errors++;
 }
 
 void BaseCompiler::printWarning(string message, unsigned int index){
-	cout << "Warning: " << message << '\n';
+	cout << "Warning: " << message << " at " << getLocationString(index) << '\n';
 	printRow(index);
+}
+
+string BaseCompiler::getLocationString(unsigned int index){
+	assert(index < tokens.size(), "token index out of range");
+	Token t = tokens[index];
+	return "line " + to_string(t.row()) + ", column " + to_string(t.col());
 }
 
 void BaseCompiler::printRow(unsigned int index){
@@ -116,7 +122,11 @@ void BaseCompiler::printRow(unsigned int index){
 }
 
 bool BaseCompiler::compileTypeConversion(const Type& from, const Type& to){
-	//TODO check if type conversion is allowed
+	if (!typeManager.canConvert(from, to)){
+		printError("Cannot convert " + from.toString() + " to " + to.toString());
+		return false;
+	}
+
 	unsigned int fromSize = typeManager.sizeOf(from);
 	unsigned int toSize = typeManager.sizeOf(to);
 	

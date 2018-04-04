@@ -16,8 +16,10 @@ bool LiteralCompiler::parse(){
 bool LiteralCompiler::compile(){
 	dout("Compiling in " << __FILE__);
 
+	writeComment("Literal");
 	assert(children.size() > 0, "No literal");
 	return children.back()->compile();
+	writeComment("End literal");
 }
 
 Type LiteralCompiler::getType(){

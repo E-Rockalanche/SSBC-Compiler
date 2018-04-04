@@ -16,6 +16,7 @@ public:
 	Type getType(string name) const;
 	bool isGlobal(string name) const;
 	void clear();
+	void dump();
 private:
 	class Entry{
 	public:

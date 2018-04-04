@@ -5,9 +5,16 @@ Compiler::Compiler(){
 	index = 0;
 	numLabels = 0;
 	errors = 0;
+	program = NULL;
 }
 
-Compiler::~Compiler(){}
+Compiler::~Compiler(){
+	dout("Destroying compiler");
+
+	if (program){
+		delete program;
+	}
+}
 
 void Compiler::addFile(string filename){
 	inputFiles.push_back(filename);
@@ -22,15 +29,22 @@ void Compiler::setOutputFilename(string filename){
 }
 
 bool Compiler::parse(){
-	//should change to program->parse();
-	depth = 0;
-	P_BEGIN
-	P_LOOP_NODE(new StatementCompiler())
-	if (index < tokens.size()){
-		printError("Unparsed tokens");
-		P_FAIL
+	dout("Compiler::parse()");
+
+	if (program){
+		dout("Deleting old program node");
+		delete program;
+		program = NULL;
 	}
-	P_END
+
+	program = new ProgramCompiler();
+	if(program->parse()){
+		return true;
+	}else{
+		delete program;
+		program = NULL;
+		return false;
+	}
 }
 
 bool Compiler::compile(){
@@ -65,6 +79,7 @@ bool Compiler::compile(){
 	writeToFile(asmFilename);
 
 	assembler.addInputFile(asmFilename);
+	assembler.addInputFile("../ssbclib/math.ssbc");
 	assembler.setOutputFilename(outputFilename);
 	
 	#if(DEBUG)
@@ -103,10 +118,7 @@ bool Compiler::compileFile(string filename){
 	dout("Parse complete");
 
 	//compile
-	//should change to program->compile();
-	for(unsigned int i = 0; i < children.size(); i++){
-		children[i]->compile();
-	}
+	program->compile();
 	dout("compilation complete");
 
 	return (errors == 0);

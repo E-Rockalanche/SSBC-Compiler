@@ -1,2 +1,7 @@
-int x
-x = 5
+int* port_a_ptr
+port_a_ptr = 0xfffc
+port_a_ptr[0] = 1
+
+
+
+======

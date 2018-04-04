@@ -1,0 +1,6 @@
+.start
+pushext16 var
+popinh
+popext PORT_A
+halt
+var: .word 1

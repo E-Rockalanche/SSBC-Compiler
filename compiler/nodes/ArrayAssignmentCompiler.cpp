@@ -50,7 +50,11 @@ Type ArrayAssignmentCompiler::getType(){
 	if (!type.isDefined()){
 		Type t = scopeTable.getType(identifier.value());
 		if (t.isPointer()){
-			type = type.dereference();
+			type = t.dereference();
+		}else{
+			printError("Variable " + identifier.value()
+				+ " is not a pointer. It is of type " + t.toString(),
+				startTokenIndex);
 		}
 	}
 	return type;

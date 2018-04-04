@@ -53,6 +53,11 @@ using namespace std;
 	#define P_END {return true;}
 #endif
 
+#define ASSERT_TYPES {for(unsigned int i = 0; i < children.size(); i++)\
+	{Type t = children[i]->getType(); if (!t.isDefined()){return false;}\
+	if (t == Type("void")){printError("void type", children[i]->getIndex());\
+	return false;}}}
+
 //use to fail the current rule parse. Sets the global token index back to the
 //current rule's starting index
 #if (DEBUG)
@@ -86,6 +91,7 @@ protected:
 	void printWarning(string message);
 	void printError(string message, unsigned int index);
 	void printWarning(string message, unsigned int index);
+	string getLocationString(unsigned int index);
 	void printRow(unsigned int index);
 	bool compileTypeConversion(const Type& from, const Type& to);
 

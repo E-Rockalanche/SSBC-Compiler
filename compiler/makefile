@@ -1,7 +1,7 @@
 PROGRAM = compiler.exe
 INCLUDE = -I../lang -I../tokenizer -I../tool -I../assembler -I./nodes -I.
 CFLAGS = -c -Wall -Wextra
-LFLAGS = -static
+LFLAGS = -static -Wall -Wextra
 CXX = g++
 OBJ_DIR = ../obj
 MAKE_OBJ = $(CXX) $(CFLAGS) $(INCLUDE) $< -o $@

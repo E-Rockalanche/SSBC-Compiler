@@ -8,22 +8,26 @@ bool IntegerCompiler::parse(){
 	value = 0;
 	switch(token.type()){
 		case CppLang::HEXADECIMAL:
-			value = stoi(str.erase(0, 2), NULL, 16);
+			str = str.erase(0, 2);
+			if (str == "") str = "0";
+			value = stoi(str, NULL, 16);
 			break;
 		case CppLang::DECIMAL:
 			value = stoi(str);
 			break;
 		case CppLang::OCTAL:
-			value = stoi(str.erase(0, 2), NULL, 8);
+			value = stoi(str, NULL, 8);
 			break;
 		case CppLang::BINARY:
-			value = stoi(str.erase(0, 2), NULL, 2);
+			str = str.erase(0, 2);
+			if (str == "") str = "0";
+			value = stoi(str, NULL, 2);
 			break;
 		default:
 			return false;
 	}
 	
-	if ((value < 256) && (value >= -128)){
+	if ((value <= 127) && (value >= -128)){
 		type = Type("int", true);
 	}else{
 		type = Type("long", true);

@@ -44,10 +44,11 @@ bool TypeCompiler::parse(){
 		type = Type(name, isConstant);
 		while(currentToken().type() == CppLang::ASTERISK){
 			isConstant = false;
-			if (nextToken().type() == CppLang::CONST){
-				isConstant = true;
-			}
 			incIndex();
+			if (currentToken().type() == CppLang::CONST){
+				isConstant = true;
+				incIndex();
+			}
 			type.addPointer(isConstant);
 		}
 		P_END

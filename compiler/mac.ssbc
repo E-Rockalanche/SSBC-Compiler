@@ -2,10 +2,54 @@
 /*
 Assignment
 */
+pushimm16 65532
+/*
+Converting const long to int *
+*/
+/*
+End type conversion
+*/
+popext portA_ptr + 0
+popext portA_ptr + 1
+/*
+End Assignment
+*/
+/*
+Assignment
+*/
+/*
++
+*/
+pushext y + 1
+pushext y + 0
+/*
+Converting long to long
+*/
+/*
+End type conversion
+*/
 pushimm 5
 /*
-Converting int to int
+Converting const int to long
 */
+test
+jnn L0
+pushimm 0xff
+jump L1
+L0:
+pushimm 0
+L1:
+/*
+End type conversion
+*/
+jsr ADD16
+/*
+End +
+*/
+/*
+Converting long to int
+*/
+popinh
 /*
 End type conversion
 */
@@ -13,5 +57,44 @@ popext x + 0
 /*
 End Assignment
 */
+/*
+Assignment
+*/
+pushext x + 0
+/*
+Converting int to int
+*/
+/*
+End type conversion
+*/
+/*
+Array assignment
+*/
+pushext16 portA_ptr
+pushimm 0
+/*
+Converting const int to long
+*/
+test
+jnn L2
+pushimm 0xff
+jump L3
+L2:
+pushimm 0
+L3:
+/*
+End type conversion
+*/
+jsr ADD16
+popext16 L4
+popext ? L4: .word 0
+/*
+End array assignment
+*/
+/*
+End Assignment
+*/
 halt
 x: .byte 0
+portA_ptr: .word 0
+y: .word 0

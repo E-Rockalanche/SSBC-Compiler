@@ -21,30 +21,25 @@ bool AdditiveExpCompiler::parse(){
 }
 
 bool AdditiveExpCompiler::compile(){
-	dout("Compiling in " << __FILE__);
 
 	assert(children.size() > 0, "No additive expression");
 
-	for(unsigned int i = 0; i < children.size(); i++){
-		Type t = children[i]->getType();
-		if (!t.isDefined()){
-			printError("Expression type undefined", children[i]->getIndex());
-			return false;
-		}else if (t == Type("void")){
-			printError("Expression returns void", children[i]->getIndex());
-			return false;
-		}
-	}
 	if (children.size() == 1){
 		return children.back()->compile();
 	}else{
+		dout("Compiling in " << __FILE__);
+		
+		ASSERT_TYPES
+
 		writeComment(token.value());
-		type = getType();
-		if (!type.isDefined()) return false;
 
 		Type t1 = children[0]->getType();
 		Type t2 = children[1]->getType();
-		int maxSize = max(typeManager.sizeOf(t1), typeManager.sizeOf(t2));
+		type = getType();
+
+		dout("Additive expression type = " << type.toString());
+
+		int maxSize = typeManager.sizeOf(type);
 		
 		if (!children[1]->compile()) return false;
 		compileTypeConversion(t2, type);
@@ -82,15 +77,12 @@ Type AdditiveExpCompiler::getType(){
 		if (children.size() == 2){
 			Type t1 = children[0]->getType();
 			Type t2 = children[1]->getType();
-			if (t1 == Type()){
-				printError("Undefined type", children[0]->getIndex());
+			if (!t1.isDefined() || !t2.isDefined()){
 				type = Type();
+			}else{
+				type = (typeManager.sizeOf(t1) > typeManager.sizeOf(t2)) ?
+					t1 : t2;
 			}
-			if (t2 == Type()){
-				printError("Undefined type", children[1]->getIndex());
-				type = Type();
-			}
-			type = (typeManager.sizeOf(t1) > typeManager.sizeOf(t2)) ? t1 : t2;
 		}else{
 			type = children.back()->getType();
 		}
