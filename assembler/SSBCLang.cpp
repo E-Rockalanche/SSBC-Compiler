@@ -54,7 +54,7 @@ SSBCLang::SSBCLang(){
 
 	//literals
 	define(HEXADECIMAL, "0x[0-9a-fA-F]*");
-	define(DECIMAL, "[-+]?[1-9][0-9]*");
+	define(DECIMAL, "[-]?[1-9][0-9]*");
 	define(OCTAL, "0[0-7]*");
 	define(BINARY, "0b[01]*");
 	define(CHAR,   "'([^\\\\']|(\\\\.))'");

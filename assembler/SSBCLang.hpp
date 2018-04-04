@@ -8,9 +8,9 @@ using namespace std;
 class SSBCLang : public Lang{
 public:
 	enum Token{
-
+		INVALID = -1,
 		//native instructions
-		NOOP,
+		NOOP = 0,
 		HALT,
 		PUSHIMM,
 		PUSHEXT,
@@ -67,7 +67,6 @@ public:
 		//other
 		PLUS,
 		COMMENT,
-		COMMENT_BLOCK,
 		IDENTIFIER,
 		COLON,
 		LOW_BITS,
@@ -77,7 +76,7 @@ public:
 		NUM_TOKENS,
 
 		//non-regex tokens
-		EOT,
+		EOT
 	};
 
 	SSBCLang();
