@@ -68,7 +68,7 @@ void BaseCompiler::writeData(string str){
 
 void BaseCompiler::writeComment(string comment){
 	if (outputComments){
-		assembly.push_back("/*\n" + comment + "\n*/");
+		assembly.push_back("/* " + comment + " */");
 	}
 }
 

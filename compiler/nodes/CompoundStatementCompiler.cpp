@@ -25,5 +25,9 @@ bool CompoundStatementCompiler::compile(){
 
 	scopeTable.popScope();
 
+	#if(DEBUG)
+		scopeTable.dump();
+	#endif
+
 	return ok;
 }

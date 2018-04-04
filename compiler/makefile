@@ -15,15 +15,18 @@ $(PROGRAM):	$(OBJ_DIR)/CppLang.o $(OBJ_DIR)/Tokenizer.o $(OBJ_DIR)/Scanner.o \
 		$(OBJ_DIR)/TypeManager.o $(OBJ_DIR)/Type.o \
 		$(OBJ_DIR)/FunctionManager.o $(OBJ_DIR)/FunctionSignature.o \
 		$(OBJ_DIR)/LabelList.o $(OBJ_DIR)/SSBCAssembler.o $(OBJ_DIR)/SSBCLang.o \
-		$(OBJ_DIR)/Binary.o $(CMP_OBJECTS) 
+		$(OBJ_DIR)/Binary.o $(OBJ_DIR)/BaseCompiler.o $(CMP_OBJECTS) 
 	$(CXX) $(LFLAGS) $^ -o $@
 
 nodes/%.o:	nodes/%.cpp FunctionManager.hpp FunctionSignature.hpp \
 		ScopeTable.hpp Type.hpp TypeManager.hpp ../tokenizer/Token.hpp \
-		CppLang.hpp CompilerDebug.hpp nodes/BaseCompiler.hpp
+		CppLang.hpp CompilerDebug.hpp BaseCompiler.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/Main.o:	Main.cpp nodes/Compiler.hpp
+	$(MAKE_OBJ)
+
+$(OBJ_DIR)/BaseCompiler.o:	BaseCompiler.cpp BaseCompiler.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/ScopeTable.o:	ScopeTable.cpp ScopeTable.hpp Type.hpp
