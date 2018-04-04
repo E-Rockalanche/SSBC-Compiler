@@ -5,60 +5,31 @@ Assignment
 /*
 Literal
 */
-pushimm16 65532
-/*
-Converting const long to int *
-*/
-/*
-End type conversion
-*/
-popext port_a_ptr + 0
-popext port_a_ptr + 1
-/*
-End Assignment
-*/
-/*
-Assignment
-*/
-/*
-Literal
-*/
-pushimm 1
+pushimm 2
 /*
 Converting const int to int
 */
 /*
 End type conversion
 */
+popext b + 0
 /*
-Array assignment
+End Assignment
 */
-pushext16 port_a_ptr
 /*
-Literal
+Assignment
 */
-pushimm 0
+pushext b + 0
 /*
-Converting const int to long
+Converting int to int
 */
-test
-jnn L0
-pushimm 0xff
-jump L1
-L0:
-pushimm 0
-L1:
 /*
 End type conversion
 */
-jsr ADD16
-popext16 L2
-popext ? L2: .word 0
-/*
-End array assignment
-*/
+popext a + 0
 /*
 End Assignment
 */
 halt
-port_a_ptr: .word 0
+a: .byte 0
+b: .byte 0

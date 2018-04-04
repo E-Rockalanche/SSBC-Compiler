@@ -42,6 +42,8 @@ tool:
 Programs:
 ---------
 
+***makefiles create programs in root directory***
+
 assembler
 	-assembles ssbc assembly files to binary
 execute with command:
@@ -52,3 +54,9 @@ compiler
 	-also generates assembly file <output file>.ssbc (compiled HLL before assembly)
 execute with command:
 ./compiler <files to compiler> -o <output file>
+
+ssbc
+	-simple stack based computer emulator
+	-loads and runs ssbc binary files
+execute with command:
+./ssbc
