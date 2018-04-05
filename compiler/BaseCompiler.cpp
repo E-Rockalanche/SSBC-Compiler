@@ -151,17 +151,13 @@ bool BaseCompiler::compileTypeConversion(const Type& from, const Type& to){
 		switch(fromSize){
 			case 1:
 				//test if positive
-				writeAssembly("popext ASM");
 				writeAssembly("pushimm 0");
-				writeAssembly("pushext ASM");
 				writeAssembly("sub");
 				writeAssembly("popinh");
 				break;
 			case 2:
 				//test if positive
-				writeAssembly("popext16 ASM2");
 				writeAssembly("pushimm16 0");
-				writeAssembly("pushext16 ASM2");
 				writeAssembly("jsr SUB16");
 				writeAssembly("jsr TEST16");
 				writeAssembly("popext PSW");

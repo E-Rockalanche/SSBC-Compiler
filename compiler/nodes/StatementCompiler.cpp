@@ -2,6 +2,7 @@
 #include "AssignmentCompiler.hpp"
 #include "VariableDefCompiler.hpp"
 #include "CompoundStatementCompiler.hpp"
+#include "IfCompiler.hpp"
 
 StatementCompiler::~StatementCompiler(){}
 
@@ -10,6 +11,7 @@ bool StatementCompiler::parse(){
 	P_TRY_NODE(new CompoundStatementCompiler())
 	P_TRY_NODE(new AssignmentCompiler())
 	P_TRY_NODE(new VariableDefCompiler())
+	P_TRY_NODE(new IfCompiler())
 	P_FAIL
 }
 

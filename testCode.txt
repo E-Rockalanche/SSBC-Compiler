@@ -1,5 +1,12 @@
 int* port_a
 port_a = 0xfffc
-int a[8]
-a[7] = 1
-port_a[0] = a[7]
+
+int a
+a = 1
+
+if (a)
+	a = 2
+else
+	a = 3
+
+port_a[0] = a
