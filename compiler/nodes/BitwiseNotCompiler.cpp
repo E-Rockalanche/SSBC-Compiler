@@ -48,5 +48,16 @@ bool BitwiseNotCompiler::compile(){
 
 Type BitwiseNotCompiler::getType(){
 	assert(children.size() > 0, "No unary expression");
-	return children.back()->getType();
+	if (!type.isDefined()){
+		Type t = children.back()->getType();
+		if (t.isDefined() && typeManager.isPrimitive(t)){
+			int size = typeManager.sizeOf(t);
+			if (size == 1){
+				type = Type("int");
+			}else{
+				printError("Cannot perform bitwise not on type " + t.toString());
+			}
+		}
+	}
+	return type;
 }

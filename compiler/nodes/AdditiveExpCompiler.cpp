@@ -1,5 +1,7 @@
 #include "AdditiveExpCompiler.hpp"
 #include "UnaryExpCompiler.hpp"
+#include <algorithm>
+using namespace std;
 
 AdditiveExpCompiler::~AdditiveExpCompiler(){}
 
@@ -77,11 +79,16 @@ Type AdditiveExpCompiler::getType(){
 		if (children.size() == 2){
 			Type t1 = children[0]->getType();
 			Type t2 = children[1]->getType();
-			if (!t1.isDefined() || !t2.isDefined()){
-				type = Type();
-			}else{
-				type = (typeManager.sizeOf(t1) > typeManager.sizeOf(t2)) ?
-					t1 : t2;
+			if (t1.isDefined() && t2.isDefined()){
+				int size = max(typeManager.sizeOf(t1), typeManager.sizeOf(t2));
+				if (size == 1){
+					type = Type("int");
+				}else if (size == 2){
+					type = Type("long");
+				}else{
+					printError("Cannot perform addition on types "
+						+ t1.toString() + " and " + t2.toString());
+				}
 			}
 		}else{
 			type = children.back()->getType();
