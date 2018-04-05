@@ -1,5 +1,6 @@
 #include "VariableDefCompiler.hpp"
 #include "TypeCompiler.hpp"
+#include "ArrayDeclarationCompiler.hpp"
 
 VariableDefCompiler::~VariableDefCompiler(){}
 
@@ -9,6 +10,7 @@ bool VariableDefCompiler::parse(){
 	if (currentToken().type() == CppLang::IDENTIFIER){
 		identifier = currentToken();
 		incIndex();
+		P_OPTIONAL_NODE(new ArrayDeclarationCompiler())
 		P_END
 	}
 	P_FAIL
@@ -18,7 +20,10 @@ bool VariableDefCompiler::compile(){
 	dout("Compiling in " << __FILE__);
 
 	assert(children.size() > 0, "No variable definition");
-	Type type = children.back()->getType();
+	Type type = children[0]->getType();
+	if (children.size() == 2){
+		type.addPointer();
+	}
 
 	dout("type = " << type.toString());
 
@@ -36,6 +41,17 @@ bool VariableDefCompiler::compile(){
 	}
 
 	scopeTable.add(identifier.value(), type);
+
+	if (children.size() == 2){
+		dout("assigning variable to array");
+		//assign array pointer to variable
+		unsigned int typeSize = typeManager.sizeOf(typeName);
+		unsigned int arraySize = children[1]->getValue();
+		string arrayLabel = newLabel();
+		writeData(arrayLabel + ": .array " + to_string(arraySize * typeSize));
+		writeAssembly("pushimm16 " + arrayLabel);
+		writeAssembly("popext16 " + identifier.value());
+	}
 	
 	#if(DEBUG)
 		scopeTable.dump();
@@ -44,6 +60,7 @@ bool VariableDefCompiler::compile(){
 	if (typeManager.sizeOf(type) == 1){
 		writeData(identifier.value() + ": .byte 0");
 	}else{
+
 		writeData(identifier.value() + ": .word 0");
 	}
 	return true;

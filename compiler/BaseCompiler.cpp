@@ -3,9 +3,6 @@
 #include <stdexcept>
 using namespace std;
 
-#define ABSTRACT_CALL_ERROR {throw runtime_error("Cannot call function of \
-an abstract class");}
-
 //static variables
 
 ScopeTable BaseCompiler::scopeTable;
@@ -213,7 +210,11 @@ bool BaseCompiler::compileTypeConversion(const Type& from, const Type& to){
 
 //class functions
 
+#define ABSTRACT_CALL_ERROR {throw runtime_error("Cannot call function of \
+an abstract class");}
+
 BaseCompiler::~BaseCompiler(){}
+
 bool BaseCompiler::parse(){
 	ABSTRACT_CALL_ERROR
 }
@@ -226,15 +227,23 @@ CompilerNode::~CompilerNode(){
 		delete children[i];
 	}
 }
+
 bool CompilerNode::parse(){
 	ABSTRACT_CALL_ERROR
 }
+
 bool CompilerNode::compile(){
 	ABSTRACT_CALL_ERROR
 }
+
+int CompilerNode::getValue(){
+	ABSTRACT_CALL_ERROR
+}
+
 Type CompilerNode::getType(){
 	return type;
 }
+
 unsigned int CompilerNode::getIndex(){
 	return startTokenIndex;
 }

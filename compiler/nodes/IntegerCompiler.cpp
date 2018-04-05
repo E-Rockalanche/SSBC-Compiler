@@ -27,7 +27,7 @@ bool IntegerCompiler::parse(){
 			return false;
 	}
 	
-	if ((value <= 127) && (value >= -128)){
+	if ((value <= SSBC_INT_MAX) && (value >= SSBC_INT_MIN)){
 		type = Type("int", true);
 	}else{
 		type = Type("long", true);
@@ -39,10 +39,14 @@ bool IntegerCompiler::parse(){
 bool IntegerCompiler::compile(){
 	dout("Compiling in " << __FILE__);
 
-	if ((value < 256) && (value >= -128)){
+	if ((value <= SSBC_INT_MAX) && (value >= SSBC_INT_MIN)){
 		writeAssembly("pushimm " + to_string(value));
 	}else{
 		writeAssembly("pushimm16 " + to_string(value));
 	}
 	return true;
+}
+
+int IntegerCompiler::getValue(){
+	return value;
 }

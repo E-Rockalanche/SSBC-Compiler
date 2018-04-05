@@ -366,9 +366,9 @@ void SSBCAssembler::pushimm16(){
 			if (labels.isDefined(token.value())){
 				value = labels.getAddress(token.value());
 			}else{
-				labels.addOccurrence(token.value(), index,
+				labels.addOccurrence(token.value(), binary.size() + 1,
 					LabelList::LOW_BITS);
-				labels.addOccurrence(token.value(), index+2,
+				labels.addOccurrence(token.value(), binary.size() + 3,
 					LabelList::HIGH_BITS);
 			}
 			break;
@@ -613,13 +613,13 @@ void SSBCAssembler::start(){
 		binary.write8bit(JNZ, jumpToStartAddress + 5);
 		writeComment("jump", jumpToStartAddress + 5);
 		binary.write16bit(binary.size(), jumpToStartAddress + 6);
-		writeComment("start", jumpToStartAddress + 6);
-		writeComment("start", binary.size());
+		writeComment(".start", jumpToStartAddress + 6);
+		writeComment(".start", binary.size());
 	}
 }
 
 void SSBCAssembler::global(){
-	dout("global");
+	dout(".global");
 	Token global = nextToken();
 	if (global.type() != SSBCLang::IDENTIFIER){
 		errorAt("Expected an identifier");
@@ -629,31 +629,55 @@ void SSBCAssembler::global(){
 }
 
 void SSBCAssembler::file(){
-	dout("file");
+	dout(".file");
 	if (nextToken().type() != SSBCLang::STRING){
 		errorAt("Expected a string");
 	}
 }
 
 void SSBCAssembler::byte(){
-	dout("byte");
-	writeComment("byte", binary.size());
+	dout(".byte");
+	writeComment(".byte", binary.size());
 	binary.write8bit(getInteger());
 }
 
 void SSBCAssembler::word(){
-	dout("word");
-	writeComment("word", binary.size());
-	binary.write16bit(getInteger());
+	dout(".word");
+	writeComment(".word", binary.size());
+
+	//old way:
+	//binary.write16bit(getInteger());
+
+	int value = 0;
+	Token token = nextToken();
+	switch(token.type()){
+		CASE_INTEGER
+			value = parseInteger(token);
+			break;
+
+		case SSBCLang::IDENTIFIER:
+			if (labels.isDefined(token.value())){
+				value = labels.getAddress(token.value());
+			}else{
+				labels.addOccurrence(token.value(), binary.size());
+			}
+			break;
+
+		default:
+			errorAt("Expected an integer or address");
+			return;
+	}
+
+	binary.write16bit(value);
 }
 
 void SSBCAssembler::array(){
-	dout("array");
+	dout(".array");
 	int length = getInteger();
 	if (length <= 0){
 		errorAt("Cannot define array of size " + to_string(length));
 	}else{
-		writeComment("array", binary.size());
+		writeComment(".array", binary.size());
 		for(int i = 0; i < length; i++){
 			binary.write8bit(0);
 		}
@@ -661,8 +685,8 @@ void SSBCAssembler::array(){
 }
 
 void SSBCAssembler::ascii(){
-	dout("ascii");
-	writeComment("ascii", binary.size());
+	dout(".ascii");
+	writeComment(".ascii", binary.size());
 	Token str = nextToken();
 	if (str.type() != SSBCLang::STRING){
 		errorAt("Expected string");
@@ -672,8 +696,8 @@ void SSBCAssembler::ascii(){
 }
 
 void SSBCAssembler::asciz(){
-	dout("asciz");
-	writeComment("asciz", binary.size());
+	dout(".asciz");
+	writeComment(".asciz", binary.size());
 	ascii();
 	binary.write8bit(0);
 }

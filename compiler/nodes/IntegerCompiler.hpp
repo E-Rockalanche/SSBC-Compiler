@@ -8,6 +8,7 @@ public:
 	~IntegerCompiler();
 	bool parse();
 	bool compile();
+	int getValue();
 private:
 	int value;
 };

@@ -116,6 +116,7 @@ public:
 	virtual bool parse();
 	virtual bool compile();
 	virtual Type getType();
+	virtual int getValue();
 	unsigned int getIndex();
 
 protected:

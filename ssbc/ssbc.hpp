@@ -13,8 +13,10 @@ written by Eric Roberts
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Debug.hpp"
 using namespace std;
+
+#define DEBUG true
+#include "Debug.hpp"
 
 typedef unsigned int uint;
 typedef unsigned char uchar;
@@ -22,9 +24,9 @@ typedef unsigned char uchar;
 class SSBC{
 public:
 	SSBC();
+	void run();
 	void reset();
 	void load(const char* filename);
-	void run();
 	void writeToPortB(char value);
 	void writeToPortD(char value);
 	char readFromPortA();
