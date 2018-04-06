@@ -2,6 +2,9 @@
 	Compiler Grammar
 ========================
 
+*grammar rules start with an upper case
+*terminals start with a lower case
+
 identifier = 	[a-zA-Z_][a-zA-Z0-9_]*
 hexadecimal = 	0x[0-9a-fA-F]*
 decimal = 		[-]?[1-9][0-9]*
@@ -15,20 +18,37 @@ Program -> StatementSequence
 StatementSequence -> Statement
 StatementSequence ->
 
+Statement -> CompoundStatement
 Statement -> VariableDef
 Statement -> Assignment
-Statement -> CompoundStatement
+Statement -> IfElse
+Statement -> WhileLoop
+Statement -> DoWhileLoop
+Statement -> ForLoop
+Statement -> exit
 
 CompoundStatement -> { StatementSequence }
 
 VariableDef -> Type identifier
+
+Assignment -> AssignmentExpression = Expression
+
+IfElse -> if ( Expression ) Statement ElseBlock
+
+ElseBlock -> else Statement
+ElseBlock -> 
+
+WhileLoop -> while ( Exression ) Statement
+
+DoWhileLoop -> do Statement while ( Expression )
+
+ForLoop -> for ( Statement ; Expression ; Statement ) Statement
 
 Type -> identifier Pointers
 
 Pointers -> * Pointers
 Pointers ->
 
-Assignment -> AssignmentExpression = Expression
 
 AssignmentExpression -> VariableAssignment
 AssignmentExpression -> ArrayAssignment
@@ -53,9 +73,12 @@ EqualityExpression -> AdditiveExpression == EqualityExpression
 EqualityExpression -> AdditiveExpression != EqualityExpression
 EqualityExpression -> AdditiveExpression
 
-AdditiveExpression -> UnaryExpression + AdditiveExpression
-AdditiveExpression -> UnaryExpression - AdditiveExpression
-AdditiveExpression -> UnaryExpression
+AdditiveExpression -> MultiplicitiveExpression + AdditiveExpression
+AdditiveExpression -> MultiplicitiveExpression - AdditiveExpression
+AdditiveExpression -> MultiplicitiveExpression
+
+MultiplicitiveExpression -> UnaryExpression * MultiplicitiveExpression
+MultiplicitiveExpression -> UnaryExpression
 
 UnaryExpression -> BitwiseNotExpression
 UnaryExpression -> BooleanNotExpression

@@ -1,4 +1,7 @@
 #include "ssbc.hpp"
+#include <bitset>
+#include <iostream>
+using namespace std;
 
 SSBC::SSBC(){
 	dout("SSBC()");
@@ -279,6 +282,14 @@ char SSBC::readFromPortC(){
 	return memory[PORTC];
 }
 
+char SSBC::readFromMemory(unsigned int address){
+	if (address < MEMORY_SIZE){
+		return memory[address];
+	}else{
+		return -1;
+	}
+}
+
 string SSBC::getAddressName(uint address){
 	switch(address){
 		case PSW: return "PSW";
@@ -287,5 +298,12 @@ string SSBC::getAddressName(uint address){
 		case PORTC: return "PORT C";
 		case PORTD: return "PORT D";
 		default: return to_string(address);
+	}
+}
+
+void SSBC::displayStack(){
+	cout << "Stack:\n";
+	for(unsigned int i = stack_pointer + 1; i <= SP_START; i++){
+		cout << bitset<8>(memory[i]) << " : " << (int)memory[i] << '\n';
 	}
 }

@@ -53,6 +53,7 @@ public:
 		THIS,
 		TYPENAME,
 		VIRTUAL,
+		EXIT,
 
 		IDENTIFIER,
 

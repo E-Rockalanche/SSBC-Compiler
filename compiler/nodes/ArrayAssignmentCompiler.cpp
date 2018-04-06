@@ -25,22 +25,24 @@ bool ArrayAssignmentCompiler::compile(){
 	type = getType();
 	if (type.isDefined()){
 		writeAssembly("pushext16 " + identifier.value());
-		if (!children.back()->compile()) return false;
+
+		children.back()->compile();
 		TypeConversionCompiler::convert(children.back()->getType(),
 			Type("long"));
+		int derefSize = typeManager.sizeOf(type);
 
-		writeAssembly("jsr ADD16");
-		string lowByte = newLabel();
-		writeAssembly("popext16 " + lowByte);
-		writeAssembly("popext ? " + lowByte + ": .word 0");
-		if (typeManager.sizeOf(type) == 2){
-			string highByte = newLabel();
-			writeAssembly("pushext16 " + lowByte);
-			writeAssembly("pushimm16 1");
-			writeAssembly("jsr ADD16");
-			writeAssembly("popext16 " + highByte);
-			writeAssembly("popext ? " + highByte + ": .word 0");
+		if (derefSize > 1){
+			writeComment("Calculate array offset");
+			writeAssembly("pushimm16 " + to_string(derefSize));
+			writeAssembly("jsr MULT16");
+			writeComment("End Calculate array offset");
 		}
+		//calculate pointer
+		writeAssembly("jsr ADD16");
+
+		//pop data to pointer
+		writeAssembly("pushimm " + to_string(derefSize));
+		writeAssembly("jsr POP_TO_ADDR");
 	}
 
 	writeComment("End array assignment");

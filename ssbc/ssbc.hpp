@@ -15,7 +15,7 @@ written by Eric Roberts
 #include <vector>
 using namespace std;
 
-#define DEBUG true
+//#define DEBUG true
 #include "Debug.hpp"
 
 typedef unsigned int uint;
@@ -31,6 +31,8 @@ public:
 	void writeToPortD(char value);
 	char readFromPortA();
 	char readFromPortC();
+	char readFromMemory(unsigned int address);
+	void displayStack();
 
 private:
 	static const uint MEMORY_SIZE = 0x10000;

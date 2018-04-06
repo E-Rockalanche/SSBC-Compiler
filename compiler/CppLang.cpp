@@ -60,6 +60,8 @@ CppLang::CppLang(){
 	define(THIS, "this");
 	define(TYPENAME, "typename");
 	define(VIRTUAL, "virtual");
+	define(EXIT, "exit");
+
 	define(IDENTIFIER, "[a-zA-Z_]+[a-zA-Z0-9_]*");
 
 	//delimeters

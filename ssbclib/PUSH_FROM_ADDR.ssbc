@@ -1,0 +1,53 @@
+/*
+PUSH_FROM_ADDR:
+	-pushes a variable number of bytes starting at a given address
+	-parameters on stack:
+		[.byte # of bytes to push]
+		[.word pointer]
+*/
+
+.include "ADD16.ssbc"
+
+.global PUSH_FROM_ADDR
+
+PUSH_FROM_ADDR:
+	//pop return address
+	popext16 RET_VALUE
+	//save # of bytes to push
+	popext ITERATIONS
+
+	//add # of bytes to pointer
+	pushext ITERATIONS
+	pushimm 0
+	jsr ADD16
+	popext16 POINTER
+
+	//reset iterator
+	pushimm 0
+	popext ITERATOR
+
+LOOP:
+	//test if iterator is less than iterations
+	pushext ITERATIONS
+	pushext ITERATOR
+	sub
+	popinh
+	jnn RETURN
+
+	//push byte
+	pushext16 POINTER
+	pushimm16 -1
+	jsr ADD16
+	popext16 POINTER
+	pushext ?
+POINTER: .word 0
+
+	inc ITERATOR
+	jump LOOP
+
+RETURN:
+	jump ?
+RET_VALUE: .word 0
+
+ITERATIONS: .byte 0
+ITERATOR: .byte 0

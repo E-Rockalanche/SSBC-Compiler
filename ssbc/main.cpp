@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <bitset>
 #include "ssbc.hpp"
 using namespace std;
 
@@ -11,6 +12,8 @@ const char* MENU = "\n\
   B:  write port B\n\
   C:  read port C\n\
   D:  write port D\n\
+  M:  read memory\n\
+  S:  display stack\n\
   Q:  quit\n\
 ====================\n\n";
 
@@ -18,6 +21,8 @@ int main(){
 	SSBC ssbc;
 	char command;
 	int port_value;
+	int address;
+	char value;
 	do{
 		cout << MENU;
 		cin >> command;
@@ -36,7 +41,8 @@ int main(){
 
 			case 'a':
 				cout << "Port A: ";
-				cout << (int)ssbc.readFromPortA() << '\n';
+				value = ssbc.readFromPortA();
+				cout << bitset<8>(value) << " : " << (int)value << '\n';
 			break;
 
 			case 'b':
@@ -47,13 +53,25 @@ int main(){
 
 			case 'c':
 				cout << "Port C: ";
-				cout << (int)ssbc.readFromPortC() << '\n';
+				value = ssbc.readFromPortC();
+				cout << bitset<8>(value) << " : " << (int)value << '\n';
 			break;
 
 			case 'd':
 				cout << "Write to port D: ";
 				cin >> port_value;
 				ssbc.writeToPortD(port_value);
+			break;
+
+			case 'm':
+				cout << "Address: ";
+				cin >> address;
+				value = ssbc.readFromMemory(address);
+				cout << bitset<8>(value) << " : " << (int)value << '\n';
+			break;
+
+			case 's':
+				ssbc.displayStack();
 			break;
 
 			case 'q':

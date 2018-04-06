@@ -36,8 +36,14 @@ bool BitwiseNotCompiler::compile(){
 		case 1:
 			writeAssembly("not");
 			break;
+		case 2:
+			writeAssembly("not");
+			writeAssembly("popext ASM2");
+			writeAssembly("not");
+			writeAssembly("pushext ASM2");
+			break;
 		default:
-			printError("Cannot perform bitwise operator on size greater then 1 byte",
+			printError("Cannot perform bitwise not on type greater than 2 bytes",
 				startTokenIndex);
 			return false;
 	}

@@ -1,7 +1,8 @@
-int* port_a
-port_a = 0xfffc
+int *ports
+ports = 0xfffc
 
-long a
-a = 6074 - 6075
+long* i
+i = 2000
+i[0] = 1
 
-port_a[0] = a
+ports[0] = i[0]

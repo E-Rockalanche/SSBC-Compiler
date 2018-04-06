@@ -30,22 +30,22 @@ bool ArrayAccessorCompiler::compile(){
 	}
 	unsigned int derefSize = typeManager.sizeOf(varType.dereference());
 
+	//push array pointer
 	if (!children[0]->compile()) return false;
+
+	//push expression value and convert to correct array offset
 	if (!children[1]->compile()) return false;
-	
 	TypeConversionCompiler::convert(expType, Type("long"));
-	string lowByte = newLabel();
-	writeAssembly("jsr ADD16");
-	writeAssembly("popext16 " + lowByte);
-	writeAssembly("pushext ? " + lowByte + ": .word 0");
-	if (derefSize == 2){
-		string highByte = newLabel();
-		writeAssembly("pushext16 " + lowByte);
-		writeAssembly("pushimm16 1");
-		writeAssembly("jsr ADD16");
-		writeAssembly("popext16 " + highByte);
-		writeAssembly("pushext ? " + highByte + ": .word 0");
+	if (derefSize > 1){
+		writeComment("Calculate array offset");
+		writeAssembly("pushimm16 " + to_string(derefSize));
+		writeAssembly("jsr MULT16");
+		writeComment("End Calculate array offset");
 	}
+
+	writeAssembly("jsr ADD16");
+	writeAssembly("pushimm " + to_string(derefSize));
+	writeAssembly("jsr PUSH_FROM_ADDR");
 
 	writeComment("End array accessor");
 	return true;

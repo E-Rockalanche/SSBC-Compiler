@@ -1,11 +1,11 @@
-#include "IfCompiler.hpp"
+#include "IfElseCompiler.hpp"
 #include "StatementCompiler.hpp"
 #include "ExpressionCompiler.hpp"
 #include "TypeConversionCompiler.hpp"
 
-IfCompiler::~IfCompiler(){}
+IfElseCompiler::~IfElseCompiler(){}
 
-bool IfCompiler::parse(){
+bool IfElseCompiler::parse(){
 	P_BEGIN
 	P_EXPECT_TOKEN(CppLang::IF)
 	P_EXPECT_TOKEN(CppLang::OPEN_PAREN)
@@ -19,7 +19,7 @@ bool IfCompiler::parse(){
 	P_END
 }
 
-bool IfCompiler::compile(){
+bool IfElseCompiler::compile(){
 	dout("Compiling in " << __FILE__);
 
 	assert(children.size() >= 2, "No if statement");
@@ -32,7 +32,7 @@ bool IfCompiler::compile(){
 	string falseLabel = newLabel();
 	string endLabel = newLabel();
 
-	writeAssembly("test");
+	writeAssembly("test popinh");
 	writeAssembly("jnz " + trueLabel);
 	writeAssembly("jump " + falseLabel);
 	writeAssembly(trueLabel + ": ");

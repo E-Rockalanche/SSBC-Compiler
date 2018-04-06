@@ -1,20 +1,22 @@
-#include "AdditiveExpCompiler.hpp"
 #include "MultiplicitiveExpCompiler.hpp"
+#include "UnaryExpCompiler.hpp"
 #include "TypeConversionCompiler.hpp"
 #include <algorithm>
 using namespace std;
 
-AdditiveExpCompiler::~AdditiveExpCompiler(){}
+MultiplicitiveExpCompiler::~MultiplicitiveExpCompiler(){}
 
-bool AdditiveExpCompiler::parse(){
+bool MultiplicitiveExpCompiler::parse(){
 	P_BEGIN
-	P_ADD_NODE(new MultiplicitiveExpCompiler())
+	//P_ADD_NODE(new MultiplicitiveExpCompiler())
+	P_ADD_NODE(new UnaryExpCompiler())
 	switch(currentToken().type()){
-		case CppLang::ADD:
-		case CppLang::SUB:
+		case CppLang::ASTERISK:
+		case CppLang::DIV:
+		case CppLang::MOD:
 			token = currentToken();
 			incIndex();
-			P_ADD_NODE(new AdditiveExpCompiler())
+			P_ADD_NODE(new MultiplicitiveExpCompiler())
 			break;
 		default:
 			break;
@@ -22,9 +24,8 @@ bool AdditiveExpCompiler::parse(){
 	P_END
 }
 
-bool AdditiveExpCompiler::compile(){
-
-	assert(children.size() > 0, "No additive expression");
+bool MultiplicitiveExpCompiler::compile(){
+	assert(children.size() > 0, "No multiplicitve expression");
 
 	if (children.size() == 1){
 		return children.back()->compile();
@@ -39,7 +40,7 @@ bool AdditiveExpCompiler::compile(){
 		Type t2 = children[1]->getType();
 		type = getType();
 
-		dout("Additive expression type = " << type.toString());
+		dout("Multiplicitive expression type = " << type.toString());
 
 		int maxSize = typeManager.sizeOf(type);
 		
@@ -50,19 +51,20 @@ bool AdditiveExpCompiler::compile(){
 		TypeConversionCompiler::convert(t1, type);
 
 		switch(token.type()){
-			case CppLang::ADD:
+			case CppLang::ASTERISK:
 				if (maxSize == 1){
-					writeAssembly("add");
+					writeAssembly("jsr MULT");
 				}else{
-					writeAssembly("jsr ADD16");
+					writeAssembly("jsr MULT16");
 				}
 				break;
-			case CppLang::SUB:
-				if (maxSize == 1){
-					writeAssembly("sub");
-				}else{
-					writeAssembly("jsr SUB16");
-				}
+			case CppLang::DIV:
+				printError("integer division not implemented yet",
+					children[1]->getIndex()-1);
+				break;
+			case CppLang::MOD:
+				printError("modulo not implemented yet",
+					children[1]->getIndex()-1);
 				break;
 			default:
 				return false;
@@ -73,8 +75,8 @@ bool AdditiveExpCompiler::compile(){
 	return true;
 }
 
-Type AdditiveExpCompiler::getType(){
-	assert(children.size() > 0, "No additive expression");
+Type MultiplicitiveExpCompiler::getType(){
+	assert(children.size() > 0, "No multiplicitive expression");
 	if (!type.isDefined()){
 		if (children.size() == 2){
 			Type t1 = children[0]->getType();

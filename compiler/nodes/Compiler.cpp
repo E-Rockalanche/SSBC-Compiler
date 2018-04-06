@@ -86,6 +86,8 @@ bool Compiler::compile(){
 	assembler.addInputFile(stdLibDir + "MULT.ssbc");
 	assembler.addInputFile(stdLibDir + "MULT16.ssbc");
 	assembler.addInputFile(stdLibDir + "XOR.ssbc");
+	assembler.addInputFile(stdLibDir + "PUSH_FROM_ADDR.ssbc");
+	assembler.addInputFile(stdLibDir + "POP_TO_ADDR.ssbc");
 	assembler.setOutputFilename(outputFilename);
 	
 	#if(DEBUG)
