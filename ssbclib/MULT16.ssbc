@@ -1,0 +1,72 @@
+/*
+MULT16:
+	-calculates 16 bit multiplication on top two words on stack
+	-returns 16 bit product on top of stack
+*/
+
+.include "ADD16.ssbc"
+.include "SUB16.ssbc"
+.include "TEST16.ssbc"
+
+.global MULT16
+
+MULT16:
+	//pop return address
+	popext16 MULT16_RET_ADDR
+	jsr TEST16
+	popext PSW
+	jnn MULT16_NOT_NEG
+	
+	//negate parameters if top word is negative
+	pushimm16 0
+	jsr SUB16
+	popext16 MULT16_TEMP
+	pushimm16 0
+	jsr SUB16
+	pushext16 MULT16_TEMP
+
+MULT16_NOT_NEG:
+	//use top word as number of loop iterations
+	popext16 MULT16_ITERATIONS
+	popext16 MULT16_VALUE
+	//reset result and iterator
+	pushimm16 0
+	popext16 MULT16_RESULT
+	pushimm16 0
+	popext16 MULT16_ITERATOR
+
+MULT16_LOOP:
+	//check if iterator is less than iterations
+	pushext16 MULT16_ITERATIONS
+	pushext16 MULT16_ITERATOR
+	jsr SUB16
+	jsr TEST16
+	popext PSW
+	popinh16
+	jnn MULT16_RETURN
+
+	//loop body
+	//add value to product
+	pushext16 MULT16_RESULT
+	pushext16 MULT16_VALUE
+	jsr ADD16
+	popext16 MULT16_RESULT
+	
+	//increment iterator
+	pushext16 MULT16_ITERATOR
+	pushimm16 1
+	jsr ADD16
+	popext16 MULT16_ITERATOR
+	jump MULT16_LOOP
+
+MULT16_RETURN:
+	//return product
+	pushext16 MULT16_RESULT
+	jump ?
+MULT16_RET_ADDR: .word 0
+
+MULT16_RESULT: .word 0
+MULT16_ITERATOR: .word 0
+MULT16_ITERATIONS: .word 0
+MULT16_VALUE: .word 0
+MULT16_TEMP: .word 0

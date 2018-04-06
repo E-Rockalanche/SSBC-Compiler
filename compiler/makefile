@@ -15,12 +15,14 @@ $(PROGRAM):	$(OBJ_DIR)/CppLang.o $(OBJ_DIR)/Tokenizer.o $(OBJ_DIR)/Scanner.o \
 		$(OBJ_DIR)/TypeManager.o $(OBJ_DIR)/Type.o \
 		$(OBJ_DIR)/FunctionManager.o $(OBJ_DIR)/FunctionSignature.o \
 		$(OBJ_DIR)/LabelList.o $(OBJ_DIR)/SSBCAssembler.o $(OBJ_DIR)/SSBCLang.o \
-		$(OBJ_DIR)/Binary.o $(OBJ_DIR)/BaseCompiler.o $(CMP_OBJECTS) 
+		$(OBJ_DIR)/Binary.o $(OBJ_DIR)/BaseCompiler.o \
+		$(OBJ_DIR)/TypeConversionCompiler.o $(CMP_OBJECTS) 
 	$(CXX) $(LFLAGS) $^ -o $@
 
 nodes/%.o:	nodes/%.cpp FunctionManager.hpp FunctionSignature.hpp \
 		ScopeTable.hpp Type.hpp TypeManager.hpp ../tokenizer/Token.hpp \
-		CppLang.hpp CompilerDebug.hpp BaseCompiler.hpp
+		CppLang.hpp CompilerDebug.hpp BaseCompiler.hpp \
+		TypeConversionCompiler.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/Main.o:	Main.cpp nodes/Compiler.hpp
@@ -47,6 +49,10 @@ $(OBJ_DIR)/FunctionSignature.o:	FunctionSignature.cpp FunctionSignature.hpp
 
 $(OBJ_DIR)/FunctionManager.o:	FunctionManager.cpp FunctionManager.hpp \
 		FunctionSignature.hpp
+	$(MAKE_OBJ)
+
+$(OBJ_DIR)/TypeConversionCompiler.o:	TypeConversionCompiler.cpp \
+		TypeConversionCompiler.hpp Type.hpp BaseCompiler.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/Assert.o:	../tool/Assert.cpp ../tool/Assert.hpp

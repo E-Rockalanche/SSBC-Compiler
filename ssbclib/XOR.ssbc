@@ -1,0 +1,25 @@
+/*
+XOR:
+	-calculates exclusive or on top byte of stack
+*/
+
+.global XOR
+
+XOR:
+	popext16 XOR_RET_ADDR
+	popext ASM
+	popext ASM2
+	pushext ASM
+	pushext ASM2
+	pushext ASM2
+	pushext ASM
+	not
+	and
+	popext XOR_TEMP
+	not
+	and
+	pushext XOR_TEMP
+	or
+	jnz ?
+XOR_RET_ADDR: .word 0
+XOR_TEMP: .byte 0

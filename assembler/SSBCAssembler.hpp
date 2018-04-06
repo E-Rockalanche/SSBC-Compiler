@@ -4,10 +4,10 @@
 #include "LabelList.hpp"
 #include "Tokenizer.hpp"
 #include "SSBCLang.hpp"
-#include "Debug.hpp"
 #include "Assert.hpp" 
 #include "Token.hpp"
 #include "Binary.hpp"
+#include "Debug.hpp"
 
 class SSBCAssembler{
 public:
@@ -85,6 +85,7 @@ private:
 	void assembleFile(string filename);
 	void statement();
 	void writeToFile();
+	string getCurrentFileDirectory();
 
 	Token nextToken();
 	Token currentToken();
@@ -151,6 +152,7 @@ private:
 	void start();
 	void global();
 	void file();
+	void include();
 	void byte();
 	void word();
 	void array();

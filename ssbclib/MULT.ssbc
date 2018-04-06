@@ -1,0 +1,63 @@
+/*
+MULT:
+	-calculate product of top two bytes on stack
+	-returns product on stack
+*/
+
+.global MULT
+
+MULT:
+	//pop return address
+	popext16 MULT_RET_ADDR
+	test
+	jnn MULT_NOT_NEG
+	
+	//negate parameters if top is negative
+	pushimm 0
+	sub
+	popext ASM
+	pushimm 0
+	sub
+	pushext ASM
+
+MULT_NOT_NEG:
+	//use first parameter as loop iterations
+	popext MULT_ITERATIONS
+	popext MULT_VALUE
+	//reset result and iterator
+	pushimm 0
+	popext MULT_RESULT
+	pushimm 0
+	popext MULT_ITERATOR
+
+MULT_LOOP:
+	//check if iterator is less than iterations
+	pushext MULT_ITERATIONS
+	pushext MULT_ITERATOR
+	sub
+	popinh
+	jnn MULT_RETURN
+
+	//loop body
+	//add value to product
+	pushext MULT_RESULT
+	pushext MULT_VALUE
+	add
+	popext MULT_RESULT
+	//increment iterator
+	pushext MULT_ITERATOR
+	pushimm 1
+	add
+	popext MULT_ITERATOR
+	jump MULT_LOOP
+
+MULT_RETURN:
+	//return product
+	pushext MULT_RESULT
+	jump ?
+MULT_RET_ADDR: .word 0
+
+MULT_RESULT: .byte 0
+MULT_ITERATOR: .byte 0
+MULT_ITERATIONS: .byte 0
+MULT_VALUE: .byte 0

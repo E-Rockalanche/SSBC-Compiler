@@ -35,15 +35,6 @@ bool TypeManager::isPrimitive(const Type& type) const{
 		|| (typeName == "long");
 }
 
-bool TypeManager::canConvert(const Type& from, const Type& to) const{
-	if (isPrimitive(from) && isPrimitive(to)){
-		if (sizeOf(from) > 0 || sizeOf(to) == 0){
-			return true;
-		}
-	}
-	return false;
-}
-
 bool TypeManager::typeExists(const string& typeName) const{
 	return (typeName == "void") || (typeName == "int")
 		|| (typeName == "char") || (typeName == "bool")

@@ -46,6 +46,7 @@ SSBCLang::SSBCLang(){
 	define(START, "\\.start");
 	define(GLOBAL, "\\.global");
 	define(FILE, "\\.file");
+	define(INCLUDE, "\\.include");
 	define(BYTE, "\\.byte");
 	define(WORD, "\\.word");
 	define(ARRAY, "\\.array");

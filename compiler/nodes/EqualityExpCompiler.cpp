@@ -1,5 +1,6 @@
 #include "EqualityExpCompiler.hpp"
 #include "AdditiveExpCompiler.hpp"
+#include "TypeConversionCompiler.hpp"
 
 EqualityExpCompiler::~EqualityExpCompiler(){}
 
@@ -38,12 +39,12 @@ bool EqualityExpCompiler::compile(){
 		
 		if (!children[0]->compile()) return false;
 		if (typeManager.sizeOf(t1) < maxSize){
-			compileTypeConversion(t1, t2);
+			TypeConversionCompiler::convert(t1, t2);
 		}
 
 		if (!children[1]->compile()) return false;
 		if (typeManager.sizeOf(t2) < maxSize){
-			compileTypeConversion(t2, t1);
+			TypeConversionCompiler::convert(t2, t1);
 		}
 
 		if (maxSize == 1){

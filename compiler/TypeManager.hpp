@@ -31,7 +31,6 @@ class TypeManager{
 public:
 	unsigned int sizeOf(const Type& type) const;
 	bool isPrimitive(const Type& type) const;
-	bool canConvert(const Type& from, const Type& to) const;
 	bool typeExists(const string& typeName) const;
 	void clear();
 private:

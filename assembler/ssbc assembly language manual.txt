@@ -13,20 +13,24 @@ multi line comment
 LITERALS:
 
 hexadecimal:	0x1234567890abcdef
-decimal:	[-]1234567890
-octal:		01234567
-binary:		0b10
-character:	'c'
-string:		"string"
+decimal:		[-]1234567890
+octal:			01234567
+binary:			0b10
+character:		'c'
+string:			"string"
 
 DIRECTIVES:
 
-.start		- specifies start location of program
-.byte X		- specify an 8bit value
-.word X		- specify a 16bit value
-.array SIZE	- allocates SIZE bytes of memory
+.file STRING 	- used by a compiler to tell the user what file compiled down
+					to this assembly file
+.include STRING - include the contents of another assembly file
+					(included files are not immediately assembled)
+.start			- specifies start location of program
+.byte X			- specify an 8bit value
+.word X			- specify a 16bit value
+.array SIZE		- allocates SIZE bytes of memory
 .ascii STRING	- specify a character array
-.asciz STRING	- specify a null terminated character array
+.asciz STRING	- specify a zero terminated character array
 
 ADDRESS LABEL:
 

@@ -1,6 +1,7 @@
 #include "IfCompiler.hpp"
 #include "StatementCompiler.hpp"
 #include "ExpressionCompiler.hpp"
+#include "TypeConversionCompiler.hpp"
 
 IfCompiler::~IfCompiler(){}
 
@@ -25,7 +26,7 @@ bool IfCompiler::compile(){
 
 	children[0]->compile();
 	Type type = children[0]->getType();
-	compileTypeConversion(type, Type("bool"));
+	TypeConversionCompiler::convert(type, Type("bool"));
 
 	string trueLabel = newLabel();
 	string falseLabel = newLabel();
@@ -47,4 +48,5 @@ bool IfCompiler::compile(){
 	}
 
 	writeAssembly(endLabel + ": ");
+	return true;
 }

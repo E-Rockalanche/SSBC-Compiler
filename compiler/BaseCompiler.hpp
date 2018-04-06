@@ -80,20 +80,19 @@ public:
 	virtual bool compile();
 
 protected:
-	void incIndex();
-	Token nextToken();
-	Token currentToken();
-	void writeAssembly(string str);
-	void writeData(string str);
-	void writeComment(string comment);
-	string newLabel();
-	void printError(string message);
-	void printWarning(string message);
-	void printError(string message, unsigned int index);
-	void printWarning(string message, unsigned int index);
-	string getLocationString(unsigned int index);
-	void printRow(unsigned int index);
-	bool compileTypeConversion(const Type& from, const Type& to);
+	static void incIndex();
+	static Token nextToken();
+	static Token currentToken();
+	static void writeAssembly(string str);
+	static void writeData(string str);
+	static void writeComment(string comment);
+	static string newLabel();
+	static void printError(string message);
+	static void printWarning(string message);
+	static void printError(string message, unsigned int index);
+	static void printWarning(string message, unsigned int index);
+	static string getLocationString(unsigned int index);
+	static void printRow(unsigned int index);
 
 	//file specific
 	static ScopeTable scopeTable;

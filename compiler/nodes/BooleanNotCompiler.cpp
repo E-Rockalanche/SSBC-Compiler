@@ -16,7 +16,7 @@ bool BooleanNotCompiler::compile(){
 	assert(children.size() > 0, "No unary expression");
 	writeComment("!");
 	
-	Type t = getType();
+	Type t = children.back()->getType();
 	int size = typeManager.sizeOf(t);
 	if (size == 0){
 		printError("Cannot perform boolean not operator on void type",
@@ -29,21 +29,22 @@ bool BooleanNotCompiler::compile(){
 	}
 	
 	children.back()->compile();
-	string trueLabel, endLabel;
+	string trueLabel = newLabel();
+	string endLabel = newLabel();
 	switch(size){
 		case 1:
-			trueLabel = newLabel();
-			endLabel = newLabel();
-			writeAssembly("test jnz " + trueLabel);
-			writeAssembly("popinh pushimm 1 jump " + endLabel);
-			writeAssembly(trueLabel + ": popinh pushimm 0");
-			writeAssembly(endLabel + ":");
+			writeAssembly("test popinh jnz " + trueLabel);
 			break;
+		case 2:
+			writeAssembly("jsr TEST16 popext PSW popinh16 jnz " + trueLabel);
 		default:
-			printError("Cannot perform bitwise operator on size greater then 1 byte",
+			printError("Cannot perform boolean not on type of size greater than 2 bytes",
 				startTokenIndex);
 			return false;
 	}
+	writeAssembly("pushimm 1 jump " + endLabel);
+	writeAssembly(trueLabel + ": pushimm 0");
+	writeAssembly(endLabel + ":");
 
 	writeComment("End !");
 	return true;
@@ -51,5 +52,5 @@ bool BooleanNotCompiler::compile(){
 
 Type BooleanNotCompiler::getType(){
 	assert(children.size() > 0, "No unary expression");
-	return children.back()->getType();
+	return Type("bool");
 }

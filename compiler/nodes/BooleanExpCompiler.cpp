@@ -1,5 +1,6 @@
 #include "BooleanExpCompiler.hpp"
 #include "RelationalExpCompiler.hpp"
+#include "TypeConversionCompiler.hpp"
 
 BooleanExpCompiler::~BooleanExpCompiler(){}
 
@@ -35,7 +36,7 @@ bool BooleanExpCompiler::compile(){
 		Type t2 = children[1]->getType();
 	
 		if (!children[0]->compile()) return false;
-		compileTypeConversion(t1, Type("bool"));
+		TypeConversionCompiler::convert(t1, Type("bool"));
 		writeAssembly("test");
 
 		string end = newLabel();
@@ -45,7 +46,7 @@ bool BooleanExpCompiler::compile(){
 			writeAssembly("popinh");
 
 			if (!children[1]->compile()) return false;
-			compileTypeConversion(t2, Type("bool"));
+			TypeConversionCompiler::convert(t2, Type("bool"));
 			writeAssembly("test");
 
 			writeAssembly("jnz " + end);
@@ -60,7 +61,7 @@ bool BooleanExpCompiler::compile(){
 			writeAssembly("popinh");
 
 			if (!children[1]->compile()) return false;
-			compileTypeConversion(t2, Type("bool"));
+			TypeConversionCompiler::convert(t2, Type("bool"));
 			writeAssembly("test");
 
 			writeAssembly("jnz " + end);

@@ -1,5 +1,6 @@
 #include "ArrayAssignmentCompiler.hpp"
 #include "ExpressionCompiler.hpp"
+#include "TypeConversionCompiler.hpp"
 
 ArrayAssignmentCompiler::~ArrayAssignmentCompiler(){}
 
@@ -25,7 +26,8 @@ bool ArrayAssignmentCompiler::compile(){
 	if (type.isDefined()){
 		writeAssembly("pushext16 " + identifier.value());
 		if (!children.back()->compile()) return false;
-		compileTypeConversion(children.back()->getType(), Type("long"));
+		TypeConversionCompiler::convert(children.back()->getType(),
+			Type("long"));
 
 		writeAssembly("jsr ADD16");
 		string lowByte = newLabel();

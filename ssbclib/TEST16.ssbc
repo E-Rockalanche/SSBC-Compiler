@@ -1,0 +1,33 @@
+/*
+TEST16:
+	-tests word on top of stack for negative and zero
+	-does not remove word on top of stack
+	-returns new PSW on stack
+*/
+
+.global TEST16
+
+TEST16:
+	//pop return address
+	popext16 TEST16_RET_ADDR
+
+	//test if word is negative
+	test
+	jnn TEST16_NOT_NEG
+	jnz TEST16_RETURN //word is negative
+
+TEST16_NOT_NEG:
+	jnz TEST16_RETURN //word is positive
+	//high byte is zero
+	popext ASM
+	test
+	pushext ASM
+	jnz TEST16_ENSURE_POSITIVE
+TEST16_RETURN:
+	pushext PSW
+	jump ?
+TEST16_RET_ADDR: .word 0
+
+TEST16_ENSURE_POSITIVE:
+	//need to make sure PSW is 0 if low byte is negative
+	jump TEST16_RETURN

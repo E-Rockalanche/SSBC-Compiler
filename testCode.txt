@@ -1,12 +1,7 @@
 int* port_a
 port_a = 0xfffc
 
-int a
-a = 1
-
-if (a)
-	a = 2
-else
-	a = 3
+long a
+a = 6074 - 6075
 
 port_a[0] = a

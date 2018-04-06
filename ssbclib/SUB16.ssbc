@@ -1,0 +1,32 @@
+/*
+SUB16:
+	-calculate difference of two 16 bit numbers
+	-diff = top word - bottom word
+	-returns 16 bit difference on stack
+*/
+
+.include "ADD16.ssbc"
+
+.global SUB16
+
+SUB16:
+	//pop return address
+	popext16 SUB16_RET_ADDR
+
+	//save top word
+	popext16 SUB16_TEMP_WORD
+
+	//2's comp negation
+	not
+	popext SUB16_TEMP_BYTE
+	not
+	pushext SUB16_TEMP_BYTE
+	pushimm16 1
+	jsr ADD16
+
+	pushext16 SUB16_TEMP_WORD
+	jsr ADD16
+	jump ?
+SUB16_RET_ADDR: .word 0
+SUB16_TEMP_WORD: .word 0
+SUB16_TEMP_BYTE: .byte 0

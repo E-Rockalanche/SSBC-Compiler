@@ -1,5 +1,6 @@
 #include "AdditiveExpCompiler.hpp"
 #include "UnaryExpCompiler.hpp"
+#include "TypeConversionCompiler.hpp"
 #include <algorithm>
 using namespace std;
 
@@ -44,10 +45,10 @@ bool AdditiveExpCompiler::compile(){
 		int maxSize = typeManager.sizeOf(type);
 		
 		if (!children[1]->compile()) return false;
-		compileTypeConversion(t2, type);
+		TypeConversionCompiler::convert(t2, type);
 
 		if (!children[0]->compile()) return false;
-		compileTypeConversion(t1, type);
+		TypeConversionCompiler::convert(t1, type);
 
 		switch(token.type()){
 			case CppLang::ADD:

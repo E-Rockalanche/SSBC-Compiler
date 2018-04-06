@@ -1,6 +1,7 @@
 #include "ArrayAccessorCompiler.hpp"
 #include "VariableExpCompiler.hpp"
 #include "ExpressionCompiler.hpp"
+#include "TypeConversionCompiler.hpp"
 
 ArrayAccessorCompiler::~ArrayAccessorCompiler(){}
 
@@ -27,17 +28,12 @@ bool ArrayAccessorCompiler::compile(){
 			startTokenIndex);
 		return false;
 	}
-	if (!typeManager.canConvert(expType, Type("long"))){
-		printError("Cannot index array with type " + expType.toString(),
-			startTokenIndex + 2);
-		return false;
-	}
 	unsigned int derefSize = typeManager.sizeOf(varType.dereference());
 
 	if (!children[0]->compile()) return false;
 	if (!children[1]->compile()) return false;
 	
-	compileTypeConversion(expType, Type("long"));
+	TypeConversionCompiler::convert(expType, Type("long"));
 	string lowByte = newLabel();
 	writeAssembly("jsr ADD16");
 	writeAssembly("popext16 " + lowByte);

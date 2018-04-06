@@ -50,6 +50,7 @@ public:
 		START,
 		GLOBAL,
 		FILE,
+		INCLUDE,
 		BYTE,
 		WORD,
 		ARRAY,

@@ -1,5 +1,6 @@
 #include "RelationalExpCompiler.hpp"
 #include "EqualityExpCompiler.hpp"
+#include "TypeConversionCompiler.hpp"
 
 RelationalExpCompiler::~RelationalExpCompiler(){}
 
@@ -42,13 +43,13 @@ bool RelationalExpCompiler::compile(){
 			//must compile first child first
 			if (!children[0]->compile()) return false;
 			if (typeManager.sizeOf(t1) < maxSize){
-				compileTypeConversion(t1, t2);
+				TypeConversionCompiler::convert(t1, t2);
 			}
 		}
 
 		if (!children[1]->compile()) return false;
 		if (typeManager.sizeOf(t2) < maxSize){
-			compileTypeConversion(t2, t1);
+			TypeConversionCompiler::convert(t2, t1);
 		}
 
 		if ((token.type() == CppLang::LESSER)
@@ -56,7 +57,7 @@ bool RelationalExpCompiler::compile(){
 			//must compile first child second
 			if (!children[0]->compile()) return false;
 			if (typeManager.sizeOf(t1) < maxSize){
-				compileTypeConversion(t1, t2);
+				TypeConversionCompiler::convert(t1, t2);
 			}
 		}
 

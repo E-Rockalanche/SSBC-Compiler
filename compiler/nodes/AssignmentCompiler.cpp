@@ -1,6 +1,7 @@
 #include "AssignmentCompiler.hpp"
 #include "AssignmentExpCompiler.hpp"
 #include "ExpressionCompiler.hpp"
+#include "TypeConversionCompiler.hpp"
 
 AssignmentCompiler::~AssignmentCompiler(){}
 
@@ -25,7 +26,7 @@ bool AssignmentCompiler::compile(){
 	dout("right type = " << from.toString());
 
 	if (!children[1]->compile()) return false;
-	compileTypeConversion(from, to);
+	TypeConversionCompiler::convert(from, to);
 
 	if (!children[0]->compile()) return false;
 

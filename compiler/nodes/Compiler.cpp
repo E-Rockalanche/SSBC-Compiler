@@ -80,7 +80,12 @@ bool Compiler::compile(){
 	writeToFile(asmFilename);
 
 	assembler.addInputFile(asmFilename);
-	assembler.addInputFile(stdLibDir + "math.ssbc");
+	assembler.addInputFile(stdLibDir + "ADD16.ssbc");
+	assembler.addInputFile(stdLibDir + "SUB16.ssbc");
+	assembler.addInputFile(stdLibDir + "TEST16.ssbc");
+	assembler.addInputFile(stdLibDir + "MULT.ssbc");
+	assembler.addInputFile(stdLibDir + "MULT16.ssbc");
+	assembler.addInputFile(stdLibDir + "XOR.ssbc");
 	assembler.setOutputFilename(outputFilename);
 	
 	#if(DEBUG)
