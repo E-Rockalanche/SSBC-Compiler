@@ -26,6 +26,7 @@ private:
 	int row, lastRow;
 	int col, lastCol;
 	bool ungetted;
+	char lastChar;
 };
 
 #endif

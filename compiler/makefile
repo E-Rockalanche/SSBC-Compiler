@@ -10,7 +10,7 @@ CMP_SOURCES = ${wildcard nodes/*.cpp}
 CMP_OBJECTS = ${CMP_SOURCES:.cpp=.o}
 CMP_HEADERS = ${CMP_SOURCES:.cpp=.hpp}
 
-$(PROGRAM):	$(OBJ_DIR)/CppLang.o $(OBJ_DIR)/Tokenizer.o $(OBJ_DIR)/Scanner.o \
+$(PROGRAM):	$(OBJ_DIR)/CppTokenizer.o $(OBJ_DIR)/Tokenizer.o $(OBJ_DIR)/Scanner.o \
 		$(OBJ_DIR)/Assert.o $(OBJ_DIR)/ScopeTable.o $(OBJ_DIR)/Main.o \
 		$(OBJ_DIR)/TypeManager.o $(OBJ_DIR)/Type.o \
 		$(OBJ_DIR)/FunctionManager.o $(OBJ_DIR)/FunctionSignature.o \
@@ -40,10 +40,6 @@ $(OBJ_DIR)/TypeManager.o:	TypeManager.cpp TypeManager.hpp Type.hpp
 $(OBJ_DIR)/Type.o:	Type.cpp Type.hpp ../tool/Assert.hpp
 	$(MAKE_OBJ)
 
-$(OBJ_DIR)/CppLang.o:	CppLang.cpp CppLang.hpp ../lang/Lang.hpp \
-		CompilerDebug.hpp
-	$(MAKE_OBJ)
-
 $(OBJ_DIR)/FunctionSignature.o:	FunctionSignature.cpp FunctionSignature.hpp
 	$(MAKE_OBJ)
 
@@ -58,8 +54,12 @@ $(OBJ_DIR)/TypeConversionCompiler.o:	TypeConversionCompiler.cpp \
 $(OBJ_DIR)/Assert.o:	../tool/Assert.cpp ../tool/Assert.hpp
 	$(MAKE_OBJ)
 
+$(OBJ_DIR)/CppTokenizer.o:	CppTokenizer.cpp CppTokenizer.hpp \
+		../tokenizer/Scanner.hpp CppLang.hpp
+	$(MAKE_OBJ)
+
 $(OBJ_DIR)/Tokenizer.o:	../tokenizer/Tokenizer.cpp ../tokenizer/Tokenizer.hpp \
-		../tokenizer/Scanner.hpp ../tool/Assert.hpp CompilerDebug.hpp
+		../tokenizer/Scanner.hpp ../tool/Assert.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/Scanner.o:	../tokenizer/Scanner.cpp ../tokenizer/Scanner.hpp

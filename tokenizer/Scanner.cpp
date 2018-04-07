@@ -1,4 +1,6 @@
 #include "Scanner.hpp"
+
+//#define DEBUG true
 #include "Debug.hpp"
 
 Scanner::Scanner(){
@@ -33,11 +35,20 @@ bool Scanner::fail(){
 }
 
 bool Scanner::eof(){
+	#if(DEBUG)
+		if(fin.eof()) dout("END OF FILE");
+	#endif
 	return fin.eof();
 }
 
 char Scanner::get(){
-	int c = fin.get();
+	int c;
+	if (fin.eof()){
+		c = 0;
+	}else{
+		c = fin.get();
+	}
+	lastChar = c;
 	ungetted = false;
 	lastRow = row;
 	lastCol = col;
@@ -51,12 +62,13 @@ char Scanner::get(){
 }
 
 char Scanner::peek(){
+	if (fin.eof()) return 0;
 	return fin.peek();
 }
 
 void Scanner::unget(){
-	if (!ungetted){
-		fin.unget();
+	if (!ungetted && lastChar != 0){
+		fin.putback(lastChar);
 		ungetted = true;
 		row = lastRow;
 		col = lastCol;

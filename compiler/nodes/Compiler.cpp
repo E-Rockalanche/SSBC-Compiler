@@ -1,5 +1,6 @@
 #include "Compiler.hpp"
 #include "StatementCompiler.hpp"
+#include "CppTokenizer.hpp"
 
 Compiler::Compiler(){
 	index = 0;
@@ -107,9 +108,8 @@ bool Compiler::compileFile(string filename){
 	functionManager.clear();
 
 	//tokenize
-	Tokenizer tokenizer;
-	tokenizer.setLang(new CppLang());
-	tokenizer.tokenize(filename, &tokens);
+	CppTokenizer tokenizer;
+	tokenizer.tokenize(filename, tokens);
 	errors += tokenizer.errors();
 	if (errors != 0){
 		printError("Could not tokenize program");

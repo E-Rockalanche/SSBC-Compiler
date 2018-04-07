@@ -1,13 +1,11 @@
 #ifndef CPP_LANG
 #define CPP_LANG
 
-#include "Lang.hpp"
-#include <regex>
-using namespace std;
-
-class CppLang : public Lang{
+class CppLang{
 public:
 	enum Token{
+		INVALID = -1,
+		
 		//types
 		/*
 		VOID,
@@ -16,7 +14,7 @@ public:
 		BOOL,
 		LONG,
 		*/
-		STRUCT,
+		STRUCT = 0,
 		CLASS,
 		UNION,
 		
@@ -109,29 +107,13 @@ public:
 		ASSIGN,
 		CONDITION,
 		ARROW,
-		PERIOD,
+		MEMBER,
 		SCOPE,
 
 		NUM_TOKENS,
 
 		EOT
 	};
-
-	CppLang();
-	~CppLang();
-	int getTokenType(const string& str);
-
-private:
-	regex expressions[NUM_TOKENS];
-
-	void define(Token token, string regExp);
 };
-/*
-#define CASE_PRIMITIVE\
-	case CppLang::INT:\
-	case CppLang::CHAR:\
-	case CppLang::LONG:\
-	case CppLang::VOID:\
-	case CppLang::BOOL:
-*/
+
 #endif

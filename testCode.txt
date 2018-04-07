@@ -2,9 +2,10 @@ int *ports
 ports = 0xfffc
 
 int i
+i = 0
 do{
 	i = i + 1
-	if (i == 6){
+	if (i ){
 		ports[2] = 1
 	}
 }while(i < 5)

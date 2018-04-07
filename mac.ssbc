@@ -7,6 +7,13 @@ pushimm16 65532
 popext ports + 0
 popext ports + 1
 /* End Assignment */
+/* Assignment */
+/* Literal */
+pushimm 0
+/* Converting const int to int */
+/* End type conversion */
+popext i + 0
+/* End Assignment */
 L0:
 /* Assignment */
 /* + */
@@ -23,19 +30,16 @@ add
 /* End type conversion */
 popext i + 0
 /* End Assignment */
-/* == */
 pushext i + 0
-/* Literal */
-pushimm 6
+/* Converting int to bool */
+pushimm 0
 sub
 popinh
-jnz L1
+jnn L2
 pushimm 1
-jump L2
-L1: pushimm 0
-L2:
-/* End == */
-/* Converting bool to bool */
+jump L1
+L2: pushimm 0
+L1:
 /* End type conversion */
 test popinh
 jnz L3

@@ -101,7 +101,7 @@ CppLang::CppLang(){
 	define(SHIFT_RIGHT, ">>");
 	define(CONDITION, "\\?");
 	define(ARROW, "->");
-	define(PERIOD, "\\.");
+	define(MEMBER, "\\.");
 
 	//assignment operators
 	define(ASSIGN, "=");
