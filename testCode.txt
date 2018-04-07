@@ -1,8 +1,12 @@
 int *ports
 ports = 0xfffc
 
-long* i
-i = 2000
-i[0] = 1
+int i
+do{
+	i = i + 1
+	if (i == 6){
+		ports[2] = 1
+	}
+}while(i < 5)
 
-ports[0] = i[0]
+ports[0] = i

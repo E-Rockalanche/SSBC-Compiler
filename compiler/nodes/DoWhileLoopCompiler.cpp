@@ -18,19 +18,18 @@ bool DoWhileLoopCompiler::parse(){
 
 bool DoWhileLoopCompiler::compile(){
 	dout("Compiling in " << __FILE__);
-
 	assert(children.size() == 2, "No do while statement");
 
+	//start loop
 	string loopLabel = newLabel();
-
 	writeAssembly(loopLabel + ":");
 
-	//compile body
-	children[1]->compile();
-
-	//compile expression
+	//loop body
 	children[0]->compile();
-	Type type = children[0]->getType();
+
+	//test expression
+	children[1]->compile();
+	Type type = children[1]->getType();
 	TypeConversionCompiler::convert(type, Type("bool"));
 
 	writeAssembly("test popinh");
