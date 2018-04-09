@@ -15,7 +15,7 @@ $(PROGRAM):	$(OBJ_DIR)/CppTokenizer.o $(OBJ_DIR)/Tokenizer.o $(OBJ_DIR)/Scanner.
 		$(OBJ_DIR)/TypeManager.o $(OBJ_DIR)/Type.o \
 		$(OBJ_DIR)/FunctionManager.o $(OBJ_DIR)/FunctionSignature.o \
 		$(OBJ_DIR)/LabelList.o $(OBJ_DIR)/SSBCAssembler.o $(OBJ_DIR)/SSBCLang.o \
-		$(OBJ_DIR)/Binary.o $(OBJ_DIR)/BaseCompiler.o \
+		$(OBJ_DIR)/Binary.o $(OBJ_DIR)/BaseCompiler.o $(OBJ_DIR)/BreakManager.o\
 		$(OBJ_DIR)/TypeConversionCompiler.o $(CMP_OBJECTS) 
 	$(CXX) $(LFLAGS) $^ -o $@
 
@@ -29,6 +29,9 @@ $(OBJ_DIR)/Main.o:	Main.cpp nodes/Compiler.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/BaseCompiler.o:	BaseCompiler.cpp BaseCompiler.hpp
+	$(MAKE_OBJ)
+
+$(OBJ_DIR)/BreakManager.o:	BreakManager.cpp BreakManager.hpp
 	$(MAKE_OBJ)
 
 $(OBJ_DIR)/ScopeTable.o:	ScopeTable.cpp ScopeTable.hpp Type.hpp

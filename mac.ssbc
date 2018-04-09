@@ -8,73 +8,73 @@ popext ports + 0
 popext ports + 1
 /* End Assignment */
 /* Assignment */
+/* ! */
+/* ! */
+/* ! */
+/* < */
+/* > */
 /* Literal */
-pushimm 0
-/* Converting const int to int */
-/* End type conversion */
-popext i + 0
-/* End Assignment */
-L0:
-/* Assignment */
+pushimm 6
+/* != */
+/* Literal */
+pushimm 8
+/* == */
+/* Literal */
+pushimm 9
+/* >= */
 /* + */
+/* Array accessor */
+pushext a + 1
+pushext a + 0
 /* Literal */
-pushimm 1
-/* Converting const int to int */
-/* End type conversion */
-pushext i + 0
-/* Converting int to int */
-/* End type conversion */
-add
-/* End + */
-/* Converting int to int */
-/* End type conversion */
-popext i + 0
-/* End Assignment */
-pushext i + 0
-/* Converting int to bool */
 pushimm 0
-sub
-popinh
-jnn L2
-pushimm 1
-jump L1
-L2: pushimm 0
-L1:
-/* End type conversion */
-test popinh
-jnz L3
-jump L4
-L3: 
-/* Assignment */
-/* Literal */
-pushimm 1
-/* Converting const int to int */
-/* End type conversion */
-/* Array assignment */
-pushext16 ports
-/* Literal */
-pushimm 2
 /* Converting const int to long */
 test
-jnn L6
+jnn L0
 pushimm 0xff
-jump L7
-L6:
+jump L1
+L0:
 pushimm 0
-L7:
+L1:
 /* End type conversion */
 jsr ADD16
 pushimm 1
-jsr POP_TO_ADDR
-/* End array assignment */
-/* End Assignment */
-jump L5
-L4: 
-L5: 
-/* < */
+jsr PUSH_FROM_ADDR
+/* End array accessor */
+/* Converting int to int */
+/* End type conversion */
 /* Literal */
-pushimm 5
-pushext i + 0
+pushimm 7
+/* Converting const int to int */
+/* End type conversion */
+add
+/* End + */
+/* Literal */
+pushimm 8
+sub
+popinh
+jnn L2
+pushimm 0
+jump L3
+L2: pushimm 1
+L3:
+/* End >= */
+sub
+popinh
+jnz L4
+pushimm 1
+jump L5
+L4: pushimm 0
+L5:
+/* End == */
+sub
+popinh
+jnz L6
+pushimm 0
+jump L7
+L6: pushimm 1
+L7:
+/* End != */
 sub
 popinh
 jnn L8
@@ -82,13 +82,56 @@ pushimm 1
 jump L9
 L8: pushimm 0
 L9:
-/* End < */
-/* Converting bool to bool */
+/* End > */
+/* + */
+/* * */
+/* Literal */
+pushimm 3
+/* Converting const int to int */
 /* End type conversion */
-test popinh
-jnz L0
+/* Literal */
+pushimm 2
+/* Converting const int to int */
+/* End type conversion */
+jsr MULT
+/* End * */
+/* Converting int to int */
+/* End type conversion */
+/* Literal */
+pushimm 1
+/* Converting const int to int */
+/* End type conversion */
+add
+/* End + */
+sub
+popinh
+jnn L10
+pushimm 1
+jump L11
+L10: pushimm 0
+L11:
+/* End < */
+test popinh jnz L12
+pushimm 1 jump L13
+L12: pushimm 0
+L13:
+/* End ! */
+test popinh jnz L14
+pushimm 1 jump L15
+L14: pushimm 0
+L15:
+/* End ! */
+test popinh jnz L16
+pushimm 1 jump L17
+L16: pushimm 0
+L17:
+/* End ! */
+/* Converting bool to int */
+/* End type conversion */
+popext x + 0
+/* End Assignment */
 /* Assignment */
-pushext i + 0
+pushext x + 0
 /* Converting int to int */
 /* End type conversion */
 /* Array assignment */
@@ -97,12 +140,12 @@ pushext16 ports
 pushimm 0
 /* Converting const int to long */
 test
-jnn L10
+jnn L18
 pushimm 0xff
-jump L11
-L10:
+jump L19
+L18:
 pushimm 0
-L11:
+L19:
 /* End type conversion */
 jsr ADD16
 pushimm 1
@@ -111,4 +154,5 @@ jsr POP_TO_ADDR
 /* End Assignment */
 halt
 ports: .word 0
-i: .byte 0
+a: .word 0
+x: .byte 0

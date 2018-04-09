@@ -24,6 +24,8 @@ bool WhileLoopCompiler::compile(){
 	string bodyLabel = newLabel();
 	string endLabel = newLabel();
 
+	scopeTable.pushScope();
+
 	writeAssembly(loopLabel + ":");
 
 	children[0]->compile();
@@ -35,10 +37,16 @@ bool WhileLoopCompiler::compile(){
 	writeAssembly("jump " + endLabel);
 	writeAssembly(bodyLabel + ":");
 
+	//body
+	breakManager.pushLoop(endLabel, loopLabel);
 	children[1]->compile();
+	breakManager.popScope();
 
 	writeAssembly("jump " + loopLabel);
 
 	writeAssembly(endLabel + ":");
+
+	scopeTable.popScope();
+
 	return true;
 }

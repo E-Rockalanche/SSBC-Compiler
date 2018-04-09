@@ -22,17 +22,27 @@ bool DoWhileLoopCompiler::compile(){
 
 	//start loop
 	string loopLabel = newLabel();
+	string endLabel = newLabel();
+	string testLabel = newLabel();
 	writeAssembly(loopLabel + ":");
 
+	scopeTable.pushScope();
+
 	//loop body
+	breakManager.pushLoop(endLabel, testLabel);
 	children[0]->compile();
+	breakManager.popScope();
 
 	//test expression
+	writeAssembly(testLabel + ":");
 	children[1]->compile();
 	Type type = children[1]->getType();
 	TypeConversionCompiler::convert(type, Type("bool"));
-
 	writeAssembly("test popinh");
 	writeAssembly("jnz " + loopLabel);
+	writeAssembly(endLabel + ":");
+
+	scopeTable.popScope();
+	
 	return true;
 }

@@ -4,9 +4,16 @@
 #include <string>
 using namespace std;
 
+void assert(bool expression, const char* message){
+	if (!expression){
+		cout << "Assert: " << message << '\n';
+		exit(EXIT_FAILURE);
+	}
+}
+
 void assert(bool expression, const string message){
 	if (!expression){
-		cout << "Error: " << message << '\n';
+		cout << "Assert: " << message << '\n';
 		exit(EXIT_FAILURE);
 	}
 }

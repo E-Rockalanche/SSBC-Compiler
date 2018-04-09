@@ -25,7 +25,10 @@ Statement -> IfElse
 Statement -> WhileLoop
 Statement -> DoWhileLoop
 Statement -> ForLoop
+Statement -> Switch
 Statement -> exit
+Statement -> continue
+Statement -> break
 
 CompoundStatement -> { StatementSequence }
 
@@ -48,7 +51,6 @@ Type -> identifier Pointers
 
 Pointers -> * Pointers
 Pointers ->
-
 
 AssignmentExpression -> VariableAssignment
 AssignmentExpression -> ArrayAssignment
@@ -83,6 +85,7 @@ MultiplicitiveExpression -> UnaryExpression
 UnaryExpression -> BitwiseNotExpression
 UnaryExpression -> BooleanNotExpression
 UnaryExpression -> DereferenceExpression
+UnaryExpression -> ReferenceExpression
 UnaryExpression -> ArrayAccessorExpression
 UnaryExpression -> EnclosedExpression
 UnaryExpression -> VariableExpression

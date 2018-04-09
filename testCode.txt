@@ -1,13 +1,9 @@
-int *ports
+int* ports
 ports = 0xfffc
 
-int i
-i = 0
-do{
-	i = i + 1
-	if (i ){
-		ports[2] = 1
-	}
-}while(i < 5)
+int* a
 
-ports[0] = i
+int x
+x = !!!(1 + 2 * 3 < (6 > 8 != 9 == (8 >= 7 + a[0])))
+
+ports[0] = x

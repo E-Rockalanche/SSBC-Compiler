@@ -8,6 +8,7 @@ using namespace std;
 ScopeTable BaseCompiler::scopeTable;
 TypeManager BaseCompiler::typeManager;
 FunctionManager BaseCompiler::functionManager;
+BreakManager BaseCompiler::breakManager;
 vector<string> BaseCompiler::assembly;
 vector<string> BaseCompiler::data;
 vector<Token> BaseCompiler::tokens;

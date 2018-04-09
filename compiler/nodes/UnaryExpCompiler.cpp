@@ -7,12 +7,14 @@
 #include "FunctionCallCompiler.hpp"
 #include "VariableExpCompiler.hpp"
 #include "LiteralCompiler.hpp"
+#include "ReferenceExpCompiler.hpp"
 
 UnaryExpCompiler::~UnaryExpCompiler(){}
 
 bool UnaryExpCompiler::parse(){
 	P_BEGIN
 	P_TRY_NODE(new BitwiseNotCompiler())
+	P_TRY_NODE(new ReferenceExpCompiler())
 	P_TRY_NODE(new BooleanNotCompiler())
 	P_TRY_NODE(new DereferenceCompiler())
 	/*

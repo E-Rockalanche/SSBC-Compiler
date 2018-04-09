@@ -13,6 +13,7 @@
 #include "CompilerDebug.hpp"
 #include "Assert.hpp"
 #include "Token.hpp"
+#include "BreakManager.hpp"
 using namespace std;
 
 //begin parsing a grammar rule
@@ -98,6 +99,7 @@ protected:
 	static ScopeTable scopeTable;
 	static TypeManager typeManager;
 	static FunctionManager functionManager;
+	static BreakManager breakManager;
 	static vector<Token> tokens;
 	static unsigned int index;
 	static unsigned int depth;//debug purposes

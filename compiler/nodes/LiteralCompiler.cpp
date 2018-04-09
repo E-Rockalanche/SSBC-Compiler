@@ -26,3 +26,7 @@ Type LiteralCompiler::getType(){
 	assert(children.size() > 0, "No literal");
 	return children.back()->getType();
 }
+
+int LiteralCompiler::getValue(){
+	return children.back()->getValue();
+}

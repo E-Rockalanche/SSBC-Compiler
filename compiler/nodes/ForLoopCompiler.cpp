@@ -24,12 +24,15 @@ bool ForLoopCompiler::compile(){
 
 	assert(children.size() == 4, "No while statement");
 
+	scopeTable.pushScope();
+
 	//comppile initial statement
 	children[0]->compile();
 
 	string loopLabel = newLabel();
 	string bodyLabel = newLabel();
 	string endLabel = newLabel();
+	string continueLabel = newLabel();
 
 	writeAssembly(loopLabel + ":");
 
@@ -44,12 +47,18 @@ bool ForLoopCompiler::compile(){
 	writeAssembly(bodyLabel + ":");
 
 	//compile body
+	breakManager.pushLoop(endLabel, continueLabel);
 	children[3]->compile();
+	breakManager.popScope();
+
+	writeAssembly(continueLabel + ":");
 
 	//compile increment statement
 	children[2]->compile();
 
 	writeAssembly("jump " + loopLabel);
+
+	scopeTable.popScope();
 
 	writeAssembly(endLabel + ":");
 	return true;
