@@ -19,8 +19,8 @@ $(PROGRAM):	$(OBJ_DIR)/CppTokenizer.o $(OBJ_DIR)/Tokenizer.o $(OBJ_DIR)/Scanner.
 		$(OBJ_DIR)/TypeConversionCompiler.o $(CMP_OBJECTS) 
 	$(CXX) $(LFLAGS) $^ -o $@
 
-nodes/%.o:	nodes/%.cpp FunctionManager.hpp FunctionSignature.hpp \
-		ScopeTable.hpp Type.hpp TypeManager.hpp ../tokenizer/Token.hpp \
+
+nodes/%.o:	nodes/%.cpp ScopeTable.hpp Type.hpp TypeManager.hpp ../tokenizer/Token.hpp \
 		CppLang.hpp CompilerDebug.hpp BaseCompiler.hpp \
 		TypeConversionCompiler.hpp
 	$(MAKE_OBJ)

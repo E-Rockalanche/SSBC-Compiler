@@ -1,26 +1,51 @@
 #include "FunctionSignature.hpp"
+#include "Assert.hpp"
+#include "CompilerDebug.hpp"
 #include <stdexcept>
 using namespace std;
 
-FunctionSignature::FunctionSignature(string name, Type returnType){
-	this->name = name;
-	this->returnType = returnType;
+FunctionSignature::FunctionSignature(){
+	name = "";
+	returnType = Type();
+	implemented = false;
 }
 
-FunctionSignature& FunctionSignature::addParameter(Type type){
-	parameters.push_back(type);
+FunctionSignature::FunctionSignature(string name, Type returnType,
+		bool implemented){
+	assert(name != "", "Empty string given to FunctionSignature(string, Type)");
+	this->name = name;
+	this->returnType = returnType;
+	this->implemented = implemented;
+}
+
+FunctionSignature& FunctionSignature::addParameter(Type type, string name){
+	paramTypes.push_back(type);
+	paramNames.push_back(name);
+	return *this;
+}
+
+FunctionSignature& FunctionSignature::setImplemented(){
+	implemented = true;
 	return *this;
 }
 
 bool FunctionSignature::operator==(const FunctionSignature& other) const{
-	if (parameters.size() != other.parameters.size() || (name != other.name)){
+	dout(toString() << " == " << other.toString() << " ?");
+
+	if (paramTypes.size() != other.paramTypes.size() || (name != other.name)){
+		dout("# of params or function names are different");
 		return false;
 	}
-	for(unsigned int i = 0; i < parameters.size(); i++){
-		if (parameters[i] != other.parameters[i]){
+
+	for(unsigned int i = 0; i < paramTypes.size(); i++){
+		if (paramTypes[i] != other.paramTypes[i]){
+			dout(paramTypes[i].toString() << " != "
+				<< other.paramTypes[i].toString());
 			return false;
 		}
 	}
+
+	dout("signatures are the same");
 	return true;
 }
 
@@ -28,36 +53,55 @@ bool FunctionSignature::operator!=(const FunctionSignature& other) const{
 	return !(*this == other);
 }
 
-unsigned int FunctionSignature::size() const{
-	return parameters.size();
+unsigned int FunctionSignature::numParams() const{
+	return paramTypes.size();
 }
 
-const Type& FunctionSignature::operator[](unsigned int index) const{
-	if (index >= parameters.size()){
+Type FunctionSignature::getParamType(unsigned int index) const{
+	if (index >= paramTypes.size()){
 		throw out_of_range("FunctionSignature parameter index out of range");
 	}
-	return parameters[index];
+	return paramTypes[index];
 }
 
-const Type& FunctionSignature::getReturnType() const{
+string FunctionSignature::getParamName(unsigned int index) const{
+	if (index >= paramNames.size()){
+		throw out_of_range("FunctionSignature parameter index out of range");
+	}
+	return paramNames[index];
+}
+
+Type FunctionSignature::getReturnType() const{
 	return returnType;
 }
 
 string FunctionSignature::toString() const{
-	string str = returnType.toString() + " " + name + "(";
-	for(unsigned int i = 0; i < parameters.size(); i++){
+	string str;
+	if (returnType.isDefined()){
+		str = returnType.toString() + " ";
+	}
+	str += name + "(";
+	for(unsigned int i = 0; i < paramTypes.size(); i++){
 		if (i > 0){
 			str += ", ";
 		}
-		str += parameters[i].toString();
+		str += paramTypes[i].toString();
 	}
 	return str + ")";
 }
 
 string FunctionSignature::toLabel() const{
 	string str = returnType.toLabel() + name;
-	for(unsigned int i = 0; i < parameters.size(); i++){
-		str += parameters[i].toLabel();
+	for(unsigned int i = 0; i < paramTypes.size(); i++){
+		str += paramTypes[i].toLabel();
 	}
 	return str;
+}
+
+bool FunctionSignature::isDefined() const {
+	return (name != "" && returnType != Type());
+}
+
+bool FunctionSignature::isImplemented() const {
+	return implemented;
 }

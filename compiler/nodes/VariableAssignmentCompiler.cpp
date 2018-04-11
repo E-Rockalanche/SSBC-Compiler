@@ -14,12 +14,14 @@ bool VariableAssignmentCompiler::parse(){
 
 bool VariableAssignmentCompiler::compile(){
 	dout("Compiling in " << __FILE__);
+
 	
 	type = getType();
 	if (type.isDefined()){
+		string label = scopeTable.getLabel(identifier.value());
 		unsigned int size = typeManager.sizeOf(type);
 		for(unsigned int i = 0; i < size; i++){
-			writeAssembly("popext " + identifier.value() + " + " + to_string(i));
+			writeAssembly("popext " + label + " + " + to_string(i));
 		}
 		return true;
 	}else{

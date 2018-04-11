@@ -23,7 +23,7 @@ bool DereferenceCompiler::compile(){
 		return false;
 	}
 
-	unsigned int derefSize = typeManager.sizeOf(t.dereference());
+	unsigned int derefSize = typeManager.sizeOf(t.removePointer());
 	if (derefSize > 2 || derefSize == 0){
 		printError("Cannot dereference to type " + t.toString(),
 			startTokenIndex);
@@ -56,5 +56,5 @@ Type DereferenceCompiler::getType(){
 			startTokenIndex);
 		return Type();
 	}
-	return t.dereference();
+	return t.removePointer();
 }

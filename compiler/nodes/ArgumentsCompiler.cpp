@@ -5,18 +5,6 @@ ArgumentsCompiler::~ArgumentsCompiler(){}
 
 bool ArgumentsCompiler::parse(){
 	P_BEGIN;
-	P_EXPECT_TOKEN(CppLang::OPEN_PAREN);
-	CompilerNode* first = new ExpressionCompiler();
-	if (first->parse()){
-		children.push_back(first);
-		while(currentToken().type() == CppLang::COMMA){
-			incIndex();
-			P_ADD_NODE(new ExpressionCompiler())
-		}
-	}else{
-		delete first;
-	}
-	P_EXPECT_TOKEN(CppLang::CLOSE_PAREN);
 	P_END;
 }
 

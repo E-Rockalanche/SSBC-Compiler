@@ -14,11 +14,14 @@ bool VariableExpCompiler::parse(){
 
 bool VariableExpCompiler::compile(){
 	dout("Compiling in " << __FILE__);
+
+	dout("variable = " << identifier.value());
 	
 	if (getType().isDefined()){
 		int size = typeManager.sizeOf(type);
+		string label = scopeTable.getLabel(identifier.value());
 		for(int i = size-1; i >= 0; i--){
-			writeAssembly("pushext " + identifier.value() + " + "
+			writeAssembly("pushext " + label + " + "
 				+ to_string(i));
 		}
 		return true;

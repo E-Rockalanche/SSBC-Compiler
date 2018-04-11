@@ -12,10 +12,15 @@ bool ContinueCompiler::compile(){
 	dout("Compiling in " << __FILE__);
 	if (breakManager.inLoop()){
 		string startLabel = breakManager.getStartLabel();
+		writeComment("Continue");
 		writeAssembly("jump " + startLabel);
 		return true;
 	}else{
 		printError("Cannot continue outside of a loop", getIndex());
 		return false;
 	}
+}
+
+bool ContinueCompiler::endsStatementSequence(){
+	return true;
 }

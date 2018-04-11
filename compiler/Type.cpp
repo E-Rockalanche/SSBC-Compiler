@@ -1,54 +1,85 @@
 #include "Type.hpp"
 
+//create undefined type
 Type::Type(){
 	defined = false;
-	name = "'undefined'";
-	constant = true;
+	constantBase = false;
+	_isArray = false;
+	_isReference = false;
+	baseName = "'undefined'";
 }
 
-Type::Type(string name, bool constant){
-	this->name = name;
-	this->constant = constant;
+//create defined type
+Type::Type(string baseName, bool constant){
+	assert(baseName != "", "Empty baseName given to Type()");
+	this->baseName = baseName;
+	this->constantBase = constant;
 	defined = true;
+	_isArray = false;
+	_isReference = false;
 }
 
 Type& Type::addPointer(bool constant){
-	assert(isDefined(), "Cannot add pointers to undefined type");
+	assert(isDefined(), "Cannot add pointers to " + toString());
+	assert(!isReference(), "Cannot point to " + toString());
+	assert(!isArray(), "Cannot point to " + toString());
 	pointers.push_back(constant);
 	return *this;
 }
 
+Type& Type::removePointer(){
+	assert(isPointer(), "Cannot remove pointer from " + toString());
+	if (isReference()){
+		_isReference = false;
+	}
+	if (isArray()){
+		_isArray = false;
+	}else{
+		pointers.pop_back();
+	}
+	return *this;
+}
+
+Type& Type::reference(bool constant){
+	assert(isDefined(), "Cannot reference " + toString());
+	assert(!isReference(), "Cannot reference " + toString());
+	_isReference = true;
+	constantReference = constant;
+	return *this;
+}
+
+Type& Type::dereference(){
+	assert(isPointer(), "Cannot dereference " + toString());
+	if (isReference()){
+		_isReference = false;
+	}
+	return *this;
+}
+
+unsigned int Type::numPointers(){
+	return pointers.size();
+}
+
 bool Type::isConstant() const{
-	if (isPointer()){
+	if (isReference()){
+		return constantReference;
+	}else if (isPointer()){
 		return pointers.back();
 	}else{
-		return constant;
+		return constantBase;
 	}
+}
+
+bool Type::isReference() const {
+	return _isReference;
+}
+
+bool Type::isArray() const {
+	return _isArray;
 }
 
 bool Type::isPointer() const{
 	return (pointers.size() > 0);
-}
-
-Type Type::dereference() const{
-	assert(isPointer(), "Trying to dereference non-pointer type");
-	Type t = *this;
-	t.pointers.pop_back();
-	return t;
-}
-	
-bool Type::canConvertConstantsTo(const Type& other) const{
-	assert(pointers.size() == other.pointers.size(),
-		"Trying to compare constants on types with differing amount of \
-pointers");
-	if (pointers.size() == 0){
-		return true;
-	}
-	for(int i = 0; i < (int)pointers.size()-1; i++){
-		if (pointers[i] && !other.pointers[i])
-			return false;
-	}
-	return true;
 }
 
 bool Type::isDefined() const{
@@ -56,18 +87,27 @@ bool Type::isDefined() const{
 }
 
 string Type::getBaseType() const{
-	return name;
+	return baseName;
 }
 
 string Type::toString() const{
 	string str;
 	if (isDefined()){
-		if (constant) str += "const ";
-		str += name;
+		if (constantBase) str += "const ";
+		str += baseName;
 		for(unsigned int i = 0; i < pointers.size(); i++){
 			str += " *";
 			if (pointers[i]){
 				str += "const";
+			}
+		}
+		if (_isArray){
+			str += "[" + to_string(arraySize) + "]";
+		}
+		if (_isReference){
+			str += "&";
+			if (constantReference){
+				str += " const";
 			}
 		}
 	}else{
@@ -79,15 +119,21 @@ string Type::toString() const{
 string Type::toLabel() const{
 	string str;
 	if (isDefined()){
-		//if (constant) str += "Const";
-		str += name;
+		//if (constantBase) str += "Const";
+		str += baseName;
 		for(unsigned int i = 0; i < pointers.size(); i++){
-			str += "Ptr";
+			str += "_Ptr";
 			/*
 			if (pointers[i]){
 				str += "Const";
 			}
 			*/
+		}
+		if (_isArray){
+			str += "_Array" + to_string(arraySize);
+		}
+		if (_isReference){
+			str += "_Ref";
 		}
 	}else{
 		throw runtime_error("Cannot convert undefined type to label");
@@ -96,9 +142,17 @@ string Type::toLabel() const{
 }
 
 bool Type::operator==(const Type& other) const{
-	return (pointers.size() == other.pointers.size() && name == other.name);
+	return ((pointers.size() == other.pointers.size())
+		&& (baseName == other.baseName)
+		&& (_isReference == other._isReference)
+		&& (_isArray == other._isArray));
 }
 
 bool Type::operator!=(const Type& other) const{
 	return !(*this == other);
+}
+
+unsigned int Type::getArraySize(){
+	assert(isArray(), toString() + " is not an array");
+	return arraySize;
 }

@@ -11,5 +11,10 @@ bool ExitCompiler::parse(){
 bool ExitCompiler::compile(){
 	dout("Compiling in " << __FILE__);
 	writeAssembly("halt");
+	returns = true;
+	return true;
+}
+
+bool ExitCompiler::endsStatementSequence(){
 	return true;
 }

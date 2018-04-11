@@ -14,6 +14,7 @@ void SSBC::reset(){
 	dout("reset");
 	stack_pointer = SP_START;
 	program_counter = PC_START;
+	memory[PSW] = 0;
 	halt_bit = false;
 	fault_bit = false;
 	break_bit = false;
@@ -55,67 +56,90 @@ void SSBC::load(const char* filename){
 }
 
 void SSBC::run(){
-	reset();
+	if (halt_bit || fault_bit || !break_bit){
+		reset();
+	}
 	dout("running program");
+	break_bit = false;
 	do{
-		if (program_counter > SP_START){
-			fault("program counter too large");
-			return;
+		if (breakPoints.find(program_counter) != breakPoints.end()){
+			break_bit = true;
+			cout << "Breaked at " << program_counter << '\n';
+			displayStack();
+			break;
 		}
-		#if(DEBUG)
-			if (program_counter < comments.size()){
-				cout << comments[program_counter] << '\n';
-			}
-		#endif
-		switch(memory[program_counter]){
-			case NOOP:
-				noop();
-			break;
-
-			case HALT:
-				halt();
-			break;
-
-			case PUSHIMM:
-				pushimm();
-			break;
-
-			case PUSHEXT:
-				pushext();
-			break;
-
-			case POPINH:
-				popinh();
-			break;
-
-			case POPEXT:
-				popext();
-			break;
-
-			case JNZ:
-				jnz();
-			break;
-
-			case JNN:
-				jnn();
-			break;
-
-			case ADD:
-				add();
-			break;
-
-			case SUB:
-				sub();
-			break;
-
-			case NOR:
-				nor();
-			break;
-
-			default:
-				fault("invalid opcode");
-		}
+		step();
 	}while(!halt_bit && !fault_bit && !break_bit);
+}
+
+void SSBC::step(){
+	if (fault_bit || halt_bit){
+		return;
+	}
+
+	if (program_counter > SP_START){
+		fault("program counter too large");
+		return;
+	}
+
+	#if(DEBUG)
+		if (program_counter < comments.size()){
+			cout << comments[program_counter] << '\n';
+		}
+	#endif
+
+	switch(memory[program_counter]){
+		case NOOP:
+			noop();
+		break;
+
+		case HALT:
+			halt();
+		break;
+
+		case PUSHIMM:
+			pushimm();
+		break;
+
+		case PUSHEXT:
+			pushext();
+		break;
+
+		case POPINH:
+			popinh();
+		break;
+
+		case POPEXT:
+			popext();
+		break;
+
+		case JNZ:
+			jnz();
+		break;
+
+		case JNN:
+			jnn();
+		break;
+
+		case ADD:
+			add();
+		break;
+
+		case SUB:
+			sub();
+		break;
+
+		case NOR:
+			nor();
+		break;
+
+		default:
+			fault("invalid opcode");
+	}
+
+	if(break_bit){
+		displayStack();
+	}
 }
 
 uint SSBC::readAddress(){
@@ -261,7 +285,7 @@ void SSBC::nor(){
 	program_counter++;
 }
 
-void SSBC::fault(const char* message){
+void SSBC::fault(string message){
 	fault_bit = 1;
 	cout << "fault: " << message << " at " << program_counter << '\n';
 }
@@ -302,8 +326,22 @@ string SSBC::getAddressName(uint address){
 }
 
 void SSBC::displayStack(){
-	cout << "Stack:\n";
+	cout << "====== STACK ======\n";
 	for(unsigned int i = stack_pointer + 1; i <= SP_START; i++){
-		cout << bitset<8>(memory[i]) << " : " << (int)memory[i] << '\n';
+		cout << bitset<8>(memory[i]) << " : " << (int)memory[i]
+			<< " : " << (char)memory[i] << '\n';
 	}
+	cout << "===================\n";
+}
+
+void SSBC::setBreakPoint(uint address){
+	breakPoints.insert(address);
+}
+
+void SSBC::removeBreakPoint(uint address){
+	breakPoints.erase(address);
+}
+
+void SSBC::SSBC::removeBreakPoints(){
+	breakPoints.clear();
 }

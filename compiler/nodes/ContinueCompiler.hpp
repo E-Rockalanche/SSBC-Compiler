@@ -8,6 +8,7 @@ public:
 	~ContinueCompiler();
 	bool parse();
 	bool compile();
+	bool endsStatementSequence();
 };
 
 #endif

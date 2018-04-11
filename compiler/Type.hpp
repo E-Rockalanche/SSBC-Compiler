@@ -9,24 +9,50 @@ using namespace std;
 
 class Type{
 public:
+	//set base type
 	Type();
 	Type(string name, bool constant = false);
+
+	//modify type
 	Type& addPointer(bool constant = false);
+	Type& removePointer();
+	Type& makeArray(unsigned int size, bool constant = false);
+	Type& reference(bool constant = false);
+	Type& dereference();
+
+	//check attributes
+	string getBaseType() const;
+	unsigned int numPointers();
+	unsigned int getArraySize();
+	bool isDefined() const;
 	bool isConstant() const;
 	bool isPointer() const;
-	Type dereference() const;
-	bool canConvertConstantsTo(const Type& other) const;
-	bool isDefined() const;
-	string getBaseType() const;
-	string toString() const;
-	string toLabel() const;
+	bool isArray() const;
+	bool isReference() const;
+
+	//comparisons
 	bool operator==(const Type& other) const;
 	bool operator!=(const Type& other) const;
+
+	string toString() const;
+	string toLabel() const;
 private:
 	bool defined;
-	string name;
-	bool constant;
-	vector<bool> pointers;//booleans tell if each pointer is constant
+	
+	string baseName;
+	bool constantBase;
+
+	//number os pointers and wether each is constant
+	vector<bool> pointers;
+
+	//is sequential array of data
+	bool _isArray;
+	bool arrayConstant;
+	unsigned int arraySize;
+
+	//is pointer to above type
+	bool _isReference;
+	bool constantReference;
 };
 
 #endif

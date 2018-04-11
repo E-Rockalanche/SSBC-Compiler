@@ -9,14 +9,22 @@ ScopeTable BaseCompiler::scopeTable;
 TypeManager BaseCompiler::typeManager;
 FunctionManager BaseCompiler::functionManager;
 BreakManager BaseCompiler::breakManager;
+
 vector<string> BaseCompiler::assembly;
 vector<string> BaseCompiler::data;
+vector<string> BaseCompiler::scopeData;
+
 vector<Token> BaseCompiler::tokens;
 unsigned int BaseCompiler::index;
 unsigned int BaseCompiler::numLabels;
 unsigned int BaseCompiler::errors;
 bool BaseCompiler::outputComments;
 unsigned int BaseCompiler::depth;
+
+string BaseCompiler::functionReturnLabel;
+string BaseCompiler::functionDataLabel;
+Type BaseCompiler::functionReturnType;
+bool BaseCompiler::inMain;
 
 //static functions
 
@@ -57,11 +65,23 @@ Token BaseCompiler::currentToken(){
 }
 
 void BaseCompiler::writeAssembly(string str){
-	assembly.push_back(str);
+	assembly.push_back("\t" + str);
 }
 
 void BaseCompiler::writeData(string str){
 	data.push_back(str);
+}
+
+void BaseCompiler::writeScopeData(string str){
+	scopeData.push_back(str);
+}
+
+void BaseCompiler::appendScopeDataToAssembly(){
+	dout("scopeData size = " << scopeData.size());
+	for(unsigned int i = 0; i < scopeData.size(); i++){
+		assembly.push_back(scopeData[i]);
+	}
+	scopeData.clear();
 }
 
 void BaseCompiler::writeComment(string comment){
@@ -151,7 +171,10 @@ bool BaseCompiler::compile(){
 
 CompilerNode::~CompilerNode(){
 	for(unsigned int i = 0; i < children.size(); i++){
-		delete children[i];
+		if(children[i]){
+			delete children[i];
+			children[i] = NULL;
+		}
 	}
 }
 
@@ -165,6 +188,14 @@ bool CompilerNode::compile(){
 
 int CompilerNode::getValue(){
 	ABSTRACT_CALL_ERROR
+}
+
+bool CompilerNode::endsStatementSequence(){
+	return endsSequence || returnsFromFunction();
+}
+
+bool CompilerNode::returnsFromFunction(){
+	return returns;
 }
 
 Type CompilerNode::getType(){

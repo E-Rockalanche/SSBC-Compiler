@@ -1,5 +1,5 @@
 #include "SwitchCaseCompiler.hpp"
-#include "StatementCompiler.hpp"
+#include "StatementSequenceCompiler.hpp"
 #include "LiteralCompiler.hpp"
 
 SwitchCaseCompiler::~SwitchCaseCompiler(){}
@@ -11,14 +11,14 @@ bool SwitchCaseCompiler::parse(){
 			incIndex();
 			defaultCase = true;
 			P_EXPECT_TOKEN(CppLang::COLON);
-			P_LOOP_NODE(new StatementCompiler())
+			P_ADD_NODE(new StatementSequenceCompiler())
 			break;
 		case CppLang::CASE:
 			incIndex();
 			defaultCase = false;
 			P_ADD_NODE(new LiteralCompiler())
 			P_EXPECT_TOKEN(CppLang::COLON);
-			P_LOOP_NODE(new StatementCompiler())
+			P_ADD_NODE(new StatementSequenceCompiler())
 			break;
 		default:
 			P_FAIL
@@ -28,18 +28,12 @@ bool SwitchCaseCompiler::parse(){
 
 bool SwitchCaseCompiler::compile(){
 	dout("Compiling in " << __FILE__);
+	assert(children.size() >= 1, "No case statement");
 
-	unsigned int startIndex = 0;
-	if (!defaultCase){
-		assert(children.size() >= 1, "No case statement");
-		startIndex = 1;
-	}
+	bool ok = children.back()->compile();
+	returns = children.back()->returnsFromFunction();
 
-	for(unsigned int i = startIndex; i < children.size(); i++){
-		children[i]->compile();
-	}
-
-	return true;
+	return ok;
 }
 
 int SwitchCaseCompiler::getValue(){

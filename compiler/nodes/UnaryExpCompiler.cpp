@@ -8,6 +8,7 @@
 #include "VariableExpCompiler.hpp"
 #include "LiteralCompiler.hpp"
 #include "ReferenceExpCompiler.hpp"
+#include "FunctionCallCompiler.hpp"
 
 UnaryExpCompiler::~UnaryExpCompiler(){}
 

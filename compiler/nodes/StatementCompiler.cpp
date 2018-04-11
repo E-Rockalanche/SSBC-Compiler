@@ -10,11 +10,14 @@
 #include "SwitchCompiler.hpp"
 #include "BreakCompiler.hpp"
 #include "ContinueCompiler.hpp"
+#include "FunctionCallStmtCompiler.hpp"
+#include "ReturnCompiler.hpp"
 
 StatementCompiler::~StatementCompiler(){}
 
 bool StatementCompiler::parse(){
 	P_BEGIN
+	P_TRY_NODE(new ReturnCompiler())
 	P_TRY_NODE(new IfElseCompiler())
 	P_TRY_NODE(new WhileLoopCompiler())
 	P_TRY_NODE(new DoWhileLoopCompiler())
@@ -26,6 +29,7 @@ bool StatementCompiler::parse(){
 	P_TRY_NODE(new CompoundStatementCompiler())
 	P_TRY_NODE(new AssignmentCompiler())
 	P_TRY_NODE(new VariableDefCompiler())
+	P_TRY_NODE(new FunctionCallStmtCompiler())
 	P_FAIL
 }
 
@@ -33,5 +37,10 @@ bool StatementCompiler::compile(){
 	dout("Compiling in " << __FILE__);
 
 	assert(children.size() > 0, "No assignment");
-	return children.back()->compile();
+	bool ok = children.back()->compile();
+
+	returns = children.back()->returnsFromFunction();
+	endsSequence = children.back()->endsStatementSequence();
+
+	return ok;
 }

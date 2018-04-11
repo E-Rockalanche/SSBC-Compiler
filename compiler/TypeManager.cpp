@@ -1,24 +1,26 @@
 #include "TypeManager.hpp"
 #include "Debug.hpp"
 
-unsigned int TypeManager::sizeOf(const Type& type) const{
+unsigned int TypeManager::sizeOf(Type type) const{
 	dout("TypeManager::sizeOf(" << type.toString() << ")");
 
 	unsigned int size = 0;
-	if (type.isPointer()){
-		size = POINTER_SIZE;
+	if (type.isArray()){
+		return type.getArraySize() * sizeOf(type.removePointer());
+	}else if (type.isPointer()){
+		size = SSBC_PTR_SIZE;
 	}else{
 		string typeName = type.getBaseType();
 		if (typeName == "void"){
-			size = VOID_SIZE;
+			size = SSBC_VOID_SIZE;
 		}else if (typeName == "int"){
-			size = INT_SIZE;
+			size = SSBC_INT_SIZE;
 		}else if (typeName == "char"){
-			size = CHAR_SIZE;
+			size = SSBC_CHAR_SIZE;
 		}else if (typeName == "bool"){
-			size = BOOL_SIZE;
+			size = SSBC_BOOL_SIZE;
 		}else if (typeName == "long"){
-			size = LONG_SIZE;
+			size = SSBC_LONG_SIZE;
 		}else{
 			//check size of struct/class/union
 			string msg = "Type " + typeName + " is not defined";

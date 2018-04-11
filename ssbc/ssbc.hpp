@@ -13,6 +13,7 @@ written by Eric Roberts
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
 using namespace std;
 
 //#define DEBUG true
@@ -33,6 +34,10 @@ public:
 	char readFromPortC();
 	char readFromMemory(unsigned int address);
 	void displayStack();
+	void setBreakPoint(uint address);
+	void removeBreakPoint(uint address);
+	void removeBreakPoints();
+	void step();
 
 private:
 	static const uint MEMORY_SIZE = 0x10000;
@@ -70,6 +75,8 @@ private:
 	bool fault_bit;
 	bool halt_bit;
 	bool break_bit;
+	set<uint> breakPoints;
+
 
 	uint readAddress();
 	void setPSW();
@@ -87,7 +94,7 @@ private:
 	void add();
 	void sub();
 	void nor();
-	void fault(const char* message);
+	void fault(string message);
 };
 
 #endif

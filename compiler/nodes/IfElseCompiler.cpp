@@ -24,6 +24,7 @@ bool IfElseCompiler::compile(){
 
 	assert(children.size() >= 2, "No if statement");
 
+	//compile expression
 	children[0]->compile();
 	Type type = children[0]->getType();
 	TypeConversionCompiler::convert(type, Type("bool"));
@@ -37,6 +38,7 @@ bool IfElseCompiler::compile(){
 	writeAssembly("jump " + falseLabel);
 	writeAssembly(trueLabel + ": ");
 
+	//compile if body
 	children[1]->compile();
 
 	writeAssembly("jump " + endLabel);
@@ -44,7 +46,17 @@ bool IfElseCompiler::compile(){
 	writeAssembly(falseLabel + ": ");
 
 	if (children.size() == 3){
+		//compile else body
 		children[2]->compile();
+
+		returns = (children[1]->returnsFromFunction()
+			&& children[2]->returnsFromFunction());
+		
+		endsSequence = (children[1]->endsStatementSequence()
+			&& children[2]->endsStatementSequence());
+	}else{
+		returns = false;
+		endsSequence = false;
 	}
 
 	writeAssembly(endLabel + ": ");

@@ -23,6 +23,7 @@ private:
 		bool compile();
 		unsigned int getIndex();
 		int getValue();
+		bool returnsFromFunction();
 
 	private:
 		int constant;

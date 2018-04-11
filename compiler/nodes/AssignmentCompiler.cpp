@@ -26,7 +26,7 @@ bool AssignmentCompiler::compile(){
 	dout("right type = " << from.toString());
 
 	if (!children[1]->compile()) return false;
-	TypeConversionCompiler::convert(from, to);
+	TypeConversionCompiler::convert(from, to, getIndex());
 
 	if (!children[0]->compile()) return false;
 

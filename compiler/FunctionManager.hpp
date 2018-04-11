@@ -8,10 +8,10 @@ using namespace std;
 
 class FunctionManager{
 public:
-	bool functionExists(const FunctionSignature& function) const;
 	bool addFunction(FunctionSignature function);
-	Type getReturnType(const FunctionSignature& function) const;
+	FunctionSignature findMatch(const FunctionSignature& function);
 	void clear();
+	void dump();
 private:
 	vector<FunctionSignature> functions;
 };

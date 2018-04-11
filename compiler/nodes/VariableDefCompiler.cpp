@@ -40,7 +40,8 @@ bool VariableDefCompiler::compile(){
 		return false;
 	}
 
-	scopeTable.add(identifier.value(), type);
+	string label = newLabel();
+	scopeTable.add(identifier.value(), type, label);
 
 	if (children.size() == 2){
 		dout("assigning variable to array");
@@ -50,7 +51,7 @@ bool VariableDefCompiler::compile(){
 		string arrayLabel = newLabel();
 		writeData(arrayLabel + ": .array " + to_string(arraySize * typeSize));
 		writeAssembly("pushimm16 " + arrayLabel);
-		writeAssembly("popext16 " + identifier.value());
+		writeAssembly("popext16 " + label);
 	}
 	
 	#if(DEBUG)
@@ -58,10 +59,10 @@ bool VariableDefCompiler::compile(){
 	#endif
 
 	if (typeManager.sizeOf(type) == 1){
-		writeData(identifier.value() + ": .byte 0");
+		writeScopeData(label + ": .byte 0");
 	}else{
 
-		writeData(identifier.value() + ": .word 0");
+		writeScopeData(label + ": .word 0");
 	}
 	return true;
 }

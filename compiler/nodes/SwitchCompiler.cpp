@@ -84,9 +84,18 @@ bool SwitchCompiler::compile(){
 
 	breakManager.pushSwitch(endLabel);
 
+	//compile cases
+	int numNoReturns = 0;
 	for(unsigned int i = 0; i < cases.size(); i++){
 		writeAssembly(cases[i].getLabel() + ":");
 		cases[i].compile();
+		numNoReturns += !cases[i].returnsFromFunction();
+	}
+
+	if (!defaultCase.isDefined()){
+		returns = false;
+	}else{
+		returns = (numNoReturns == 0);
 	}
 
 	breakManager.popScope();
@@ -179,4 +188,7 @@ unsigned int SwitchCompiler::Case::getIndex(){
 int SwitchCompiler::Case::getValue(){
 	assertDefined();
 	return compiler->getValue();
+}
+bool SwitchCompiler::Case::returnsFromFunction(){
+	return compiler->returnsFromFunction();
 }

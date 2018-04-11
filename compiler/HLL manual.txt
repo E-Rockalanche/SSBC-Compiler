@@ -1,4 +1,19 @@
 ========================
+	    HLL rules
+========================
+
+primitive types:
+void, char, int, long
+
+define a pointer by adding an asterisk
+ex) int** mypointer
+
+define an array by adding a size in brackets
+ex) long[8] myArray
+
+must define a void main() function for program to run
+
+========================
 	Compiler Grammar
 ========================
 
@@ -13,7 +28,20 @@ binary = 		0b[01]*
 char = 			'[\\]?[ -~]'
 string = 		"[ -~]*"
 
-Program -> StatementSequence
+Program -> GlobalStatements
+
+GlobalStatements -> GlobalStatement
+GlobalStatements ->
+
+GlobalStatement -> FunctionDefinition
+
+FunctionDefinition -> Type identifier ( Parameters ) { StatementSequence }
+FunctionDefinition -> Type identifier ( ) { StatementSequence }
+
+Parameters -> Parameter , Parameters
+Parameters -> Parameter
+
+Parameter -> Type identifier
 
 StatementSequence -> Statement
 StatementSequence ->
@@ -29,6 +57,7 @@ Statement -> Switch
 Statement -> exit
 Statement -> continue
 Statement -> break
+Statement -> FunctionCall
 
 CompoundStatement -> { StatementSequence }
 
@@ -46,6 +75,20 @@ WhileLoop -> while ( Exression ) Statement
 DoWhileLoop -> do Statement while ( Expression )
 
 ForLoop -> for ( Statement ; Expression ; Statement ) Statement
+
+Switch -> switch ( Expression ) { Cases }
+
+Cases -> Case Cases
+Cases ->
+
+Case -> default : StatementSequence
+Case -> Literal : StatementSequence
+
+FunctionCall -> identifier ( Arguments )
+FunctionCall -> identifier ( )
+
+Arguments -> Expression
+Arguments -> Expression , Arguments
 
 Type -> identifier Pointers
 
@@ -88,6 +131,7 @@ UnaryExpression -> DereferenceExpression
 UnaryExpression -> ReferenceExpression
 UnaryExpression -> ArrayAccessorExpression
 UnaryExpression -> EnclosedExpression
+UnaryExpression -> FunctionCall
 UnaryExpression -> VariableExpression
 UnaryExpression -> LiteralExpression
 

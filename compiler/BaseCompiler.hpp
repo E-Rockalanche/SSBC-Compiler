@@ -46,6 +46,9 @@ using namespace std;
 #define P_EXPECT_TOKEN(N) {if (currentToken().type() == (N)){incIndex();}\
 	else P_FAIL}
 
+#define P_EXPECT_TOKEN_SET(N, S) {if (currentToken().type() == (N)){S;\
+	incIndex();} else P_FAIL}
+
 //current parse is successful
 #if (DEBUG)
 	#define P_END {DEPTH_SPACES DEC_DEPTH cout << "Successful parse in " << __FILE__ << '\n';\
@@ -84,8 +87,12 @@ protected:
 	static void incIndex();
 	static Token nextToken();
 	static Token currentToken();
+
 	static void writeAssembly(string str);
 	static void writeData(string str);
+	static void writeScopeData(string str);
+	static void appendScopeDataToAssembly();
+
 	static void writeComment(string comment);
 	static string newLabel();
 	static void printError(string message);
@@ -103,9 +110,17 @@ protected:
 	static vector<Token> tokens;
 	static unsigned int index;
 	static unsigned int depth;//debug purposes
+	
+	//current function info
+	static string functionReturnLabel;
+	static string functionDataLabel;
+	static Type functionReturnType;
+	static bool inMain;
 
 	static vector<string> assembly;
 	static vector<string> data;
+	static vector<string> scopeData;
+
 	static unsigned int numLabels;
 	static unsigned int errors;
 	static bool outputComments;
@@ -116,14 +131,22 @@ public:
 	virtual ~CompilerNode();
 	virtual bool parse();
 	virtual bool compile();
+	unsigned int getIndex();
+
+	//for expressions
 	virtual Type getType();
 	virtual int getValue();
-	unsigned int getIndex();
+
+	//for statements
+	virtual bool endsStatementSequence();
+	bool returnsFromFunction();
 
 protected:
 	unsigned int startTokenIndex;
 	vector<CompilerNode*> children;
 	Type type;
+	bool returns = false;
+	bool endsSequence = false;
 };
 
 #endif

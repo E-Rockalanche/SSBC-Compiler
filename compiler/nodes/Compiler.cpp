@@ -8,6 +8,12 @@ Compiler::Compiler(){
 	errors = 0;
 	program = NULL;
 	stdLibDir = "ssbclib/";
+
+	//current function
+	functionReturnLabel = "";
+	functionDataLabel = "";
+	functionReturnType = Type();
+	inMain = false;
 }
 
 Compiler::~Compiler(){
@@ -65,9 +71,6 @@ bool Compiler::compile(){
 		printError("No output filename given");
 		return false;
 	}
-
-	//later this will only show up at main() function
-	writeAssembly(".start");
 
 	for(unsigned int i = 0; i < inputFiles.size(); i++){
 		compileFile(inputFiles[i]);
@@ -138,10 +141,12 @@ bool Compiler::writeToFile(string filename){
 		printError("Cannot open file " + filename);
 		return false;
 	}
+	
+	assert(scopeData.size() == 0, "scope data was not saved");
+
 	for(unsigned int i = 0; i < assembly.size(); i++){
 		fout << assembly[i] << '\n';
 	}
-	fout << "halt\n";
 	for(unsigned int i = 0; i < data.size(); i++){
 		fout << data[i] << '\n';
 	}

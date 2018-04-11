@@ -28,7 +28,7 @@ bool ArrayAccessorCompiler::compile(){
 			startTokenIndex);
 		return false;
 	}
-	unsigned int derefSize = typeManager.sizeOf(varType.dereference());
+	unsigned int derefSize = typeManager.sizeOf(varType.removePointer());
 
 	//push array pointer
 	if (!children[0]->compile()) return false;
@@ -58,5 +58,5 @@ Type ArrayAccessorCompiler::getType(){
 		printError("Cannot dereference non-pointer type", startTokenIndex);
 		return Type();
 	}
-	return t.dereference();
+	return t.removePointer();
 }

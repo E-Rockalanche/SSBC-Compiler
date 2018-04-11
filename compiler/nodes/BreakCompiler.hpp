@@ -8,6 +8,7 @@ public:
 	~BreakCompiler();
 	bool parse();
 	bool compile();
+	bool endsStatementSequence();
 };
 
 #endif
