@@ -1,7 +1,7 @@
 #ifndef INTEGER_COMPILER_HPP
 #define INTEGER_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class IntegerCompiler : public CompilerNode {
 public:

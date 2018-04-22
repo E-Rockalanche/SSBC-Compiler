@@ -1,7 +1,7 @@
 #ifndef VARIABLE_DEF_COMPILER_HPP
 #define VARIABLE_DEF_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class VariableDefCompiler : public CompilerNode {
 public:

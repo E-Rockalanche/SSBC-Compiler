@@ -1,7 +1,7 @@
 #ifndef BREAK_COMPILER_HPP
 #define BREAK_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class BreakCompiler : public CompilerNode {
 public:

@@ -1,7 +1,7 @@
 #ifndef MULTIPLICITIVE_EXP_COMPILER_HPP
 #define MULTIPLICITIVE_EXP_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class MultiplicitiveExpCompiler : public CompilerNode {
 public:

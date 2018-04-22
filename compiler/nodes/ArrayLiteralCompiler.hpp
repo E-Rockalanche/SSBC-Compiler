@@ -1,7 +1,7 @@
 #ifndef ARRAY_LITERAL_COMPILER_HPP
 #define ARRAY_LITERAL_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class ArrayLiteralCompiler : public CompilerNode {
 public:

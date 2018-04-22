@@ -1,7 +1,7 @@
 #ifndef ARGUMENTS_COMPILER_HPP
 #define ARGUMENTS_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 #include "FunctionSignature.hpp"
 
 class ArgumentsCompiler : public CompilerNode {

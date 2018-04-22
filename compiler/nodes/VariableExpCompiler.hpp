@@ -1,7 +1,7 @@
 #ifndef VARIABLE_EXP_COMPILER_HPP
 #define VARIABLE_EXP_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class VariableExpCompiler : public CompilerNode {
 public:

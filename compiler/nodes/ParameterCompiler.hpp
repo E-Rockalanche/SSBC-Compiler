@@ -1,7 +1,7 @@
 #ifndef PARAMETER_COMPILER_HPP
 #define PARAMETER_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class ParameterCompiler : public CompilerNode {
 public:

@@ -1,7 +1,7 @@
 #ifndef ASSIGNMENT_EXP_COMPILER_HPP
 #define ASSIGNMENT_EXP_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class AssignmentExpCompiler : public CompilerNode {
 public:

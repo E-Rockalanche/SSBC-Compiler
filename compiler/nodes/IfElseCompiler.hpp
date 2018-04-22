@@ -1,7 +1,7 @@
 #ifndef IF_ELSE_COMPILER_HPP
 #define IF_ELSE_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class IfElseCompiler : public CompilerNode {
 public:

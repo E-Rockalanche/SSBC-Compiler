@@ -1,7 +1,7 @@
 #ifndef ASSIGNMENT_COMPILER_HPP
 #define ASSIGNMENT_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class AssignmentCompiler : public CompilerNode {
 public:

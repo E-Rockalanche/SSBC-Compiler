@@ -1,7 +1,7 @@
 #ifndef RELATIONAL_EXP_COMPILER_HPP
 #define RELATIONAL_EXP_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class RelationalExpCompiler : public CompilerNode {
 public:

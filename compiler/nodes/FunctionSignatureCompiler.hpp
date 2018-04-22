@@ -1,7 +1,7 @@
 #ifndef FUNCTION_SIGNATURE_COMPILER_HPP
 #define FUNCTION_SIGNATURE_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class FunctionSignatureCompiler : public CompilerNode {
 public:

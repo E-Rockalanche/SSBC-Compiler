@@ -5,11 +5,6 @@ using namespace std;
 
 //static variables
 
-ScopeTable BaseCompiler::scopeTable;
-TypeManager BaseCompiler::typeManager;
-FunctionManager BaseCompiler::functionManager;
-BreakManager BaseCompiler::breakManager;
-
 vector<string> BaseCompiler::assembly;
 vector<string> BaseCompiler::globalData;
 
@@ -178,8 +173,6 @@ void BaseCompiler::printRow(unsigned int index){
 
 //class functions
 
-#define ABSTRACT_CALL_ERROR {throw runtime_error("Cannot call function of \
-an abstract class");}
 
 BaseCompiler::~BaseCompiler(){}
 
@@ -190,39 +183,3 @@ bool BaseCompiler::compile(){
 	ABSTRACT_CALL_ERROR
 }
 
-CompilerNode::~CompilerNode(){
-	for(unsigned int i = 0; i < children.size(); i++){
-		if(children[i]){
-			delete children[i];
-			children[i] = NULL;
-		}
-	}
-}
-
-bool CompilerNode::parse(){
-	ABSTRACT_CALL_ERROR
-}
-
-bool CompilerNode::compile(){
-	ABSTRACT_CALL_ERROR
-}
-
-int CompilerNode::getValue(){
-	ABSTRACT_CALL_ERROR
-}
-
-bool CompilerNode::endsStatementSequence(){
-	return endsSequence || returnsFromFunction();
-}
-
-bool CompilerNode::returnsFromFunction(){
-	return returns;
-}
-
-Type CompilerNode::getType(){
-	return type;
-}
-
-unsigned int CompilerNode::getIndex(){
-	return startTokenIndex;
-}

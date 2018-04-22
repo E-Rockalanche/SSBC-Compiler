@@ -1,7 +1,7 @@
 #ifndef BOOLEAN_EXP_COMPILER_HPP
 #define BOOLEAN_EXP_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class BooleanExpCompiler : public CompilerNode {
 public:

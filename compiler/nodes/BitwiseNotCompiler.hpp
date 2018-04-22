@@ -1,7 +1,7 @@
 #ifndef BITWISE_NOT_COMPILER_HPP
 #define BITWISE_NOT_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class BitwiseNotCompiler : public CompilerNode {
 public:

@@ -1,7 +1,7 @@
 #ifndef EXPRESSION_COMPILER_HPP
 #define EXPRESSION_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class ExpressionCompiler : public CompilerNode {
 public:

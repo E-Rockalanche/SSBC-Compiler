@@ -1,7 +1,7 @@
 #ifndef REFERENCE_EXP_COMPILER_HPP
 #define REFERENCE_EXP_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class ReferenceExpCompiler : public CompilerNode {
 public:

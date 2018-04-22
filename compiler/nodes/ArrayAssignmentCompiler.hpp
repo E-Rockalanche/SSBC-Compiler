@@ -1,7 +1,7 @@
 #ifndef ARRAY_ASSIGNMENT_COMPILER_HPP
 #define ARRAY_ASSIGNMENT_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class ArrayAssignmentCompiler : public CompilerNode {
 public:

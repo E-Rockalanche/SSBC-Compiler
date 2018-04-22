@@ -1,7 +1,7 @@
 #ifndef DEREFERENCE_COMPILER_HPP
 #define DEREFERENCE_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class DereferenceCompiler : public CompilerNode {
 public:

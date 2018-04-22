@@ -1,7 +1,7 @@
 #ifndef FUNCTION_DEF_COMPILER_HPP
 #define FUNCTION_DEF_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 #include "FunctionSignature.hpp"
 #include <string>
 using namespace std;

@@ -1,7 +1,7 @@
 #ifndef GLOBAL_STATEMENT_COMPILER_HPP
 #define GLOBAL_STATEMENT_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class GlobalStatementCompiler : public CompilerNode {
 public:

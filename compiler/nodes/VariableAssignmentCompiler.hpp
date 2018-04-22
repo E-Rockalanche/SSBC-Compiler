@@ -1,7 +1,7 @@
 #ifndef VARIABLE_ASSIGNMENT_COMPILER_HPP
 #define VARIABLE_ASSIGNMENT_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class VariableAssignmentCompiler : public CompilerNode {
 public:

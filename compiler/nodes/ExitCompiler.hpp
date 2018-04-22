@@ -1,7 +1,7 @@
 #ifndef EXIT_COMPILER_HPP
 #define EXIT_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class ExitCompiler : public CompilerNode {
 public:

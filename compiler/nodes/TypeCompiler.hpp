@@ -1,7 +1,7 @@
 #ifndef TYPE_COMPILER_HPP
 #define TYPE_COMPILER_HPP
 
-#include "baseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class TypeCompiler : public CompilerNode {
 public:

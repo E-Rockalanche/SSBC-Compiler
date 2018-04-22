@@ -1,7 +1,7 @@
 #ifndef STRING_COMPILER_HPP
 #define STRING_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class StringCompiler : public CompilerNode {
 public:

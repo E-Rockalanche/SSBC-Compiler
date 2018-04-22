@@ -1,11 +1,11 @@
 #ifndef COMPILER_HPP
 #define COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerData.hpp"
 #include "SSBCAssembler.hpp"
 #include "ProgramCompiler.hpp"
 
-class Compiler : public BaseCompiler {
+class Compiler : public CompilerData {
 public:
 	Compiler();
 	~Compiler();

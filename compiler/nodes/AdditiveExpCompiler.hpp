@@ -1,7 +1,7 @@
 #ifndef ADDITIVE_EXP_COMPILER_HPP
 #define ADDITIVE_EXP_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class AdditiveExpCompiler : public CompilerNode {
 public:

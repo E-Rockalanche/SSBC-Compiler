@@ -5,16 +5,15 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "ScopeTable.hpp"
-#include "TypeManager.hpp"
-#include "FunctionManager.hpp"
 #include "Type.hpp"
 #include "CppLang.hpp"
 #include "CompilerDebug.hpp"
 #include "Assert.hpp"
 #include "Token.hpp"
-#include "BreakManager.hpp"
 using namespace std;
+
+#define ABSTRACT_CALL_ERROR {throw runtime_error("Cannot call function of \
+an abstract class");}
 
 //begin parsing a grammar rule
 //use to remember the starting index of the current rule
@@ -112,10 +111,6 @@ protected:
 	static void printRow(unsigned int index);
 
 	//file specific
-	static ScopeTable scopeTable;
-	static TypeManager typeManager;
-	static FunctionManager functionManager;
-	static BreakManager breakManager;
 	static vector<Token> tokens;
 	static unsigned int index;
 	static unsigned int depth;//debug purposes
@@ -132,29 +127,6 @@ protected:
 	static unsigned int numLabels;
 	static unsigned int errors;
 	static bool outputComments;
-};
-
-class CompilerNode : public BaseCompiler {
-public:
-	virtual ~CompilerNode();
-	virtual bool parse();
-	virtual bool compile();
-	unsigned int getIndex();
-
-	//for expressions
-	virtual Type getType();
-	virtual int getValue();
-
-	//for statements
-	virtual bool endsStatementSequence();
-	bool returnsFromFunction();
-
-protected:
-	unsigned int startTokenIndex;
-	vector<CompilerNode*> children;
-	Type type;
-	bool returns = false;
-	bool endsSequence = false;
 };
 
 #endif

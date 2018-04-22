@@ -1,7 +1,7 @@
 #ifndef LITERAL_COMPILER_HPP
 #define LITERAL_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class LiteralCompiler : public CompilerNode {
 public:

@@ -1,7 +1,7 @@
 #ifndef WHILE_LOOP_COMPILER_HPP
 #define WHILE_LOOP_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class WhileLoopCompiler : public CompilerNode {
 public:

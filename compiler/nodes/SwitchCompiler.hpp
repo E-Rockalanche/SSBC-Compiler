@@ -1,7 +1,7 @@
 #ifndef SWITCH_COMPILER_HPP
 #define SWITCH_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 #include "SwitchCaseCompiler.hpp"
 #include "Assert.hpp"
 

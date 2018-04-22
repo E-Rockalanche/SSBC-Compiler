@@ -1,9 +1,9 @@
 #ifndef TYPE_CONVERSION_COMPILER_HPP
 #define TYPE_CONVERSION_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerData.hpp"
 
-class TypeConversionCompiler : public BaseCompiler {
+class TypeConversionCompiler : public CompilerData {
 public:
 	static bool convert(const Type& from, const Type& to,
 		unsigned int tokenIndex);

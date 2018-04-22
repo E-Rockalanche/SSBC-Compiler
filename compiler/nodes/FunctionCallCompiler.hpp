@@ -1,7 +1,7 @@
 #ifndef FUNCTION_CALL_COMPILER_HPP
 #define FUNCTION_CALL_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class FunctionCallCompiler : public CompilerNode {
 public:

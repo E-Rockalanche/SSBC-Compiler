@@ -145,8 +145,8 @@ bool Compiler::writeToFile(string filename){
 	for(unsigned int i = 0; i < assembly.size(); i++){
 		fout << assembly[i] << '\n';
 	}
-	for(unsigned int i = 0; i < data.size(); i++){
-		fout << data[i] << '\n';
+	for(unsigned int i = 0; i < globalData.size(); i++){
+		fout << globalData[i] << '\n';
 	}
 	fout.close();
 	return true;

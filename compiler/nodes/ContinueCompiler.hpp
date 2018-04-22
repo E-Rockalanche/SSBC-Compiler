@@ -1,7 +1,7 @@
 #ifndef CONTINUE_COMPILER_HPP
 #define CONTINUE_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class ContinueCompiler : public CompilerNode {
 public:

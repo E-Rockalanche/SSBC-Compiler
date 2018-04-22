@@ -1,7 +1,7 @@
 #ifndef CHARACTER_COMPILER_HPP
 #define CHARACTER_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class CharacterCompiler : public CompilerNode {
 public:

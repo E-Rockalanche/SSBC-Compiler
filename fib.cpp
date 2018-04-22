@@ -1,6 +1,7 @@
 long fibRecursive(long index){
 	if(index <= 0) return 0
 	if(index <= 2) return 1
+	return fibRecursive(index - 2) + fibRecursive(index - 1)
 }
 
 long fibLoop(long index){

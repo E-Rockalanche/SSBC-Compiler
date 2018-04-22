@@ -1,7 +1,7 @@
 #ifndef SWITCH_CASE_COMPILER_HPP
 #define SWITCH_CASE_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 #include <string>
 using namespace std;
 

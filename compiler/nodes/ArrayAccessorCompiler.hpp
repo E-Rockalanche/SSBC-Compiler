@@ -1,7 +1,7 @@
 #ifndef ARRAY_ACCESSOR_COMPILER_HPP
 #define ARRAY_ACCESSOR_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class ArrayAccessorCompiler : public CompilerNode {
 public:

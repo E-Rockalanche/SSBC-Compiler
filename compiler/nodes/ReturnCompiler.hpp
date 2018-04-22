@@ -1,7 +1,7 @@
 #ifndef RETURN_COMPILER_HPP
 #define RETURN_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class ReturnCompiler : public CompilerNode {
 public:

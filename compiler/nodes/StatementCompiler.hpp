@@ -1,7 +1,7 @@
 #ifndef STATEMENT_COMPILER_HPP
 #define STATEMENT_COMPILER_HPP
 
-#include "BaseCompiler.hpp"
+#include "CompilerNode.hpp"
 
 class StatementCompiler : public CompilerNode {
 public:
