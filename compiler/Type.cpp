@@ -56,6 +56,16 @@ Type& Type::dereference(){
 	return *this;
 }
 
+Type& Type::makeArray(unsigned int size, bool constant){
+	assert(isDefined(), "Cannot make array of " + toString());
+	assert(!isArray(), "Cannot make array of an array");
+
+	_isArray = true;
+	arraySize = size;
+	constantArray = constant;
+	return *this;
+}
+
 unsigned int Type::numPointers(){
 	return pointers.size();
 }

@@ -47,7 +47,7 @@ private:
 
 	//is sequential array of data
 	bool _isArray;
-	bool arrayConstant;
+	bool constantArray;
 	unsigned int arraySize;
 
 	//is pointer to above type

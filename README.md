@@ -1,7 +1,6 @@
-=================================
 SSBC assembler and compiler
 by Eric Roberts
-=================================
+--------------------
 
 Directory Structure:
 --------------------

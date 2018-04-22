@@ -30,6 +30,7 @@ using namespace std;
 class TypeManager{
 public:
 	unsigned int sizeOf(Type type) const;
+	unsigned int sizeOf(string typeName) const;
 	bool isPrimitive(const Type& type) const;
 	bool typeExists(const string& typeName) const;
 	void clear();

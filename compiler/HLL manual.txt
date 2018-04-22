@@ -22,10 +22,10 @@ must define a void main() function for program to run
 
 identifier = 	[a-zA-Z_][a-zA-Z0-9_]*
 hexadecimal = 	0x[0-9a-fA-F]*
-decimal = 		[-]?[1-9][0-9]*
+decimal = 		[-]?[1-9][0-9]*[lL]?
 octal = 		0[0-7]*
 binary = 		0b[01]*
-char = 			'[\\]?[ -~]'
+char = 			'[\]?[ -~]'
 string = 		"[ -~]*"
 
 Program -> GlobalStatements
@@ -61,6 +61,7 @@ Statement -> FunctionCall
 
 CompoundStatement -> { StatementSequence }
 
+VariableDef -> Type identifier = Expression
 VariableDef -> Type identifier
 
 Assignment -> AssignmentExpression = Expression

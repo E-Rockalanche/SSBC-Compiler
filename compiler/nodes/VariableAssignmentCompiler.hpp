@@ -9,6 +9,7 @@ public:
 	bool parse();
 	bool compile();
 	Type getType();
+	string getName();
 private:
 	Token identifier;
 };

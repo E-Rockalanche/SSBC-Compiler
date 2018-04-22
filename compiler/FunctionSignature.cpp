@@ -76,26 +76,34 @@ Type FunctionSignature::getReturnType() const{
 }
 
 string FunctionSignature::toString() const{
-	string str;
-	if (returnType.isDefined()){
-		str = returnType.toString() + " ";
-	}
-	str += name + "(";
-	for(unsigned int i = 0; i < paramTypes.size(); i++){
-		if (i > 0){
-			str += ", ";
+	if (!isDefined()){
+		return "'undefined function'";
+	}else{
+		string str;
+		if (returnType.isDefined()){
+			str = returnType.toString() + " ";
 		}
-		str += paramTypes[i].toString();
+		str += name + "(";
+		for(unsigned int i = 0; i < paramTypes.size(); i++){
+			if (i > 0){
+				str += ", ";
+			}
+			str += paramTypes[i].toString();
+		}
+		return str + ")";
 	}
-	return str + ")";
 }
 
 string FunctionSignature::toLabel() const{
-	string str = returnType.toLabel() + name;
-	for(unsigned int i = 0; i < paramTypes.size(); i++){
-		str += paramTypes[i].toLabel();
+	if (!isDefined()){
+		return "'undefined function'";
+	}else{
+		string str = returnType.toLabel() + name;
+		for(unsigned int i = 0; i < paramTypes.size(); i++){
+			str += paramTypes[i].toLabel();
+		}
+		return str;
 	}
-	return str;
 }
 
 bool FunctionSignature::isDefined() const {

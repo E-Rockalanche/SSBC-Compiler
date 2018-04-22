@@ -2,11 +2,13 @@
 #include "CharacterCompiler.hpp"
 #include "StringCompiler.hpp"
 #include "IntegerCompiler.hpp"
+#include "ArrayLiteralCompiler.hpp"
 
 LiteralCompiler::~LiteralCompiler(){}
 
 bool LiteralCompiler::parse(){
 	P_BEGIN
+	P_TRY_NODE(new ArrayLiteralCompiler())
 	P_TRY_NODE(new CharacterCompiler())
 	P_TRY_NODE(new StringCompiler())
 	P_TRY_NODE(new IntegerCompiler())

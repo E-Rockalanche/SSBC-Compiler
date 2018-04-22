@@ -38,21 +38,30 @@ using namespace std;
 #define P_OPTIONAL_NODE(N) {CompilerNode* node = (N); if (node->parse())\
 	{children.push_back(node);} else {delete node;}}
 
+//add a compiler node if it parses
+#define P_OPTIONAL_NODE_SET(N, S) {CompilerNode* node = (N); if (node->parse())\
+	{children.push_back(node); S} else {delete node;}}
+
 //add multiple compiler nodes until a parse fails
 #define P_LOOP_NODE(N) {bool ok = true; while(ok){CompilerNode* node = (N);\
 	if (node->parse()){children.push_back(node);} else {delete node;\
 	ok = false;}if(index >= tokens.size()){ok = false;}}}
 
-#define P_EXPECT_TOKEN(N) {if (currentToken().type() == (N)){incIndex();}\
+#define P_EXPECT_TOKEN(T) {if (currentToken().type() == (T)){incIndex();}\
 	else P_FAIL}
 
-#define P_EXPECT_TOKEN_SET(N, S) {if (currentToken().type() == (N)){S;\
-	incIndex();} else P_FAIL}
+#define P_EXPECT_TOKEN_SET(T, BEFORE, AFTER) {if (currentToken().type() == (T))\
+	{BEFORE; incIndex(); AFTER;} else P_FAIL}
+
+#define P_OPTIONAL_TOKEN(T) {if (currentToken().type() == (T){incIndex();})}
+
+#define P_OPTIONAL_TOKEN_SET(T, BEFORE, AFTER) {if (currentToken().type() == (T))\
+	{BEFORE; incIndex(); AFTER;}}
 
 //current parse is successful
 #if (DEBUG)
-	#define P_END {DEPTH_SPACES DEC_DEPTH cout << "Successful parse in " << __FILE__ << '\n';\
-		return true;}
+	#define P_END {DEPTH_SPACES DEC_DEPTH cout << "Successful parse in "\
+		<< __FILE__ << '\n'; return true;}
 #else
 	#define P_END {return true;}
 #endif
@@ -89,9 +98,9 @@ protected:
 	static Token currentToken();
 
 	static void writeAssembly(string str);
-	static void writeData(string str);
-	static void writeScopeData(string str);
-	static void appendScopeDataToAssembly();
+	static void writeGlobalData(string str);
+	static void popToAddress(string label, unsigned int size);
+	static void pushFromAddress(string label, unsigned int size);
 
 	static void writeComment(string comment);
 	static string newLabel();
@@ -118,8 +127,7 @@ protected:
 	static bool inMain;
 
 	static vector<string> assembly;
-	static vector<string> data;
-	static vector<string> scopeData;
+	static vector<string> globalData;
 
 	static unsigned int numLabels;
 	static unsigned int errors;

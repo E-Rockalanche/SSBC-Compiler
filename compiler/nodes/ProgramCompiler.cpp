@@ -1,5 +1,5 @@
 #include "ProgramCompiler.hpp"
-#include "FunctionDefCompiler.hpp"
+#include "GlobalStatementCompiler.hpp"
 
 ProgramCompiler::~ProgramCompiler(){}
 
@@ -9,7 +9,7 @@ bool ProgramCompiler::parse(){
 	#endif
 		
 	P_BEGIN
-	P_LOOP_NODE(new FunctionDefCompiler())
+	P_LOOP_NODE(new GlobalStatementCompiler())
 	if (index < tokens.size()){
 		printError("Unparsed tokens");
 		P_FAIL

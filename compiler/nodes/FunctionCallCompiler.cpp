@@ -46,10 +46,13 @@ bool FunctionCallCompiler::compile(){
 	if(!inMain){
 		//save scope
 		writeComment("Saving local scope");
+		scopeSize = scopeTable.getLocalScopeSize();
+		/*
 		vector<Type> scope = scopeTable.getScopeTypes();
 		for(unsigned int i = 0; i < scope.size(); i++){
 			scopeSize += typeManager.sizeOf(scope[i]);
 		}
+		*/
 		dout("current scope size = " << scopeSize);
 
 		assert(scopeSize <= SSBC_INT_MAX, "scope size greater than "
@@ -84,36 +87,17 @@ bool FunctionCallCompiler::compile(){
 		writeComment("saving return value to temp location");
 		unsigned int returnTypeSize = typeManager.sizeOf(getType());
 		string returnTempLabel = newLabel();
-		if (returnTypeSize == 1){
-			writeData(returnTempLabel + ": .byte 0");
-			writeAssembly("popext " + returnTempLabel);
-		}else{
-			writeData(returnTempLabel + ": .word 0");
-			writeAssembly("popext16 " + returnTempLabel);
-		}
+		scopeTable.pushScope();
+		scopeTable.add("temp", getType(), returnTempLabel, returnTypeSize);
+		popToAddress(returnTempLabel, returnTypeSize);
 
 		//restore scope
-		if (scopeSize > 0){
-			if (scopeSize <= 6){
-				for(unsigned int i = 0; i < scopeSize; i++){
-					writeAssembly("popext " + functionDataLabel + " + "
-						+ to_string(i));
-				}
-			}else{
-				writeComment("Restoring scope");
-				writeAssembly("pushimm16 " + functionDataLabel);
-				writeAssembly("pushimm " + to_string(scopeSize));
-				writeAssembly("jsr POP_TO_ADDR");
-			}
-		}
+		writeComment("restoring function scope");
+		popToAddress(functionDataLabel, scopeSize);
 
-		//push return value to stack
 		writeComment("Restoring return value from temp location");
-		if (returnTypeSize == 1){
-			writeAssembly("pushext " + returnTempLabel);
-		}else{
-			writeAssembly("pushext16 " + returnTempLabel);
-		}
+		pushFromAddress(returnTempLabel, returnTypeSize);
+		scopeTable.popScope();
 	}
 	return true;
 }

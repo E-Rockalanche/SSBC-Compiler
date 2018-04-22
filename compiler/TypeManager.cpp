@@ -10,22 +10,27 @@ unsigned int TypeManager::sizeOf(Type type) const{
 	}else if (type.isPointer()){
 		size = SSBC_PTR_SIZE;
 	}else{
-		string typeName = type.getBaseType();
-		if (typeName == "void"){
-			size = SSBC_VOID_SIZE;
-		}else if (typeName == "int"){
-			size = SSBC_INT_SIZE;
-		}else if (typeName == "char"){
-			size = SSBC_CHAR_SIZE;
-		}else if (typeName == "bool"){
-			size = SSBC_BOOL_SIZE;
-		}else if (typeName == "long"){
-			size = SSBC_LONG_SIZE;
-		}else{
-			//check size of struct/class/union
-			string msg = "Type " + typeName + " is not defined";
-			throw runtime_error(msg);
-		}
+		size = sizeOf(type.getBaseType());
+		
+	}
+	return size;
+}
+
+unsigned int TypeManager::sizeOf(string typeName) const {
+	unsigned int size;
+	if (typeName == "void"){
+		size = SSBC_VOID_SIZE;
+	}else if (typeName == "int"){
+		size = SSBC_INT_SIZE;
+	}else if (typeName == "char"){
+		size = SSBC_CHAR_SIZE;
+	}else if (typeName == "bool"){
+		size = SSBC_BOOL_SIZE;
+	}else if (typeName == "long"){
+		size = SSBC_LONG_SIZE;
+	}else{
+		// TODO check size of struct/class/union
+		throw runtime_error("type " + typeName + " is not defined");
 	}
 	return size;
 }

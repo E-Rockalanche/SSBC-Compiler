@@ -17,7 +17,7 @@ bool StringCompiler::compile(){
 	dout("Compiling in " << __FILE__);
 
 	string label = newLabel();
-	writeData(label + ": .asciz " + token.value());
+	writeGlobalData(label + ": .asciz " + token.value());
 	writeAssembly("pushimm16 " + label);
 	return true;
 }

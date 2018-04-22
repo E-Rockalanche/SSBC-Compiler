@@ -11,8 +11,7 @@ FunctionManager BaseCompiler::functionManager;
 BreakManager BaseCompiler::breakManager;
 
 vector<string> BaseCompiler::assembly;
-vector<string> BaseCompiler::data;
-vector<string> BaseCompiler::scopeData;
+vector<string> BaseCompiler::globalData;
 
 vector<Token> BaseCompiler::tokens;
 unsigned int BaseCompiler::index;
@@ -68,20 +67,42 @@ void BaseCompiler::writeAssembly(string str){
 	assembly.push_back("\t" + str);
 }
 
-void BaseCompiler::writeData(string str){
-	data.push_back(str);
+void BaseCompiler::writeGlobalData(string str){
+	globalData.push_back(str);
 }
 
-void BaseCompiler::writeScopeData(string str){
-	scopeData.push_back(str);
-}
+void BaseCompiler::popToAddress(string label, unsigned int size){
+	assert(label != "", "empty label in popToAddress");
+	if (size > 0){
 
-void BaseCompiler::appendScopeDataToAssembly(){
-	dout("scopeData size = " << scopeData.size());
-	for(unsigned int i = 0; i < scopeData.size(); i++){
-		assembly.push_back(scopeData[i]);
+		const unsigned int sizeOfPopext = 3;
+		if (size * sizeOfPopext <= 18){
+			for(unsigned int i = 0; i < size; i++){
+				writeAssembly("popext " + label + " + " + to_string(i));
+			}
+		}else{
+			writeAssembly("pushimm16 " + label);
+			writeAssembly("pushimm " + to_string(size));
+			writeAssembly("jsr POP_TO_ADDR");
+		}
 	}
-	scopeData.clear();
+}
+
+void BaseCompiler::pushFromAddress(string label, unsigned int size){
+	assert(label != "", "empty label in pushFromAddress");
+	if (size > 0){
+	
+		const unsigned int sizeOfPushext = 3;
+		if (size * sizeOfPushext <= 18){
+			for(int i = size-1; i >= 0; i--){
+				writeAssembly("pushext " + label + " + " + to_string(i));
+			}
+		}else{
+			writeAssembly("pushimm16 " + label);
+			writeAssembly("pushimm " + to_string(size));
+			writeAssembly("jsr PUSH_FROM_ADDR");
+		}
+	}
 }
 
 void BaseCompiler::writeComment(string comment){

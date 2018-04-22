@@ -58,7 +58,7 @@ bool Compiler::parse(){
 bool Compiler::compile(){
 	errors = 0;
 	assembly.clear();
-	data.clear();
+	globalData.clear();
 	numLabels = 0;
 	outputComments = true;
 
@@ -106,7 +106,7 @@ bool Compiler::compileFile(string filename){
 
 	//clear data
 	tokens.clear();
-	scopeTable.clear();
+	scopeTable.clearEntireScope();
 	typeManager.clear();
 	functionManager.clear();
 
@@ -141,8 +141,6 @@ bool Compiler::writeToFile(string filename){
 		printError("Cannot open file " + filename);
 		return false;
 	}
-	
-	assert(scopeData.size() == 0, "scope data was not saved");
 
 	for(unsigned int i = 0; i < assembly.size(); i++){
 		fout << assembly[i] << '\n';

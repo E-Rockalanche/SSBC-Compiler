@@ -18,12 +18,9 @@ bool VariableExpCompiler::compile(){
 	dout("variable = " << identifier.value());
 	
 	if (getType().isDefined()){
-		int size = typeManager.sizeOf(type);
+		unsigned int size = typeManager.sizeOf(type);
 		string label = scopeTable.getLabel(identifier.value());
-		for(int i = size-1; i >= 0; i--){
-			writeAssembly("pushext " + label + " + "
-				+ to_string(i));
-		}
+		pushFromAddress(label, size);
 		return true;
 	}
 	return false;

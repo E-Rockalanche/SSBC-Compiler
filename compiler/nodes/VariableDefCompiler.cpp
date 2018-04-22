@@ -1,34 +1,26 @@
 #include "VariableDefCompiler.hpp"
 #include "TypeCompiler.hpp"
-#include "ArrayDeclarationCompiler.hpp"
+#include "ExpressionCompiler.hpp"
+#include "TypeConversionCompiler.hpp"
 
 VariableDefCompiler::~VariableDefCompiler(){}
 
 bool VariableDefCompiler::parse(){
 	P_BEGIN
 	P_ADD_NODE(new TypeCompiler())
-	if (currentToken().type() == CppLang::IDENTIFIER){
-		identifier = currentToken();
-		incIndex();
-		P_OPTIONAL_NODE(new ArrayDeclarationCompiler())
-		P_END
-	}
-	P_FAIL
+	P_EXPECT_TOKEN_SET(CppLang::IDENTIFIER, identifier = currentToken(), )
+	P_OPTIONAL_TOKEN_SET(CppLang::ASSIGN, ,
+		P_ADD_NODE(new ExpressionCompiler())
+	)
+	P_END
 }
 
 bool VariableDefCompiler::compile(){
 	dout("Compiling in " << __FILE__);
-
 	assert(children.size() > 0, "No variable definition");
+
 	Type type = children[0]->getType();
-	if (children.size() == 2){
-		type.addPointer();
-	}
-
-	dout("type = " << type.toString());
-
 	string typeName = type.getBaseType();
-
 	if (!typeManager.typeExists(typeName)){
 		printError("Type " + typeName + " is not defined", startTokenIndex);
 		return false;
@@ -41,28 +33,20 @@ bool VariableDefCompiler::compile(){
 	}
 
 	string label = newLabel();
-	scopeTable.add(identifier.value(), type, label);
+	unsigned int typeSize = typeManager.sizeOf(type);
+	scopeTable.add(identifier.value(), type, label, typeSize);
 
 	if (children.size() == 2){
-		dout("assigning variable to array");
-		//assign array pointer to variable
-		unsigned int typeSize = typeManager.sizeOf(typeName);
-		unsigned int arraySize = children[1]->getValue();
-		string arrayLabel = newLabel();
-		writeData(arrayLabel + ": .array " + to_string(arraySize * typeSize));
-		writeAssembly("pushimm16 " + arrayLabel);
-		writeAssembly("popext16 " + label);
+		//compile assignment
+		children[1]->compile();
+		Type from = children[1]->getType();
+		TypeConversionCompiler::convert(from, type, getIndex());
+		popToAddress(label, typeManager.sizeOf(type));
 	}
 	
 	#if(DEBUG)
 		scopeTable.dump();
 	#endif
-
-	if (typeManager.sizeOf(type) == 1){
-		writeScopeData(label + ": .byte 0");
-	}else{
-
-		writeScopeData(label + ": .word 0");
-	}
+	
 	return true;
 }

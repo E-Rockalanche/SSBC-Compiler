@@ -40,8 +40,9 @@ bool IfElseCompiler::compile(){
 
 	//compile if body
 	children[1]->compile();
-
-	writeAssembly("jump " + endLabel);
+	if (!children[1]->endsStatementSequence()){
+		writeAssembly("jump " + endLabel);
+	}
 
 	writeAssembly(falseLabel + ": ");
 

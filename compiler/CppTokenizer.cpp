@@ -290,7 +290,7 @@ void CppTokenizer::parseInteger(){
 		c = scanner.peek();
 	}
 	CppLang::Token type;
-	if (regex_match(str, regex("^[1-9][0-9]*$"))){
+	if (regex_match(str, regex("^[1-9][0-9]*[lL]?$"))){
 		type = CppLang::DECIMAL;
 	}else if (regex_match(str, regex("^0x[0-9a-fA-F]+$"))){
 		type = CppLang::HEXADECIMAL;

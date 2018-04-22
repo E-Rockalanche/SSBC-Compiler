@@ -49,7 +49,6 @@
 /* End type conversion */
 /* Return */
 	jump L0
-	jump L10
 	L9: 
 	L10: 
 /* <= */
@@ -94,7 +93,6 @@
 /* End type conversion */
 /* Return */
 	jump L0
-	jump L19
 	L18: 
 	L19: 
 /* Calculating return value */
@@ -168,64 +166,62 @@
 /* ########## End of long fibRecursive(long) ########## */
 /* Local data to function */
 	L1:
-L3: .word 0
+	L3: .byte 0
+	L29: .byte 0
+/* End of local memory */
 /* ########## long fibLoop(long) ########### */
 	longfibLooplong:
 /* Pop return address to temp */
-	popext16 L31
-/* Pop function arguments */
 	popext16 L32
+/* Pop function arguments */
+	popext16 L33
 /* Push return address from temp */
-	pushext16 L31
+	pushext16 L32
 /* Function body */
 /* <= */
-	pushext L32 + 1
-	pushext L32 + 0
+	pushext L33 + 1
+	pushext L33 + 0
 /* Literal */
 	pushimm 0
 /* Converting const int to long */
 	test
-	jnn L33
+	jnn L34
 	pushimm 0xff
-	jump L34
-	L33:
-	pushimm 0
+	jump L35
 	L34:
+	pushimm 0
+	L35:
 /* End type conversion */
 	jsr SUB16
 	jsr TEST16
 	popext PSW
 	popinh16
-	jnn L35
+	jnn L36
 	pushimm 0
-	jump L36
-	L35: pushimm 1
-	L36:
+	jump L37
+	L36: pushimm 1
+	L37:
 /* End <= */
 	test popinh
-	jnz L37
-	jump L38
-	L37: 
+	jnz L38
+	jump L39
+	L38: 
 /* Calculating return value */
 /* Literal */
 	pushimm 0
 /* Converting const int to long */
 	test
-	jnn L40
+	jnn L41
 	pushimm 0xff
-	jump L41
-	L40:
-	pushimm 0
+	jump L42
 	L41:
+	pushimm 0
+	L42:
 /* End type conversion */
 /* Return */
-	jump L29
-	jump L39
-	L38: 
+	jump L30
 	L39: 
-	pushimm16 L43
-	popext16 L42
-/* Assignment */
+	L40: 
 /* Literal */
 	pushimm 0
 /* Converting const int to long */
@@ -237,44 +233,21 @@ L3: .word 0
 	pushimm 0
 	L45:
 /* End type conversion */
-/* Array assignment */
-	pushext L42 + 1
-	pushext L42 + 0
-/* Literal */
-	pushimm 0
-/* Converting const int to long */
-	test
-	jnn L46
-	pushimm 0xff
-	jump L47
-	L46:
-	pushimm 0
-	L47:
-/* End type conversion */
-/* Calculate array offset */
-	pushimm16 2
-	jsr MULT16
-/* End Calculate array offset */
-	jsr ADD16
-	pushimm 2
-	jsr POP_TO_ADDR
-/* End array assignment */
-/* End Assignment */
-/* Assignment */
+	popext L43 + 0
+	popext L43 + 1
 /* Literal */
 	pushimm 1
 /* Converting const int to long */
 	test
-	jnn L48
+	jnn L47
 	pushimm 0xff
-	jump L49
-	L48:
+	jump L48
+	L47:
 	pushimm 0
-	L49:
+	L48:
 /* End type conversion */
-/* Array assignment */
-	pushext L42 + 1
-	pushext L42 + 0
+	popext L46 + 0
+	popext L46 + 1
 /* Literal */
 	pushimm 1
 /* Converting const int to long */
@@ -286,200 +259,121 @@ L3: .word 0
 	pushimm 0
 	L51:
 /* End type conversion */
-/* Calculate array offset */
-	pushimm16 2
-	jsr MULT16
-/* End Calculate array offset */
-	jsr ADD16
-	pushimm 2
-	jsr POP_TO_ADDR
-/* End array assignment */
-/* End Assignment */
-/* Assignment */
-/* Literal */
-	pushimm 2
-/* Converting const int to long */
-	test
-	jnn L53
-	pushimm 0xff
-	jump L54
-	L53:
-	pushimm 0
-	L54:
-/* End type conversion */
-	popext L52 + 0
-	popext L52 + 1
-/* End Assignment */
-	L55:
-/* <= */
-	pushext L52 + 1
-	pushext L52 + 0
-	pushext L32 + 1
-	pushext L32 + 0
+	popext L49 + 0
+	popext L49 + 1
+	L52:
+/* < */
+	pushext L33 + 1
+	pushext L33 + 0
+	pushext L49 + 1
+	pushext L49 + 0
 	jsr SUB16
 	jsr TEST16
 	popext PSW
 	popinh16
-	jnn L59
-	pushimm 0
-	jump L60
-	L59: pushimm 1
-	L60:
-/* End <= */
-	test popinh
-	jnz L56
+	jnn L56
+	pushimm 1
 	jump L57
-	L56:
-/* Assignment */
-/* + */
-/* Array accessor */
-	pushext L42 + 1
-	pushext L42 + 0
-/* - */
-/* Literal */
-	pushimm 2
-/* Converting const int to long */
-	test
-	jnn L61
-	pushimm 0xff
-	jump L62
-	L61:
-	pushimm 0
-	L62:
-/* End type conversion */
-	pushext L52 + 1
-	pushext L52 + 0
-	jsr SUB16
-/* End - */
-/* Calculate array offset */
-	pushimm16 2
-	jsr MULT16
-/* End Calculate array offset */
-	jsr ADD16
-	pushimm 2
-	jsr PUSH_FROM_ADDR
-/* End array accessor */
-/* Array accessor */
-	pushext L42 + 1
-	pushext L42 + 0
-/* - */
-/* Literal */
-	pushimm 1
-/* Converting const int to long */
-	test
-	jnn L63
-	pushimm 0xff
-	jump L64
-	L63:
-	pushimm 0
-	L64:
-/* End type conversion */
-	pushext L52 + 1
-	pushext L52 + 0
-	jsr SUB16
-/* End - */
-/* Calculate array offset */
-	pushimm16 2
-	jsr MULT16
-/* End Calculate array offset */
-	jsr ADD16
-	pushimm 2
-	jsr PUSH_FROM_ADDR
-/* End array accessor */
-	jsr ADD16
-/* End + */
-/* Array assignment */
-	pushext L42 + 1
-	pushext L42 + 0
-	pushext L52 + 1
-	pushext L52 + 0
-/* Calculate array offset */
-	pushimm16 2
-	jsr MULT16
-/* End Calculate array offset */
-	jsr ADD16
-	pushimm 2
-	jsr POP_TO_ADDR
-/* End array assignment */
-/* End Assignment */
-	L58:
-/* Assignment */
-/* + */
-/* Literal */
-	pushimm 1
-/* Converting const int to long */
-	test
-	jnn L65
-	pushimm 0xff
-	jump L66
-	L65:
-	pushimm 0
-	L66:
-/* End type conversion */
-	pushext L52 + 1
-	pushext L52 + 0
-	jsr ADD16
-/* End + */
-	popext L52 + 0
-	popext L52 + 1
-/* End Assignment */
-	jump L55
+	L56: pushimm 0
 	L57:
-/* Calculating return value */
-/* Array accessor */
-	pushext L42 + 1
-	pushext L42 + 0
-	pushext L32 + 1
-	pushext L32 + 0
-/* Calculate array offset */
-	pushimm16 2
-	jsr MULT16
-/* End Calculate array offset */
+/* End < */
+	test popinh
+	jnz L53
+	jump L54
+	L53:
+/* + */
+	pushext L43 + 1
+	pushext L43 + 0
+	pushext L46 + 1
+	pushext L46 + 0
 	jsr ADD16
-	pushimm 2
-	jsr PUSH_FROM_ADDR
-/* End array accessor */
+/* End + */
+	popext L58 + 0
+	popext L58 + 1
+/* Assignment */
+	pushext L46 + 1
+	pushext L46 + 0
+	popext L43 + 0
+	popext L43 + 1
+/* End Assignment */
+/* Assignment */
+	pushext L58 + 1
+	pushext L58 + 0
+	popext L46 + 0
+	popext L46 + 1
+/* End Assignment */
+	L55:
+/* Assignment */
+/* + */
+/* Literal */
+	pushimm 1
+/* Converting const int to long */
+	test
+	jnn L59
+	pushimm 0xff
+	jump L60
+	L59:
+	pushimm 0
+	L60:
+/* End type conversion */
+	pushext L49 + 1
+	pushext L49 + 0
+	jsr ADD16
+/* End + */
+	popext L49 + 0
+	popext L49 + 1
+/* End Assignment */
+	jump L52
+	L54:
+/* Calculating return value */
+	pushext L46 + 1
+	pushext L46 + 0
 /* Return */
-	jump L29
+	jump L30
 /* Return to call address */
-	L29:
+	L30:
 /* Pop return address to jump instruction */
-	popext16 L67
-	popext16 L31
-	pushext16 L67
+	popext16 L61
+	popext16 L32
+	pushext16 L61
 	jump ?
-	L31: .word 0
+	L32: .word 0
 /* ########## End of long fibLoop(long) ########## */
 /* Local data to function */
-	L30:
-L32: .word 0
-L42: .word 0
-L52: .word 0
+	L31:
+	L33: .byte 0
+	L62: .byte 0
+	L43: .byte 0
+	L63: .byte 0
+	L46: .byte 0
+	L64: .byte 0
+	L49: .byte 0
+	L65: .byte 0
+	L58: .byte 0
+	L66: .byte 0
+/* End of local memory */
 /* ########## void main() ########### */
 	.start
 /* Function body */
-/* Assignment */
 /* Literal */
 	pushimm16 65532
 /* Converting const long to int * */
 /* End type conversion */
-	popext L71 + 0
-	popext L71 + 1
-/* End Assignment */
-/* Assignment */
+	popext L70 + 0
+	popext L70 + 1
 /* Array accessor */
-	pushext L71 + 1
-	pushext L71 + 0
+	pushext L70 + 1
+	pushext L70 + 0
 /* Literal */
 	pushimm 1
 /* Converting const int to long */
 	test
-	jnn L73
+	jnn L72
 	pushimm 0xff
-	jump L74
-	L73:
+	jump L73
+	L72:
 	pushimm 0
-	L74:
+	L73:
 /* End type conversion */
 	jsr ADD16
 	pushimm 1
@@ -487,27 +381,39 @@ L52: .word 0
 /* End array accessor */
 /* Converting int to long */
 	test
-	jnn L75
+	jnn L74
 	pushimm 0xff
-	jump L76
-	L75:
+	jump L75
+	L74:
 	pushimm 0
-	L76:
+	L75:
 /* End type conversion */
-	popext L72 + 0
-	popext L72 + 1
-/* End Assignment */
+	popext L71 + 0
+	popext L71 + 1
 /* Assignment */
+/* Saving local scope */
+	pushext L68 + 3
+	pushext L68 + 2
+	pushext L68 + 1
+	pushext L68 + 0
 /* Compiling function arguments */
-	pushext L72 + 1
-	pushext L72 + 0
+	pushext L71 + 1
+	pushext L71 + 0
 	jsr longfibLooplong
+/* saving return value to temp location */
+	popext16 L76
+	popext L68 + 0
+	popext L68 + 1
+	popext L68 + 2
+	popext L68 + 3
+/* Restoring return value from temp location */
+	pushext16 L76
 /* Converting long to int */
 	popinh
 /* End type conversion */
 /* Array assignment */
-	pushext L71 + 1
-	pushext L71 + 0
+	pushext L70 + 1
+	pushext L70 + 0
 /* Literal */
 	pushimm 0
 /* Converting const int to long */
@@ -525,26 +431,39 @@ L52: .word 0
 /* End array assignment */
 /* End Assignment */
 /* Assignment */
+/* Saving local scope */
+	pushext L68 + 3
+	pushext L68 + 2
+	pushext L68 + 1
+	pushext L68 + 0
 /* Compiling function arguments */
-	pushext L72 + 1
-	pushext L72 + 0
+	pushext L71 + 1
+	pushext L71 + 0
 	jsr longfibRecursivelong
+/* saving return value to temp location */
+	popext16 L79
+	popext L68 + 0
+	popext L68 + 1
+	popext L68 + 2
+	popext L68 + 3
+/* Restoring return value from temp location */
+	pushext16 L79
 /* Converting long to int */
 	popinh
 /* End type conversion */
 /* Array assignment */
-	pushext L71 + 1
-	pushext L71 + 0
+	pushext L70 + 1
+	pushext L70 + 0
 /* Literal */
 	pushimm 2
 /* Converting const int to long */
 	test
-	jnn L79
+	jnn L80
 	pushimm 0xff
-	jump L80
-	L79:
-	pushimm 0
+	jump L81
 	L80:
+	pushimm 0
+	L81:
 /* End type conversion */
 	jsr ADD16
 	pushimm 1
@@ -552,15 +471,19 @@ L52: .word 0
 /* End array assignment */
 /* End Assignment */
 /* Return to call address */
-	L68:
+	L67:
 	halt
 /* ########## End of void main() ########## */
 /* Local data to function */
-	L69:
-L71: .word 0
-L72: .word 0
+	L68:
+	L70: .byte 0
+	L82: .byte 0
+	L71: .byte 0
+	L83: .byte 0
+/* End of local memory */
 L24: .word 0
 L27: .word 0
 L28: .word 0
-L43: .array 200
-L67: .word 0
+L61: .word 0
+L76: .word 0
+L79: .word 0
