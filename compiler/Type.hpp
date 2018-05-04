@@ -17,8 +17,9 @@ public:
 	Type& addPointer(bool constant = false);
 	Type& removePointer();
 	Type& makeArray(unsigned int size, bool constant = false);
-	Type& reference(bool constant = false);
+	Type& reference();
 	Type& dereference();
+	Type& convertArrayToPointer();
 
 	//check attributes
 	string getBaseType() const;
@@ -52,7 +53,6 @@ private:
 
 	//is pointer to above type
 	bool _isReference;
-	bool constantReference;
 };
 
 #endif

@@ -79,7 +79,7 @@ string FunctionSignature::toString() const{
 	if (!isDefined()){
 		return "'undefined function'";
 	}else{
-		string str;
+		string str = "";
 		if (returnType.isDefined()){
 			str = returnType.toString() + " ";
 		}
@@ -95,19 +95,34 @@ string FunctionSignature::toString() const{
 }
 
 string FunctionSignature::toLabel() const{
-	if (!isDefined()){
-		return "'undefined function'";
-	}else{
-		string str = returnType.toLabel() + name;
+	assert(isDefined(), "function is not defined");
+
+	string str = returnType.toLabel() + "_" + name;
+	if (paramTypes.size() == 0) {
+		str += "_void";
+	} else {
 		for(unsigned int i = 0; i < paramTypes.size(); i++){
-			str += paramTypes[i].toLabel();
+			str += "_" + paramTypes[i].toLabel();
 		}
-		return str;
 	}
+	return str;
 }
 
 bool FunctionSignature::isDefined() const {
-	return (name != "" && returnType != Type());
+	bool defined = true;
+	if (name == "") {
+		dout("function sig name is empty");
+		defined = false;
+	} else {
+		for(unsigned int i = 0; i < paramTypes.size(); i++) {
+			if (!paramTypes[i].isDefined()) {
+				dout("function sig param is undefined");
+				defined = false;
+				break;
+			}
+		}
+	}
+	return defined;
 }
 
 bool FunctionSignature::isImplemented() const {

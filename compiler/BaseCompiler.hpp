@@ -5,15 +5,20 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+
 #include "Type.hpp"
 #include "CppLang.hpp"
 #include "CompilerDebug.hpp"
 #include "Assert.hpp"
 #include "Token.hpp"
-using namespace std;
 
-#define ABSTRACT_CALL_ERROR {throw runtime_error("Cannot call function of \
-an abstract class");}
+//helper objects
+#include "ScopeTable.hpp"
+#include "TypeManager.hpp"
+#include "FunctionManager.hpp"
+#include "BreakManager.hpp"
+
+using namespace std;
 
 //begin parsing a grammar rule
 //use to remember the starting index of the current rule
@@ -87,9 +92,9 @@ an abstract class");}
 
 class BaseCompiler {
 public:
-	virtual ~BaseCompiler();
-	virtual bool parse();
-	virtual bool compile();
+	virtual ~BaseCompiler() = 0;
+	virtual bool parse() = 0;
+	virtual bool compile() = 0;
 
 protected:
 	static void incIndex();
@@ -100,6 +105,8 @@ protected:
 	static void writeGlobalData(string str);
 	static void popToAddress(string label, unsigned int size);
 	static void pushFromAddress(string label, unsigned int size);
+	static void popToAddress(unsigned int size);
+	static void pushFromAddress(unsigned int size);
 
 	static void writeComment(string comment);
 	static string newLabel();
@@ -109,6 +116,12 @@ protected:
 	static void printWarning(string message, unsigned int index);
 	static string getLocationString(unsigned int index);
 	static void printRow(unsigned int index);
+
+	//helper objects
+	static ScopeTable scopeTable;
+	static TypeManager typeManager;
+	static FunctionManager functionManager;
+	static BreakManager breakManager;
 
 	//file specific
 	static vector<Token> tokens;

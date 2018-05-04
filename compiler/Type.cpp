@@ -28,7 +28,7 @@ Type& Type::addPointer(bool constant){
 }
 
 Type& Type::removePointer(){
-	assert(isPointer(), "Cannot remove pointer from " + toString());
+	assert(isPointer() || isArray(), "Cannot remove pointer from " + toString());
 	if (isReference()){
 		_isReference = false;
 	}
@@ -40,11 +40,10 @@ Type& Type::removePointer(){
 	return *this;
 }
 
-Type& Type::reference(bool constant){
+Type& Type::reference(){
 	assert(isDefined(), "Cannot reference " + toString());
 	assert(!isReference(), "Cannot reference " + toString());
 	_isReference = true;
-	constantReference = constant;
 	return *this;
 }
 
@@ -58,11 +57,19 @@ Type& Type::dereference(){
 
 Type& Type::makeArray(unsigned int size, bool constant){
 	assert(isDefined(), "Cannot make array of " + toString());
-	assert(!isArray(), "Cannot make array of an array");
+	assert(!isArray(), "Cannot make array of arrays");
 
 	_isArray = true;
 	arraySize = size;
 	constantArray = constant;
+	return *this;
+}
+
+Type& Type::convertArrayToPointer() {
+	if (isArray()) {
+		_isArray = false;
+		addPointer(true);
+	}
 	return *this;
 }
 
@@ -71,11 +78,9 @@ unsigned int Type::numPointers(){
 }
 
 bool Type::isConstant() const{
-	if (isReference()){
-		return constantReference;
-	}else if (isPointer()){
+	if (isPointer()){
 		return pointers.back();
-	}else{
+	} else {
 		return constantBase;
 	}
 }
@@ -88,19 +93,19 @@ bool Type::isArray() const {
 	return _isArray;
 }
 
-bool Type::isPointer() const{
+bool Type::isPointer() const {
 	return (pointers.size() > 0);
 }
 
-bool Type::isDefined() const{
+bool Type::isDefined() const {
 	return defined;
 }
 
-string Type::getBaseType() const{
+string Type::getBaseType() const {
 	return baseName;
 }
 
-string Type::toString() const{
+string Type::toString() const {
 	string str;
 	if (isDefined()){
 		if (constantBase) str += "const ";
@@ -108,7 +113,7 @@ string Type::toString() const{
 		for(unsigned int i = 0; i < pointers.size(); i++){
 			str += " *";
 			if (pointers[i]){
-				str += "const";
+				str += " const";
 			}
 		}
 		if (_isArray){
@@ -116,9 +121,6 @@ string Type::toString() const{
 		}
 		if (_isReference){
 			str += "&";
-			if (constantReference){
-				str += " const";
-			}
 		}
 	}else{
 		str = "'undefined'";
@@ -126,7 +128,7 @@ string Type::toString() const{
 	return str;
 }
 
-string Type::toLabel() const{
+string Type::toLabel() const {
 	string str;
 	if (isDefined()){
 		//if (constantBase) str += "Const";
@@ -151,14 +153,14 @@ string Type::toLabel() const{
 	return str;
 }
 
-bool Type::operator==(const Type& other) const{
+bool Type::operator==(const Type& other) const {
 	return ((pointers.size() == other.pointers.size())
 		&& (baseName == other.baseName)
 		&& (_isReference == other._isReference)
 		&& (_isArray == other._isArray));
 }
 
-bool Type::operator!=(const Type& other) const{
+bool Type::operator!=(const Type& other) const {
 	return !(*this == other);
 }
 

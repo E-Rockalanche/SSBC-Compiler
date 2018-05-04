@@ -1,7 +1,7 @@
 #ifndef COMPILER_DEBUG
 #define COMPILER_DEBUG
 
-#define DEBUG true
+#define DEBUG false
 
 #include "Debug.hpp"
 

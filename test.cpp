@@ -1,28 +1,45 @@
-#include <iostream>
-using namespace std;
+void bubbleSort(int* arr, int arrSize) {
+	for(int i = 0; i < arrSize-1; i = i+1) {
+		for(int index = 0; index < arrSize-1; index = index+1) {
+			if (arr[index] > arr[index+1]) {
+				int temp = arr[index]
+				arr[index] = arr[index+1]
+				arr[index+1] = temp
+			}
+		}
+	}
 
-struct Block{
-	int data[8];
-};
 
-int main(){
-	int array[3] = {1, 2, 3};
-	int* var = array;
-	int*& ref = var;
-	int c = *ref;
+	bool sorted = 1
+	for(int index = 0; index < arrSize-1; index = index+1) {
+		if (arr[index] > arr[index+1]) {
+			sorted = 0
+			break
+		}
+	}
 
-	cout << "Block size = " << sizeof(Block) << '\n';
-	cout << "Array size = " << sizeof(array) << '\n';
+	int* ports = 0xfffc
+	ports[2] = sorted
+}
 
-	cout << "array = " << array << '\n';
-	cout << "&array = " << &array << '\n';
-	cout << "var contents = " << var << '\n';
+void main() {
+	int* ports = 0xfffc
 
-	cout << "array[0] = " << array[0] << '\n';
+	int[4] arr
+	arr[0] = 99
+	arr[1] = 78
+	arr[2] = 66
+	arr[3] = 7
 
-	cout << "*(var + 1) = " << *(var + 1) << '\n';
+	bubbleSort(arr, 4)
 
-	cout << "ref[2] = " << ref[2] << '\n';
+	bool sorted = 1
+	for(int index = 0; index < 3; index = index+1) {
+		if (arr[index] > arr[index+1]) {
+			sorted = 0
+			break
+		}
+	}
 
-	cout << "c = " << c << '\n';
+	ports[0] = sorted
 }

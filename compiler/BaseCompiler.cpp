@@ -20,6 +20,11 @@ string BaseCompiler::functionDataLabel;
 Type BaseCompiler::functionReturnType;
 bool BaseCompiler::inMain;
 
+ScopeTable CompilerData::scopeTable;
+TypeManager CompilerData::typeManager;
+FunctionManager CompilerData::functionManager;
+BreakManager CompilerData::breakManager;
+
 //static functions
 
 void BaseCompiler::incIndex(){
@@ -68,8 +73,7 @@ void BaseCompiler::writeGlobalData(string str){
 
 void BaseCompiler::popToAddress(string label, unsigned int size){
 	assert(label != "", "empty label in popToAddress");
-	if (size > 0){
-
+	if (size > 0) {
 		const unsigned int sizeOfPopext = 3;
 		if (size * sizeOfPopext <= 18){
 			for(unsigned int i = 0; i < size; i++){
@@ -77,16 +81,14 @@ void BaseCompiler::popToAddress(string label, unsigned int size){
 			}
 		}else{
 			writeAssembly("pushimm16 " + label);
-			writeAssembly("pushimm " + to_string(size));
-			writeAssembly("jsr POP_TO_ADDR");
+			popToAddress(size);
 		}
 	}
 }
 
 void BaseCompiler::pushFromAddress(string label, unsigned int size){
 	assert(label != "", "empty label in pushFromAddress");
-	if (size > 0){
-	
+	if (size > 0) {
 		const unsigned int sizeOfPushext = 3;
 		if (size * sizeOfPushext <= 18){
 			for(int i = size-1; i >= 0; i--){
@@ -94,10 +96,23 @@ void BaseCompiler::pushFromAddress(string label, unsigned int size){
 			}
 		}else{
 			writeAssembly("pushimm16 " + label);
-			writeAssembly("pushimm " + to_string(size));
-			writeAssembly("jsr PUSH_FROM_ADDR");
+			pushFromAddress(size);
 		}
 	}
+}
+
+void BaseCompiler::popToAddress(unsigned int size){
+	assert(size != 0, "popping nothing in popToAddress(uint)");
+	
+	writeAssembly("pushimm " + to_string(size));
+	writeAssembly("jsr POP_TO_ADDR");
+}
+
+void BaseCompiler::pushFromAddress(unsigned int size){
+	assert(size != 0, "pushing nothing in pushFromAddress(uint)");
+	
+	writeAssembly("pushimm " + to_string(size));
+	writeAssembly("jsr PUSH_FROM_ADDR");
 }
 
 void BaseCompiler::writeComment(string comment){
@@ -170,16 +185,3 @@ void BaseCompiler::printRow(unsigned int index){
 	}
 	cout << "^\n";
 }
-
-//class functions
-
-
-BaseCompiler::~BaseCompiler(){}
-
-bool BaseCompiler::parse(){
-	ABSTRACT_CALL_ERROR
-}
-bool BaseCompiler::compile(){
-	ABSTRACT_CALL_ERROR
-}
-

@@ -126,8 +126,10 @@ bool TypeConversionCompiler::toReference(Type from, Type to){
 
 bool TypeConversionCompiler::toArray(Type from, Type to){
 	return (to.isArray()
+		&& from.isArray()
 		&& to.getArraySize() == from.getArraySize()
-		&& toPointer(from, to));
+		&& (typeManager.sizeOf(from.getBaseType())
+			== typeManager.sizeOf(to.getBaseType())));
 }
 
 bool TypeConversionCompiler::toVoid(Type from){

@@ -1,9 +1,9 @@
 #ifndef PROGRAM_COMPILER_HPP
 #define PROGRAM_COMPILER_HPP
 
-#include "CompilerNode.hpp"
+#include "BaseCompilerNode.hpp"
 
-class ProgramCompiler : public CompilerNode {
+class ProgramCompiler : public BaseCompilerNode {
 public:
 	~ProgramCompiler();
 	bool parse();
