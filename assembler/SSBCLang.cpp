@@ -72,8 +72,6 @@ SSBCLang::SSBCLang(){
 	define(BLANK_ADDRESS, "\\?");
 }
 
-#undef define
-
 SSBCLang::~SSBCLang(){
 	delete[] expressions;
 }
