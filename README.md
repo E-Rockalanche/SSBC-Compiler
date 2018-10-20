@@ -1,5 +1,26 @@
 # SSBC assembler and compiler
 
+c-like language to SSBC assembly compiler. Made for CSCI 405 (meta programming) class project. Based on older compiler made for use in CSCI 261 (assembly programming) (courses offered at Vancouver Island University)
+
+The SSBC (Simple stack based computer) is a teaching tool used by [Peter Walsh](http://csciun1.mala.bc.ca:8080/~pwalsh/) in CSCI 261 to teach students the basics of assembly programming. The SSBC has a 16bit address space, 11 instructions, 4 IO ports, stack, and program status available to the programmer. The stack pointer and program counter are not accessible. The program status contains a negative and a zero flag. No carry or overflow flags are implemented.
+
+SSBC instruction set:
+```
+0: NOOP
+1: HALT
+2: PUSHIMM
+3: PUSHEXT
+4: POPINH
+5: POPEXT
+6: JNZ
+7: JNN
+8: ADD
+9: SUB
+10: NOR
+```
+
+The purpose of this project is to see if a high level language could be compiled into these 11 (10 excluding noop) opcodes. Future work includes proper function scoping, sructs, object orientation.
+
 ## Directory Structure
 
 ### assembler
