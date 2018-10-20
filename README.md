@@ -19,7 +19,7 @@ SSBC instruction set:
 10: NOR
 ```
 
-The purpose of this project is to see if a high level language could be compiled into these 11 (10 excluding noop) opcodes. Future work includes proper function scoping, sructs, object orientation.
+The purpose of this project is to see if a high level language could be compiled into these 11 (10 excluding noop) opcodes. Future work includes proper function scoping, structs, references, and object orientation.
 
 ## Directory Structure
 
